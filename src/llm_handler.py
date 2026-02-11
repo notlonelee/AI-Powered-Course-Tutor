@@ -92,7 +92,7 @@ def process_question_with_response(classification_result):
         llm = get_llm()
         llm_response = generate_chatbot_response(question, relevant_chunks, llm)
     except Exception as e:
-        llm_response = f"Error generating response: {str(e)}\nMake sure Ollama is running with: ollama serve"
+        llm_response = f"Error generating response: {str(e)}"
     
     sources = [
         {
