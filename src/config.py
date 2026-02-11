@@ -72,8 +72,8 @@ EMBEDDING_MAX_LENGTH = 512
 # LLM PARAMETERS
 # ============================================================
 LLM_MODEL = "qwen2-math:1.5b"
-HF_MODEL = "Qwen/Qwen2.5-Math-1.5B"
-# HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.3"
+# HF_MODEL = "Qwen/Qwen2.5-Math-1.5B"
+HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.3"
 LLM_TEMPERATURE = 0.3
 LLM_TOP_P = 0.9
 LLM_NUM_PREDICT = 2048
