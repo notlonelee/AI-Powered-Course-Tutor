@@ -11,7 +11,6 @@ def get_llm():
     return HuggingFaceEndpoint(
         repo_id=config.HF_MODEL,
         huggingfacehub_api_token=api_key,
-        task="conversational",
         do_sample=True,
         max_new_tokens=config.LLM_NUM_PREDICT,
         temperature=config.LLM_TEMPERATURE,
