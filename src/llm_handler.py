@@ -1,22 +1,24 @@
 import config
 import os
-from langchain_huggingface import HuggingFaceEndpoint
+from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 
 def get_llm():
     api_key = os.getenv("HUGGINGFACE_API_KEY")
 
     if not api_key:
             raise ValueError("HUGGINGFACE_API_KEY environment variable not set")
-        
-    return HuggingFaceEndpoint(
+
+    llm_endpoint = HuggingFaceEndpoint(
         repo_id=config.HF_MODEL,
         huggingfacehub_api_token=api_key,
-        task="conversational",
+        task="text-generation",
         do_sample=True,
         max_new_tokens=config.LLM_NUM_PREDICT,
         temperature=config.LLM_TEMPERATURE,
         top_p=config.LLM_TOP_P
     )
+
+    return ChatHuggingFace(llm=llm_endpoint)
 
 import re
 
