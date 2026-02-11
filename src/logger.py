@@ -38,7 +38,7 @@ def log_interaction(question, response_with_context, response_without_context, c
             classification,
             f"{confidence*100:.0f}",
             response_with_context[:], 
-            response_without_context[]
+            response_without_context[:]
         ]
         
         worksheet.append_row(new_row)
