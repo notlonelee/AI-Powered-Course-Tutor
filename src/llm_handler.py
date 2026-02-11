@@ -57,7 +57,7 @@ def generate_chatbot_response(question, relevant_chunks, llm=None):
                 QUESTION: {question}
                 """
 
-    response = llm.invoke(prompt).strip()
+    response = llm.invoke(prompt).content
     # response = convert_latex_delimiters(response)
 
     return response

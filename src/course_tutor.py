@@ -82,9 +82,9 @@ class CourseTutor:
         ANSWER:"""
         
         try:
-            llm_response = llm.invoke(prompt).strip()
+            llm_response = llm.invoke(prompt).content
         except Exception as e:
-            llm_response = f"Error generating response: {str(e)}\nMake sure Ollama is running with: ollama serve"
+            llm_response = f"Error generating response: {str(e)}"
         
         return {
             'question': question,
