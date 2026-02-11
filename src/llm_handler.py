@@ -1,15 +1,26 @@
 import config
 from langchain_ollama import OllamaLLM
+import os
+from langchain_huggingface import HuggingFaceEndpoint
 
 def get_llm():
-    return OllamaLLM(
-        model=config.LLM_MODEL,
+    api_key = os.getenv("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")
+
+    if not api_key:
+            raise ValueError("HUGGINGFACE_API_KEY environment variable not set")
+        
+    return HuggingFaceEndpoint(
+        repo_id=config.HF_MODEL,
+        huggingfacehub_api_token=api_key,
+        task="text-generation",
+        do_sample=True,
+        max_new_tokens=config.LLM_NUM_PREDICT,
         temperature=config.LLM_TEMPERATURE,
-        top_p=config.LLM_TOP_P,
-        num_predict=config.LLM_NUM_PREDICT
+        top_p=config.LLM_TOP_P
     )
 
 import re
+
 
 def convert_latex_delimiters(text):
     text = text.replace('\\[', '$$')
