@@ -1,10 +1,9 @@
 import config
-from langchain_ollama import OllamaLLM
 import os
 from langchain_huggingface import HuggingFaceEndpoint
 
 def get_llm():
-    api_key = os.getenv("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")
+    api_key = os.getenv("HUGGINGFACE_API_KEY")
 
     if not api_key:
             raise ValueError("HUGGINGFACE_API_KEY environment variable not set")
