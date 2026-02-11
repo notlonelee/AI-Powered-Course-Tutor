@@ -1,0 +1,120 @@
+\documentclass{article}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{framed, booktabs}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{comment}
+\usepackage{tikz}
+\usepackage{color, graphicx, parskip, titling, subfig}
+\usepackage{ragged2e} %justifying
+
+
+\title{Decision and Risk - Exercise 8}
+\author{}
+\date{}
+
+\setlength{\droptitle}{-10em}
+\newcommand\Solution[2][\\]{{\Question#1#2}}
+% TO PROVIDE NO SOLUTION uncomment
+\renewcommand\Solution[2][\\]{}
+
+
+\begin{document}
+
+\maketitle 
+\subsection*{Question 1}
+
+Consider a random variable $X\sim N(\mu,1)$. It is desired to estimate the unknown parameter $\mu$  under loss function $L ( \mu , a ) = ( \mu - a ) ^ { 2 }$. Let the decision rule be as follows: $\delta _ {1} ( \textbf{X} ) = \frac{\sum_{i=1}^{n}X_i}{n} = \overline { X }$.
+
+\begin{itemize}
+\item[(a)] Compute the risk function $R \left( \mu , \delta _ { 1} \right)$.
+\end{itemize}
+\vspace{.3cm}
+
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+$$R \left( \mu , \delta _ { 1 } \right) = E \left[ ( \mu - \delta _ {1} ( \textbf{X} )  ) ^ { 2 } \right] =  E \left[ ( \mu - \overline { X } ) ^ { 2 } \right]$$
+It is well known that $\overline { X }$ is unbiased, i.e. $E ( \overline { X } ) = \mu $, so $R \left( \mu , \delta _ { 1 } \right) = Var ( \overline { X } ) = \frac { 1} { n }$
+
+}
+
+\subsection*{Question 2}
+
+ Consider the following loss matrix.
+
+ \vspace{2mm}
+ $$\begin{array}{ | c | c | c | c |} \hline 
+ & {\color{black}a _ { 1 }} & {\color{black} a _ { 2 } } & {\color{black} a _ { 3 } } \\ 
+ \hline \theta _ { 1 } & { \pounds 1000 } & { -\pounds300 } & { \pounds4000 } \\ 
+ \hline \theta _ { 2 } & { - \pounds1000 } & { \pounds5000 } & { \pounds3000 } \\ \hline \theta _ { 3 } & { \pounds300 } & { - \pounds1000 } & { - \pounds100 } \\ 
+ \hline \end{array}$$
+ 
+ 
+ \begin{itemize}
+ \item[(a)] State for each action if it is \textbf{admissible} or \textbf{inadmissible}.
+ 
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+$a_1$ is admissible.\\
+$a_2$ is admissible.\\
+$a_3$ is admissible.
+}
+  
+ \item[(b)] Find the minimax nonrandomized action.
+ \end{itemize}
+ 
+ 
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+$$\begin{array} { l } { \sup _ { \theta } L \left( \theta , a _ { 1 } \right) = \max \{ 1000,-1000, 300 \} = 1000 } \\ { \sup _ { \theta } L \left( \theta , a _ { 2 } \right) = \max \{ -300 , 5000,-1000 \} = 5000 }\\
+{\sup_{\theta} L \left( \theta , a _ { 3 } \right) = \max \{4000 , 3000, -100\} = 4000}
+\end{array}$$
+Thus, $a _ { 1 }$ is the minimax non-randomized action.
+}
+
+\subsection*{Question 3}
+ Consider a random variable $X\sim N(\mu,\sigma^2)$. It is desired to estimate the unknown parameter $\sigma^2$  under loss function $L ( \sigma^2 , a ) = ( \sigma^2 - a ) ^ { 2 }$. Let the decision rule be as follows: $\delta _ {2} ( \textbf{X} ) = \frac { 1 } { n - 1 } \sum _ { i = 1 } ^ { n } \left( X _ { i } - \overline { X } \right) ^ { 2 } = S^2$ where $\overline { X }=\frac{\sum_{i=1}^{n}X_i}{n}$.
+ 
+ \begin{itemize}
+ \item[(a)] Computer the risk function $R \left( \sigma^2 , \delta _ { 2} \right)$.
+ %\item[(b)] Find the minimax randomized action.
+ \end{itemize}
+ 
+ 
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+Here the risk function is:
+$$R \left( \sigma^2 , \delta _ { 2 } \right) = E \left[ \left( \sigma^2 - \delta _ { 2 } ( \mathbf { X } ) \right) ^ { 2 } \right] = E \left[ \left( \sigma^2 - S^2 \right) ^ { 2 } \right]$$
+
+It is well known that the sample variance $S^2$ is an unbiased estimator of the population variance, $\sigma^2$, i.e. $E \left[ \delta _ { 2 } ( \mathbf { X } ) \right] = \sigma^2 $. 
+  Therefore:
+  
+\begin{align}\nonumber
+R \left( \sigma^2 , \delta _ { 2 } \right) & = Var \left[ \delta _ { 2 } ( \mathbf { X } ) \right] \\\nonumber 
+& = \frac { (\sigma^2) ^ { 2 } } { ( n - 1 ) ^ { 2 } } Var \left[ \sum _ { i = 1 } ^ { n } \frac { \left( X _ { i } - \overline { X } \right) ^ { 2 } } { \sigma^2 } \right] \\ \nonumber
+& = \frac { (\sigma^2) ^ { 2 } } { ( n - 1 ) ^ { 2 } } \cdot 2 ( n - 1 ) = \frac { 2 (\sigma^2) ^ { 2 } } { n - 1 }
+\end{align}
+   }
+ 
+\end{document}
+
+
+
+
+
+

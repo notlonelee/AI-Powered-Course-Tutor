@@ -1,0 +1,142 @@
+\documentclass{article}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{framed, booktabs}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{comment}
+\usepackage{tikz}
+\usepackage{color, graphicx, parskip, titling, subfig}
+\usepackage[left=1in, right=1in]{geometry}
+\title{Decision and Risk - Exercise 2 \\ 
+%{\footnotesize *Starred questions are slightly harder.}
+}
+\author{}
+\date{}
+
+\setlength{\droptitle}{-10em}
+
+\newcommand\Solution[2][\\]{{\Question#1#2}}
+% TO PROVIDE NO SOLUTION uncomment
+\renewcommand\Solution[2][\\]{} 
+
+\begin{document}
+
+\maketitle 
+
+\vspace{-20mm}
+
+\section*{Question 1}
+Consider the independence copula:
+\[
+C(u_1, u_2) = u_1 u_2, \quad \text{for } u_1, u_2 \in [0, 1].
+\]
+
+Verify that this copula satisfies the three properties of a copula.
+
+  
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}\\
+
+\underline{Property 1}
+
+Substitute \(u_1 = 0\) into \(C(u_1, u_2)\): \quad     $C(0, u_2) = 0 \cdot u_2 = 0$
+
+Similarly, substitute \(u_2 = 0\): \quad $C(u_1, 0) = u_1 \cdot 0 = 0$
+
+Thus, Property 1 is satisfied.\\
+
+\underline{Property 2}
+
+Substitute \(u_1 = 1\) into \(C(u_1, u_2)\):   \quad    $C(1, u_2) = 1 \cdot u_2 = u_2$
+
+Similarly, substitute \(u_2 = 1\): \quad $C(u_1, 1) = u_1 \cdot 1 = u_1$
+
+Thus, Property 2 is satisfied.\\
+
+\underline{Property 3}
+
+Property 3 requires that for all \(u_1, u_1', u_2, u_2' \in [0, 1]\) such that \(u_1 \leq u_1'\) and \(u_2 \leq u_2'\), the following inequality holds:
+
+$$
+C(u_1', u_2') - C(u_1', u_2) - C(u_1, u_2') + C(u_1, u_2) \geq 0.
+$$
+
+Substitute \(C(u_1, u_2) = u_1 u_2\):
+\begin{align*}
+C(u_1', u_2') - C(u_1', u_2) - C(u_1, u_2') + C(u_1, u_2) &= u_1' u_2' - u_1' u_2 - u_1 u_2' + u_1 u_2\\
+&= u_1'(u_2' - u_2) - u_1(u_2' - u_2)\\
+&= (u_1' - u_1)(u_2' - u_2)
+\end{align*}
+
+Since \(u_1' \geq u_1\) and \(u_2' \geq u_2\), the product \((u_1' - u_1)(u_2' - u_2) \geq 0\).
+
+Thus, Property 3 is also satisfied.
+
+%The independence copula \(C(u_1, u_2) = u_1 u_2\) satisfies:
+%\begin{itemize}
+%    \item \(C(0, u_2) = 0\) and \(C(u_1, 0) = 0\),
+%    \item \(C(1, u_2) = u_2\) and \(C(u_1, 1) = u_1\),
+%    \item \(C(u_1', u_2') - C(u_1', u_2) - C(u_1, u_2') + C(u_1, u_2) \geq 0\) for all \(u_1 \leq u_1'\) and \(u_2 \leq u_2'\).
+%\end{itemize}
+}
+ 
+ 
+ 
+  \section*{Question 2}
+
+Consider the Clayton copula:
+\[
+C(u_1, u_2 \mid \theta) = \left(u_1^{-\theta} + u_2^{-\theta} - 1\right)^{-\frac{1}{\theta}}, \quad \text{for } \theta > 0.
+\]
+
+Show that its density is given by the following expression:
+
+\[
+c(u_1, u_2) = (1+\theta) (u_1 u_2)^{-\theta-1} \left(u_1^{-\theta} + u_2^{-\theta} - 1\right)^{-\frac{1}{\theta} - 2}
+\]
+
+  
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+To find the copula density, we calculate the second partial derivative \(\frac{\partial^2 C}{\partial u_1 \partial u_2}\).
+
+\underline{First Partial Derivatives}
+
+The first partial derivative with respect to \(u_1\) is:
+\begin{align*}
+\frac{\partial C}{\partial u_1} &= \frac{\partial}{\partial u_1} \left(u_1^{-\theta} + u_2^{-\theta} - 1\right)^{-\frac{1}{\theta}} \\
+&= -\frac{1}{\theta} \left(u_1^{-\theta} + u_2^{-\theta} - 1\right)^{-\frac{1}{\theta} - 1} \cdot \left(-\theta u_1^{-\theta-1}\right) \\
+&= u_1^{-\theta-1} \left(u_1^{-\theta} + u_2^{-\theta} - 1\right)^{-\frac{1}{\theta} - 1}.
+\end{align*}
+
+\underline{Second Partial Derivative}
+
+The second partial derivative is:
+\begin{align*}
+\frac{\partial^2 C}{\partial u_1 \partial u_2} &= \frac{\partial}{\partial u_2} \left(u_1^{-\theta-1} \left(u_1^{-\theta} + u_2^{-\theta} - 1\right)^{-\frac{1}{\theta} - 1}\right)\\
+ &= u_1^{-\theta-1} \cdot \left(-\frac{1}{\theta} - 1\right) \left(u_1^{-\theta} + u_2^{-\theta} - 1\right)^{-\frac{1}{\theta} - 2} \cdot \left(-\theta u_2^{-\theta-1}\right).
+\end{align*}
+
+Simplifying the expression, the copula density is:
+\[
+\frac{\partial^2 C}{\partial u_1 \partial u_2}=c(u_1, u_2) = (1+\theta) (u_1 u_2)^{-\theta-1} \left(u_1^{-\theta} + u_2^{-\theta} - 1\right)^{-\frac{1}{\theta} - 2}.
+\]
+
+}
+  
+  
+\end{document}
+
+
+
+
+
+

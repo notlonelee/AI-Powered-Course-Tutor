@@ -1,0 +1,260 @@
+\begin{document}
+
+
+\begingroup
+\let\cleardoublepage\clearpage
+\setcounter{chapter}{9}
+\chapter*{\centering Decision and Risk \\ \vspace{1cm} \LARGE Lecture 9: Statistical Decision Theory III}
+\centering {\tiny Last updated on \today}
+\tableofcontents
+\endgroup 
+\chaptermark{Statistical Decision Theory III}
+
+
+\section{Randomized decision rules}
+ So far, we have considered \textbf{deterministic} decision rules. That is, given a particular realization $X=x$, a \textbf{deterministic} decision rule {\color{red}$\delta(x)$} is a function from $\Omega$ into $\mathscr{A}$. However, there will be situations when decision will have to be taken in a randomised manner. These situations may arise in the presence of an intelligent competitor. A generalization of this concept is a {\color{red} {randomized decision  rule}}.
+
+\vspace{.3cm}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 6}\end{defn}, colframe=black!60]
+ A {\color{red}randomized decision rule} {\color{blue}$\delta ^ { * } ( x , \cdot )$} is a probability distribution on {\color{ForestGreen}$\mathscr { A }$}. That is, given that $X=x$ is observed, {\color{blue}$\delta ^ { * } ( x , {\color{ForestGreen}A})$} is the probability that an action in ${\color{ForestGreen}A}\subseteq {\color{ForestGreen}\mathscr{A}}$ will be chosen.
+
+\vspace{0.2mm}
+\end{tcolorbox}
+\vspace{.3cm}
+
+In the absence of data, a {\color{red} randomized decision rule} is also called a {\color{blue} randomized action}, which is denoted as {\color{blue}$\delta ^ { * } (\cdot )$}. A {\color{blue} randomized action} is also a probability distribution on {\color{ForestGreen}$\mathscr { A }$}. 
+
+
+\subsection{Example 6: Matching Pennies}
+Consider the following game called \enquote{matching pennies}. In this game, two players \textbf{A} and \textbf{B} uncover a coin simultaneously. If the two coins match, i.e. both heads or both tails, then player \textbf{A} wins \pounds1 from his opponent. If the coins do not match, then player \textbf{B} wins \pounds1 from his opponent. The actions which are available to player \textbf{A} are:
+\begin{itemize}
+\item[] {\color{red}$a_1$} -- choose heads
+\item[] {\color{red}$a_2$} -- choose tails
+\end{itemize}
+
+
+ The possible states of nature are:
+ \begin{itemize}
+ \item[] {\color{blue}$\theta_1$} -- the opponent's coin is a head
+ \item[] {\color{blue}$\theta_2$} -- the opponent's coin is a tail
+ \end{itemize}
+
+ 
+The loss matrix in this game is:
+$$\begin{array}{ |c| c | c | } 
+\hline 
+ &{\color{red} a _ { 1 } } & {\color{red} a _ { 2 }  } \\ 
+\hline 
+{\color{blue}\theta_1} &- 1 & { 1 } \\ 
+\hline 
+{\color{blue}\theta_2} &1 & { - 1 } \\ 
+\hline 
+\end{array}$$
+\vspace{3mm}
+Here, both actions ${\color{red} a _ { 1 }  }$, and ${\color{red} a _ { 2 }  }$, are \textbf{admissible}. However, if the game is to be played many times, it would be a very poor idea for player \textbf{A} to always choose ${\color{red} a _ { 1 }  }$ or ${\color{red} a _ { 2 }  }$. This is because player \textbf{B} would quickly realize this, and could then develop a winning strategy. Similarly, any deterministic choice of ${\color{red} a _ { 1 }  }$, and ${\color{red} a_{2}}$ could be discerned by an intelligent opponent. To prevent loosing, choose ${\color{red} a _ { 1 }  }$ and ${\color{red} a_{2}}$ by some random mechanism. For example, choose ${\color{red} a_{ 1 }}$ with probability ${\color{ForestGreen}p}$, and ${\color{red} a_{2}}$ with probability ${\color{ForestGreen}(1-p)}$ respectively.
+
+ \textbf{Non-randomized} decision rules can be considered as a special case of \textbf{randomized} rules. It can be shown that they correspond to the \textbf{randomized} rules which choose a specific action with probability one for each $x$. Indeed if {\color{blue}$\delta( x)$} is a non-randomized decision rule, let {\color{red}$\langle \delta \rangle $} denote the equivalent randomized rule given by:
+ 
+  \vspace{.3cm}
+  \begin{tcolorbox}[colback=black!10, colframe=black!60]
+  $${\color{red}\langle \delta \rangle ( x , {\color{ForestGreen}A} )} = \mathbb{I}_ { {\color{ForestGreen}A} } (  {\color{red}\delta ( x )} ) = \left\{ \begin{array} { l l } { 1 } & { \text { if }  {\color{red}\delta ( x )} \in {\color{ForestGreen}A} } \\ { 0 } & { \text { if }  {\color{red}\delta ( x )} \notin {\color{ForestGreen}A} } \end{array}$$
+
+  \end{tcolorbox}
+  \vspace{.3cm}
+Note that $\mathbb{I}_ { {\color{ForestGreen}A} } (  {\color{red}\delta ( x )} )$ is an indicator function which takes value of 1 if the non-randomized decision rule ${\color{red}\delta ( x )}$ belongs to the subset of actions ${\color{ForestGreen}A}$, and 0 otherwise\footnote{In this course we will only consider ${\color{ForestGreen}A}=\{a_i\}$, that is, a subset ${\color{ForestGreen}A}$ of the action space ${\color{ForestGreen}\mathscr { A }}$ will consist of one element $a_i$ only.}.
+
+Consider the randomized action (no-data problem) discussed in the \enquote{matching pennies} example, which is defined by:
+ \vspace{3mm}
+ \begin{align} \label{decision_rand_1}
+ {\color{blue}\delta ^ { * } \left( a _ { 1 } \right)} =  & \; {\color{red}p}\\ \label{decision_rand_2}
+ {\color{blue}\delta ^ { * } \left( a _ { 2 } \right)} = & \; {\color{red}(1-p)}
+ \end{align}
+% \vspace{3mm}
+ 
+\noindent This can also be expressed in a more convenient way using the previous notation of {\color{red}$\langle \delta \rangle $}:
+\begin{align}\label{rand_notation}
+\delta ^ { * } = p \langle a _ { 1 } \rangle + ( 1 - p )\langle a _ { 2 } \rangle
+\end{align}
+ \begin{tcolorbox}[colback=black!10, colframe=black!60]
+For example, suppose we wish to know the probability with which action ${\color{red}a_1}$ is selected. Then using this notation:
+\begin{align}\nonumber
+\delta ^ { * }({\color{red}a_1}) &= p \left\langle a _ { 1 } \right\rangle({\color{red}a_1}) + ( 1 - p )\left\langle a _ { 2 } \right\rangle({\color{red}a_1})\\\nonumber
+&=p\cdot 1 + ( 1 - p )\cdot 0 \\\nonumber
+&= p 
+\end{align} 
+where ${\color{}\langle a_1 \rangle ( {\color{red}a_1} )} = I _ { {\color{red}a_1} } (  {\color{}a_1} ) = 1$, and ${\color{}\langle a_2 \rangle ( {\color{red}a_1} )} = I _ { {\color{red}a_1} } (  {\color{}a_2} ) = 0$ (because ${\color{}a_2} \notin \{{\color{red}a_1}\})$. Then what this notation is saying is that, action $a_1$ is chosen with probability $p$ (when there are two actions only, we can also use notation $\delta ^ { * }_p({\color{red}a_1})$). Similarly, the probability with which action ${\color{ForestGreen}a_2}$ is selected:
+\begin{align}\nonumber
+\delta ^ { * }({\color{ForestGreen}a_2}) &= p \left\langle a _ { 1 } \right\rangle({\color{ForestGreen}a_2}) + ( 1 - p )\left\langle a _ { 2 } \right\rangle({\color{ForestGreen}a_2})\\\nonumber
+&=p\cdot 0 + ( 1 - p )\cdot 1 \\\nonumber
+&= ( 1 - p )
+\end{align} 
+where ${\color{}\langle a_1 \rangle ( {\color{ForestGreen}a_2} )} = I _ { {\color{ForestGreen}a_2} } (  {\color{}a_1} ) = 0$ (because ${\color{}a_1} \notin \{{\color{ForestGreen}a_2}\}$), and ${\color{}\langle a_2 \rangle ( {\color{ForestGreen}a_2} )} = I _ { {\color{ForestGreen}a_2} } (  {\color{}a_2} ) = 1$.
+Hence, equation \eqref{rand_notation} is an alternative expression to \eqref{decision_rand_1} - \eqref{decision_rand_2}.
+ \end{tcolorbox}
+ \vspace{.3cm}
+
+Similar to \textbf{non-randomized} decision rules, there are costs associated with \textbf{randomized} decision rules.
+
+\textbf{Question:} How can we define the {\color{red}loss function} associated with a particular \textbf{randomized} rule? The natural way to define the {\color{red}loss function} is in terms of expected loss.
+
+
+
+\vspace{.3cm}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 7}\end{defn}, colframe=black!60]
+The loss function ${\color{red} L \left( \theta , {\color{ForestGreen}\delta ^ { * } ( x )} \right)}$ of the randomized rule {\color{ForestGreen}$\delta ^ { * } ( x , \cdot )$} is:
+$${\color{red}L \left( \theta , {\color{ForestGreen}\delta ^ { * } ( x)} \right)} = E ^ { {\color{ForestGreen}\delta ^ { * } ( x , \cdot )} } [ L ( \theta , {\color{ForestGreen}a} ) ]$$
+
+
+\end{tcolorbox}
+\vspace{.3cm}
+
+Note that the expectation is taken over {\color{ForestGreen}$a$}. Similarly, we can define the {\color{black}\textbf{risk function} $R \left( \theta , {\color{ForestGreen}\delta ^ { * }} \right)$} of a randomized decision rule {\color{ForestGreen}$\delta ^ { * } ( x , \cdot )$} in terms of expected loss.
+\end{itemize}
+\vspace{3mm}
+
+
+\vspace{.2cm}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 8}\end{defn}, colframe=black!60]
+The {\color{blue}\textbf{risk function} $R \left( \theta , {\color{ForestGreen}\delta ^ { * }} \right)$} of a randomized decision rule {\color{ForestGreen}$\delta ^ { * } ( x , \cdot )$} with the loss function ${\color{black} L \left( \theta , {\color{ForestGreen}\delta ^ { * } ( x )} \right)}$ is:
+
+$${\color{blue}R ( \theta , {\color{ForestGreen}\delta^*} )} = E _ { \theta } ^ { {\color{red}X} } [ {\color{black} L \left( \theta , {\color{ForestGreen}\delta ^ { * } ( {\color{red}X} )} \right)} ] = {\color{red}\int _ { \Omega }} L ( \theta , {\color{ForestGreen}\delta^*( {\color{red}x} )} ) d {\color{red}F ^ { X } ( x | {\color{black}\theta })}$$
+
+\end{tcolorbox}
+\vspace{3mm}
+
+Again, we can see that for a no-data decision problem ${{\color{blue}R ( \theta , {\color{ForestGreen}\delta^*} )}} = {\color{black} L \left( \theta , {\color{ForestGreen}\delta ^ { * }} \right)}$. Let's consider again the \enquote{matching pennies} example with no-data. Because this is a no-data problem, the risk ${{\color{black}R ( \theta , {\color{black}\delta^*} )}}$ is just the loss $ {\color{black} L \left( \theta , {\color{black}\delta ^ { * }} \right)}$. In \underline{Definition \ref{defn: 7}} we have seen that the loss function of the randomised decision rule is the expected loss of a loss function taken with respect to a probability distribution on the action space. Furthermore, because there are two states of nature, ${\color{red}\theta _ { 1 }}$ and ${\color{ForestGreen}\theta _ { 2 }}$, the form of the risk function will depend on the value of $\theta$:
+
+ $$\begin{aligned}{\color{blue}R ( \theta , {\color{blue}\delta^*} )}= {\color{blue}L \left( \theta , \delta ^ { * } \right)} & = E ^ { \delta ^ { * } } [ L ( \theta , a ) ]\\
+  &= {\color{red}\delta ^ { * } \left( a _ { 1 } \right)} L \left( \theta , a _ { 1 } \right) +  {\color{ForestGreen}\delta ^ { * } \left( a _ { 2 } \right)} L \left( \theta , a _ { 2 } \right) \\ 
+  & =  {\color{red}p} L \left( \theta , a _ { 1 } \right) +  {\color{ForestGreen}( 1 - p )} L \left( \theta , a _ { 2 } \right) \\ & = \left\{ \begin{array} { l l } {  {\color{red}- p + ( 1 - p )} =  {\color{red}1 - 2 p} } & { \text { if }  {\color{blue}\theta} =  {\color{red}\theta _ { 1 }} } \\ { \: \:\:{\color{ForestGreen}p - ( 1 - p )} =  {\color{ForestGreen}2 p - 1} } & { \text { if }  {\color{blue}\theta} =  {\color{ForestGreen}\theta _ { 2 }} } \end{array} \right. \end{aligned}$$
+  \vspace{3mm}
+ It is evident that if player \textbf{A} chooses ${\color{red} a_{ 1 }}$ with probability ${\color{ForestGreen}p=\frac{1}{2}}$, and ${\color{red} a_{2}}$ with ${\color{ForestGreen}(1-p)=\frac{1}{2}}$, the loss is zero no matter what player \textbf{B} does. Therefore, the randomized rule ${\color{ForestGreen}\delta^{ * }(\cdot)}$ with ${\color{ForestGreen}p=\frac{1}{2}}$ guarantees an expected loss of zero.
+
+
+
+\vspace{.2cm}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 9}\end{defn}, colframe=black!60]
+Let {\color{red}$\mathscr{D^*}$} be the set of all randomized decision rules ${\color{ForestGreen}\delta ^ { * }}$ for which ${{\color{blue}R ( \theta , {\color{ForestGreen}\delta^*})}}<\infty$ for all ${\color{blue}\theta}$. A decision rule will be said to be \textbf{admissible} if there exists no $R$-\textit{better} randomized decision rule in {\color{red}$\mathscr{D^*}$}.
+
+\vspace{0.2mm}
+\end{tcolorbox}
+\subsection{Is the use of randomized decision rules reasonable?}
+
+Often decision problems do not involve an intelligent opponent. For example, when deciding whether to prescribe a particular drug to a patient, no intelligent opponent is involved. In these situations there seems to be no good reason to use randomized decision rules. On the contrary, our intuition would argue against it. Whenever possible, each possible action has to be evaluated in order to find the optimal action. If there is only one optimal action, then randomizing is of limited use. If there are two or more optimal actions, one could potentially choose at random, although the usefulness of doing so is questionable. Often, leaving the final choice of an action to be decided by some random mechanism just seems illogical. Therefore, the actual use of a randomized rule will rarely be recommended.
+
+\section{Frequentist Decision Principles}
+We have seen that using risk functions to select a
+decision rule does not always produce a clear final choice. It may well be that there are many \textbf{admissible} decision rules. %(i.e., decision rules which can not be dominated in terms of risk). 
+To overcome this limitation, we must introduce an additional principle in order to select a specific decision rule. For example, in classical statistics there are a number of such principles for developing statistical procedures: 
+ \begin{itemize}\setlength\itemsep{0.01mm}
+ \item[-] least squares principle
+ \item[-] the maximum likelihood 
+ \item[-] unbiasedness
+ \item[-] minimum variance 
+ \end{itemize}
+In decision theory, two important principles that can be used are:
+
+ \begin{itemize}
+ \item[I.] the Bayes risk principle
+ \item[II.] the minimax principle 
+
+ \end{itemize}
+
+
+
+\subsection{I. The Bayes Risk Principle}
+
+We have already seen in \underline{Definition  5} (Lecture 8) that, we could obtain a (real) number associated with a particular decision rule instead of a risk function. This approach involved using the prior distribution {\color{ForestGreen}$\pi$}, and computing the Bayes risk of a decision rule {\color{red}$\delta$}: 
+$${\color{blue}r ( {\color{ForestGreen}\pi} , {\color{red}\delta} )} = {\color{blue}E} ^ { {\color{ForestGreen}\pi} } {\color{blue}R ( \theta , {\color{red}\delta} )}$$ 
+Since this is a (real) number, we can simply find a decision rule which will minimize it. Thus, we can define the first frequentist decision principle.
+
+
+\vspace{.2cm}
+\begin{tcolorbox}[colback=black!10, title=\begin{defn}\label{defn: 10}\end{defn}, colframe=black!60]
+A decision rule {\color{red}$\delta _ { 1 }$} is preferred to a rule {\color{blue}$\delta _ { 2 }$} if:
+
+$${\color{red}r \left( \pi , \delta _ { 1 } \right)} < {\color{blue}r \left( \pi , \delta _ { 2 } \right)}$$
+
+A decision rule is said to be optimal if it minimizes $r(\pi , \delta)$. This decision rule is called a Bayes rule, and will be denoted $\delta ^ { \pi }$. \\
+
+The quantity $r ( \pi ) = r \left( \pi , \delta ^ { \pi } \right)$ is then called the Bayes risk for $\pi$.
+
+\vspace{0.2mm}
+\end{tcolorbox}
+
+
+\subsection{Example 7}
+Consider previous Example 5. We have seen that the Bayes risk $r\left( \pi , \delta _ { c } \right)$ of a decision rule $\delta _ { c }$ when a prior distribution $\pi$ is $N(0, \tau^2)$ was $c ^ { 2 } + ( 1 - c ) ^ { 2 } \tau ^ { 2 }$. Minimizing with respect to $c$, we can establish that $c _ { 0 } = \frac{\tau ^ { 2 }}{\left( 1 + \tau ^ { 2 } \right)}$ is the optimal value. Hence, $\delta _ { c_{0} }$ has the smallest Bayes risk among all estimators of the form  $\delta _ { c }$. Therefore, $\delta _ {c_{0}}$ is the Bayes rule, which has the following form:
+
+
+\vspace{.2cm}
+\begin{tcolorbox}[colback=black!10, colframe=black!60]
+$$\begin{aligned}{\color{red}r ( \pi )} & = {\color{red}r \left( \pi , \delta _ { c _ { 0 } } \right)}\\
+& = c _ { 0 } ^ { 2 } + \left( 1 - c _ { 0 } \right) ^ { 2 } \tau ^ { 2 } \\ & = \left( \frac { \tau ^ { 2 } } { 1 + \tau ^ { 2 } } \right) ^ { 2 } + \left( \frac { 1 } { 1 + \tau ^ { 2 } } \right) ^ { 2 } \tau ^ { 2 }\\
+& = \frac { \tau ^ { 2 } } { 1 + \tau ^ { 2 } } 
+\end{aligned}$$
+
+\end{tcolorbox}
+
+\subsection{II. The Minimax Principle}
+Analysis of decision problems using the \textbf{minimax principle} generally requires consideration of randomized decision rules. Hence, if {\color{red}$\delta^*\in \mathscr{D^*}$} is the  randomized decision rule, then the worst case possible using this decision rule {\color{red}$\delta^*$} is:
+
+$${\color{blue}\sup _ { \theta \in \Theta } R \left( \theta , {\color{red}\delta ^ { * }} \right)}$$ 
+
+In order to protect from the worst case scenario, one should use the \textbf{minimax principle}.
+
+\vspace{.2cm}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 11}(The Minimax Principle)\end{defn}, colframe=black!60]
+A decision rule {\color{red}$\delta _ { 1 } ^ { * }$} is preferred to a rule {\color{blue}$\delta _ { 2 } ^ { * }$} if:
+\vspace{-1mm}
+$${\color{red}\sup _ { \theta } R \left( \theta , \delta _ { 1 } ^ { * } \right)} < {\color{blue}\sup _ { \theta } R \left( \theta , \delta _ { 2 } ^ { * } \right)}$$
+
+\end{tcolorbox}
+
+For a no-data decision problem, the \textbf{minimax decision rule} is simply called the \textbf{minimax action}.
+
+
+\subsection{Example 8}
+There may be situations where it is of interest to determine the best \textit{non-randomized} rule according to the \textit{minimax principle}. When such a best rule exists, it will be
+called the \textbf{minimax non-randomized rule}. In a no-data decision problem, the \textbf{minimax non-randomized} rule is simply called \textbf{minimax non-randomized action}. Consider previous Example 3.
+
+ $$\begin{aligned} 
+ R \left( \theta , \delta _ { c } \right) & = {\color{black}c ^ { 2 } + ( 1 - c ) ^ { 2 } \theta ^ { 2 }}
+ \end{aligned}$$
+ \vspace{1mm}
+ 
+For the decision rules $\delta _ { c }$:
+$$\sup _ { \theta } R \left( \theta , \delta _ { c } \right) = \sup _ { \theta } \left[ c ^ { 2 } + ( 1 - c ) ^ { 2 } \theta ^ { 2 } \right] = \left\{ \begin{array} { l l } { 1 } & { \text { if } c = 1 } \\ { \infty } & { \text { if } c \neq 1 } \end{array} \right.$$
+
+Therefore, according to the \textbf{minimax principle}, $\delta _ { 1 }$ is best among the decision rules $\delta _ { c }$. Hence, $\delta _ { 1 }$ is a minimax rule and that 1
+is the minimax value for the decision problem. Recall that the decision rule is $\delta _ { 1 } ( x ) = x$, and if it is used, one can ensure that the risk is no worse than 1. It can also be noted that the minimax rule and the Bayes rule are different. \\
+
+\begin{tcolorbox}[colback=black!10, colframe=black!60]
+Note that in Example 3 we are trying to estimate the unknown parameter $\theta$, which is the mean of the normal distribution, $N(\theta,1)$. Hence, it can take values between $-\infty$ and $\infty$. Therefore, function $ c ^ { 2 } + ( 1 - c ) ^ { 2 } \theta ^ { 2 }$, which is a quadratic function of $\theta$, will tend to $\infty$ as $\theta \to \infty$ for any value of $c$ except $c=1$. When, $c=1$,  function $ c ^ { 2 } + ( 1 - c ) ^ { 2 } \theta ^ { 2 }$ will always take value of 1 regardless of the value of $\theta$. Hence, the worst (or highest) possible risk is 1 for any value of $\theta$ (i.e. $\sup _ { \theta } \left[ c ^ { 2 } + ( 1 - c ) ^ { 2 } \theta ^ { 2 } \right] =1$). Therefore, according to the \textbf{minimax principle}, if we want to minimise the worst (or highest) possible risk, then we should use $\delta _ { 1 }$ (i.e. select $c=1$).
+
+\vspace{0.2mm}
+\end{tcolorbox}
+\subsection{Example 6 (continued)}
+
+Consider again the randomized action {\color{red}$ \delta^* $} (no-data problem) discussed in the \enquote{matching pennies} example:
+$${\color{red}\delta ^ { * }} = {\color{ForestGreen}p} {\color{red}\left\langle a _ { 1 } \right\rangle} + {\color{ForestGreen}( 1 - p )} {\color{red}\left\langle a _ { 2 } \right\rangle}$$
+
+where ${\color{red} a_{ 1 }}$ is to be selected with probability ${\color{ForestGreen}p}$, and ${\color{red} a_{2}}$ with ${\color{ForestGreen}(1-p)}$. The risk (which is also the loss) was shown to be:
+ \vspace{3mm}
+$$\begin{aligned}{\color{blue}R ( \theta , {\color{blue}\delta^*} )}= {\color{blue}L \left( \theta , \delta ^ { * } \right)}  = \left\{ \begin{array} { l l } {  {\color{red}- p + ( 1 - p )} =  {\color{red}1 - 2 p} } & { \text { if }  {\color{blue}\theta} =  {\color{red}\theta _ { 1 }} } \\ { \: \:\:{\color{ForestGreen}p - ( 1 - p )} =  {\color{ForestGreen}2 p - 1} } & { \text { if }  {\color{blue}\theta} =  {\color{ForestGreen}\theta _ { 2 }} } \end{array} \right. \end{aligned}$$
+
+\begin{figure}[h]
+\centering
+\caption{$\sup _ { \theta } R \left( \theta , \delta _ { p } ^ { * } \right) = \max \{ 1 - 2 p , 2 p - 1 \}$.} \label{risk_randomised}
+\includegraphics[width=3in, height=2.2in]{risk_function2}
+\end{figure}
+
+\noindent Therefore, the supremum of a risk function over all values of $\theta$ has the following form:
+ 
+$$\sup _ { \theta } R \left( \theta , \delta _ { p } ^ { * } \right) = \max \{ 1 - 2 p , 2 p - 1 \}$$
+
+ \noindent Also, because the maximum of these functions exists, we can replace supremum with maximum.
+
+ Plotting these two functions in Figure \ref{risk_randomised}, it is clear that the minimum value of $\max \{ 1 - 2 p , 2 p - 1 \}$ (maximum is the highest of the two lines, which is highlighted in red) is 0, which occurs at {\color{ForestGreen}$p=\frac{1}{2}$}. Therefore, {\color{blue}$\delta_{1/2}^*$} is the \textbf{minimax action}, and $0$ is the minimax value for the problem. We can also use the notation for the randomized action introduced in equation \eqref{rand_notation}: $\delta ^ { * }_{1/2} = \frac{1}{2} \langle a _ { 1 } \rangle + \frac{1}{2}\langle a _ { 2 } \rangle$. That is, in order protect from the worst possible scenario (i.e. the highest possible risk), player \textbf{A} should select action ${\color{red} a_{ 1 }}$ with probability $\frac{1}{2}$, and action ${\color{ForestGreen} a_{2}}$ with $\frac{1}{2}$.
+ 
+\end{document}

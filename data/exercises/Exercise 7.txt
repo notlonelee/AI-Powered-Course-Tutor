@@ -1,0 +1,216 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{csquotes}
+\usepackage{xcolor}
+\usepackage{tcolorbox} % framed box around text
+\usepackage{parskip, titling, subfig}
+\usepackage[dvips,xetex]{graphicx}
+\usepackage{alltt}
+\usepackage{sverb}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{courier}
+\usepackage{framed,color}
+
+\usepackage{color, graphicx, parskip, framed, titling, subfig}
+
+\title{Decision and Risk - Exercise 7}
+\author{}
+\date{}
+
+\setlength{\droptitle}{-10em}
+\newcommand\Solution[2][\\]{{\Question#1#2}}
+% TO PROVIDE NO SOLUTION
+%\renewcommand\Solution[2][\\]{}
+\begin{document}
+
+\maketitle 
+
+%There are only 3 questions, but the first two are fairly long. They follow the structure of the examples used in the lecture very closely, so check the lecture notes carefully if you are struggling!
+
+\section*{Question 1}
+
+Suppose that a parameter $\theta$ can take only two values, $\theta=0$ or $\theta=1$. Your prior on $\theta$ before observing any data is $p(\theta=1)=0.6$. A random variable $Y$ is observable and has the following distribution:
+
+\begin{align}\nonumber
+Y|\theta=0 \sim Gamma(3,2) \\ \nonumber
+Y|\theta=1 \sim Gamma(3,1)
+\end{align} 
+
+Your task is to estimate the $\theta$. Let action $a_0$ correspond to claiming that $\theta = 0$, and action $a_1$ correspond to claiming that $\theta = 1$. 
+
+The losses corresponding to each action and values of $\theta$ are represented by the following \emph{loss matrix}:
+\begin{center}
+  \begin{tabular}{ c |c c }
+    & $\theta=0$ & $\theta=1$\\
+    \hline 
+    $a_0$ & 0 & 1 \\
+    $a_1$ & 8 & 0 \\
+  \end{tabular}
+\end{center}
+For example, the loss associated with action $a_1$ when the true value of $\theta = 0$ is $L(\theta=0, a_1) =8$. 
+
+
+\color{black}
+\vspace{.3cm}
+You obtain one observation of $Y=3$. Compute the \emph{Bayesian expected loss} associated with both actions given this observation, and decide which action to take.
+
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+After seeing the data $Y=3$, the \textit{Bayesian expected loss} is:
+\begin{align} \nonumber
+\rho(\pi^*, a_0| y) &= L(\theta=0, a_0)\cdot p(\theta = 0|y) +  L(\theta=1, a_0)\cdot p(\theta = 1|y) \\ \nonumber
+& = 0*p(\theta = 0|y) + 1*p(\theta = 1|y) = p(\theta = 1|y) \\ \nonumber \\ \nonumber
+\rho(\pi^*, a_1| y) &= L(\theta=0, a_1)\cdot p(\theta=0|y) + L(\theta=1,a_1)\cdot p(\theta=1|y)\\ \nonumber
+& = 8*p(\theta = 0|y) + 0*p(\theta = 1|y) = 8*p(\theta = 0|y) 
+\end{align}
+
+
+Using Bayes' Theorem:
+\begin{align} \nonumber
+p(\theta=0|y) &=  \frac{p(y|\theta=0)\cdot p(\theta=0)}{p(y)} 
+\end{align}
+
+\begin{align} \nonumber
+p(\theta=1|y) &=  \frac{p(y|\theta=1)\cdot p(\theta=1)}{p(y)} 
+\end{align}
+
+
+Numerator:
+\begin{align} \nonumber 
+p(y|\theta=0)\cdot p(\theta=0)=\frac{2^{3}}{\Gamma(3)} 3^{3-1} e^{-2*3} * 0.4 = 0.036
+\end{align}
+
+\begin{align} \nonumber
+p(y|\theta=1)\cdot p(\theta=1) = \frac{1^{3}}{\Gamma(3)} 3^{3-1} e^{-1*3} * 0.6 = 0.134 
+\end{align}
+
+
+Denominator:
+
+Using Law of Total probability:
+\begin{align} \nonumber
+p(y) &=  p(y|\theta=0)\cdot p(\theta=0) + p(y|\theta=1)\cdot  p(\theta=1) \\ \nonumber 
+&=\frac{2^{3}}{\Gamma(3)} 3^{3-1} e^{-2*3} * 0.4 + \frac{1^{3}}{\Gamma(3)} 3^{3-1} e^{-1*3} * 0.6 \\ \nonumber
+&= 0.17  
+\end{align}
+
+
+\begin{align} \nonumber
+p(\theta=0|y) &=  \frac{0.036}{0.17} = 0.21 
+\end{align}
+
+\begin{align} \nonumber
+p(\theta=1|y) &= \frac{0.134}{0.17} = 0.79
+\end{align}
+
+\begin{align} \nonumber
+\rho(\pi^*, a_0| y) &= p(\theta = 1|y) = 0.79 \\ \nonumber \rho(\pi^*, a_1| y) &= 8*p(\theta = 0|y) = 8*0.21 = 1.68
+\end{align}
+
+The \textit{Bayesian expected loss} is minimised by taking action $a_0$, hence we choose action $a_0$. 
+
+\color{black}
+\vspace{.6cm}
+}
+
+
+%\begin{align} \nonumber
+%p(\theta=0|y) &=  \frac{p(y|\theta=0)\cdot p(\theta=0)}{p(y)} 
+%              &= \frac{\frac{2^{3}}{\Gamma(3)} 3^{3-1} e^{-2*3} * 0.4}{0.17} \hspace{4cm} {\color{red}(1 \; mark)}
+%\end{align}
+%
+%\begin{align} \nonumber
+%p(\theta=1|y) &=  \frac{p(y|\theta=1)\cdot p(\theta=1)}{p(y)} 
+%              &= \frac{\frac{1^{3}}{\Gamma(3)} 3^{3-1} e^{-1*3} * 0.6}{0.17}\hspace{4cm} {\color{red}(1 \; mark)}
+%\end{align}
+
+\section*{Question 2}
+Consider a drug company deciding whether or not to market a new pain reliever. One of the many factors affecting its decision is the proportion of the market $\theta$ the drug will capture. The company desires to estimate $\theta$. Since $\theta$ is a proportion, it is clear that $\Theta=\{\theta: 0\leq \theta \leq 1\} =[0,1]$. Since the goal is to estimate $\theta$, the action taken is simply the choice of a number as an estimate for $\theta$. Hence $\mathcal{A}=[0,1]$. If a company underestimates demand, i.e. $\theta-a \geq 0$, the loss incurred is $\theta-a$. However, if a company overestimates demand, i.e. $\theta-a \leq 0$, then it is twice as costly as underestimating the demand with the cost being $2(a-\theta)$. Assume no data is obtained, however there is a prior information about $\theta$ arising from previous introductions of new similar drugs into the market. In the past drugs tended to capture between $\frac{1}{10}$ and $\frac{1}{5}$ of the market, with all values between $\frac{1}{10}$ and $\frac{1}{5}$ being equally likely. 
+
+%This prior information could be modelled using a $U(0.1, 0.2)$ prior density.
+
+a) Write down the prior density $p(\theta)$ that will reflect this prior information.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+See p. 8 in James O. Berger, \emph{Statistical Decision Theory and Bayesian Analysis}.
+
+This prior information on $\theta$ can be modelled using a $U(0.1,0.2)$ prior density: 
+   \begin{align} \nonumber
+   p(\theta)=& 10\mathbb{I}_{\{0.1, 0.2\}}(\theta)
+   \end{align}
+}
+
+b) Using the prior density from part a) compute the \textit{Bayesian expected loss} $\rho(\pi, a)$ of an action $a$.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+The \textit{Bayesian expected loss} $\rho(\pi, a)$ of an action $a$ is:
+
+   \begin{align} \nonumber
+   \rho(\pi, a)=& \int_{0}^{1} L(\theta,a)p(\theta)d\theta \\ \nonumber
+   =&\int_{0}^{a} 2(a-\theta) 10\mathbb{I}_{\{0.1, 0.2\}}(\theta) d\theta +\int_{a}^{1} (\theta-a) 10\mathbb{I}_{\{0.1, 0.2\}}(\theta) d\theta \\ \nonumber 
+   = & \begin{cases}
+    0.15-a  \qquad \quad\quad \quad \;\textrm{if} \quad  a \leq 0.1 \\
+     15a^2-4a+0.3  \qquad \textrm{if} \quad 0.1\leq a \leq 0.2 \\ 
+     2a-0.3  \qquad \quad \quad \quad \; \textrm{if} \quad a \geq 0.2
+         \end{cases}   
+   \end{align}
+}
+
+%\subsection*{Question 3}
+%
+%Let $p(\theta|\textbf{y})$ be the posterior density of unknown parameter $\theta$. It is required to obtain a single point estimate of $\theta$. This is a decision problem where action is the choice of $\hat{\theta}$ as an estimate of $\theta$. The loss function is as follows:
+% 
+% $$L ( \theta , \hat{\theta} ) = \left\{ \begin{array} { l l } { c ( \theta - \hat{\theta} ) } & { \text { if } \: \hat{\theta} \leq \theta } \\ { b ( \hat{\theta} - \theta ) } & { \text { if } \: \hat{\theta} > \theta } \end{array} \right.$$
+% 
+%where $c$ and $b$ are given positive constants.
+%
+% \begin{itemize}
+% \item[(a)] Find the Bayesian point estimate of $\theta$ under this loss function. 
+% [Hint: Bayes estimator is an estimator that minimizes the \textit{Bayesian expected loss}.]
+% \end{itemize}
+%
+%\Solution{
+%\vspace{.3cm}
+%\color{blue}
+%{\bf Solution}
+%
+%The \textit{Bayesian expected loss} has the following form:
+%$$ E ^ { \pi ^ {*} } L ( \theta , \hat{\theta})=c \int _ {\hat{\theta}  } ^ { \infty } ( \theta - \hat{\theta} ) p(\theta|\textbf{y}) d \theta + b \int _ { - \infty } ^ { \hat{\theta} } ( \hat{\theta} - \theta ) p(\theta|\textbf{y})  d \theta $$
+% 
+% 
+% Differentiate with respect to $\hat{\theta}$, set equal to 0, and rearrange  to obtain:
+% $$\int _ { - \infty } ^ { \hat{\theta} } p( \theta | \textbf{y})d \theta = \frac { c } { c + b }$$
+%  Let $q=\frac { c } { c + b }$. Therefore,  the resulting Bayes estimate $\hat{\theta}$ is  $q$th-quantile of the posterior density $p( \theta | \textbf{y})$.
+%  }
+  
+
+%\subsection*{Question 3}
+%
+%Derive the optimal point estimate of $\hat{\theta}$ for the coin tossing example in Lecture 1 for both Sarah and John, using  each of the squared and absolute loss functions. Give your answers to 5 decimal places.
+%
+%\vspace{3mm}
+%
+%[\textbf{Hint}: It is perhaps not obvious how to find the median of a Beta distribution. Here is one approach which is very general and can be used in a variety of situations. Rather than trying to find the median analytically, instead simulate a very large number of observations from a Beta distribution with the required parameters in R, using the \texttt{rbeta()} function. Then, take the median  of this sample, and treat it as an estimate of the true median. As long as your sample is large enough, this should be accurate. You will probably want to use the \texttt{sort()} function in R for finding the median.
+%
+%In general, if you want to find properties (e.g. median, interquartile range, etc.) of a probability distribution and it is not obvious how to do this, a very general solution is to generate samples from the distribution and find the properties of this sample instead.]
+\end{document}
+
+
+
+
+
+

@@ -1,0 +1,186 @@
+\begin{document}
+
+\begingroup
+\let\cleardoublepage\clearpage
+\setcounter{chapter}{8}
+\chapter*{\centering Decision and Risk \\ \vspace{1cm} \LARGE Lecture 8: Statistical Decision Theory II}
+\centering {\tiny Last updated on \today}
+\tableofcontents
+\endgroup 
+\chaptermark{Statistical Decision Theory II}
+
+
+\section{Frequentist Risk}
+
+We have seen that the Bayesian school of decision theory considers the expected loss based on an average over the random variable $\theta$. Once the \textbf{Bayesian expected loss} is computed, the conditional Bayes principle is used to select an action which minimises the \textbf{Bayesian expected loss}. Frequentist (or classical) approach considers a different expected loss. Before considering the expected loss from a frequentist perspective, we first need to define a decision rule.  
+
+
+\vspace{.9cm}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 1}\end{defn}, colframe=black!60]
+A \textbf{decision rule} {\color{red}$\delta(x)$} is a function from $\Omega$
+into $\mathscr{A}$. Given a particular realization $X=x$, {\color{red}$\delta(x)$} is the action that will be taken. Two decision rules, $\delta_{1}$ and $\delta_{2}$, are said to be equivalent if $P _ { \theta } \left( \delta _ { 1 } ( X ) = \delta _ { 2 } ( X ) \right) = 1$ for all $\theta$.
+
+\end{tcolorbox}
+\vspace{.9cm}
+\normalfont
+
+ That is, a decision rule specifies how the data is used to choose an action. In the absence of data, a decision rule is also called an action.
+
+
+\subsection{Example 1: Drug company}
+
+Let's consider the situation of a drug company that has to decide whether or not to market a new pain reliever. Suppose that the factor affecting its decision is the proportion of the market denoted by {\color{blue}$\theta$} the drug will capture. The value of {\color{blue}$\theta$} is unknown and needs to be estimated. The action taken is simply the choice of a number as an estimate for {\color{blue}$\theta$}. Hence, the standard decision rule for estimating {\color{blue}$\theta$} is {\color{red}$\delta ( x ) = \frac{x}{n}$}.
+
+
+
+
+\subsection{Example 2: Radio company}
+
+Let's consider a company that produces radios. It receives a shipment of transistors and randomly selects a sample of {\color{blue}$n$} transistors from the shipment for testing. Based on the number of defective transistors {\color{blue}$X$} in the sample, the shipment will be accepted or rejected. Hence, there are two possible actions:
+
+\begin{itemize}
+\item[] {\color{red}$a_1$} -- accept the shipment
+\item[] {\color{red}$a_2$} -- reject the shipment
+\end{itemize} 
+
+The decision rule is then:
+
+\vspace{.3cm}
+\begin{tcolorbox}[colback=black!10, colframe=black!60]
+$${\color{red}\delta ( x ) =} \left\{ \begin{array} { l l } { {\color{red}a _ { 1 }} } & { \text { if } {\color{blue}\frac{x}{n} \leq 0.05 }} \\ 
+&\\
+{ {\color{red}a _ { 2 }} } & { \text { if } {\color{blue}\frac{x}{n}> 0.05 }} \end{array} \right.$$
+
+\end{tcolorbox}
+
+
+
+\section{The risk function of a decision rule}
+Now we can define the expected loss from a frequentist perspective, which is known as the \textbf{risk function}. 
+\vspace{.4cm}
+
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 2}\end{defn}, colframe=black!60]
+The \textbf{\color{blue}risk function} of a decision rule {\color{red}$\delta ( x )$} is defined by:
+
+$${\color{blue}R ( \theta , {\color{red}\delta} )} = E _ { \theta } ^ { X } [ L ( \theta , {\color{red}\delta ( X )} ) ] = \int _ { \Omega } L ( \theta , {\color{red}\delta ( x )} ) d F ^ { X } ( x | \theta )$$
+
+
+\end{tcolorbox}
+\vspace{.4cm}
+
+Hence, the \textbf{\color{myblue}risk function} of a decision rule {\color{red}$\delta ( x )$} is defined as the expected loss with respect to the distribution of $\boldsymbol{X}$. That is, the risk function provides information to the decision-maker about how much they would expect to lose if they used {\color{red}$\delta ( x )$} repeatedly with varying  $\boldsymbol{X}$ but holding the value of $\theta$ constant. It is natural to use a decision rule {\color{red}$\delta ( X )$} which has smallest risk {\color{blue}$R(\theta, {\color{red}\delta})$}. However, in contrast to the \textit{Bayesian expected loss}, the risk is a function of $\theta$, and hence it is not a single number. Since $\theta$ is unknown, the meaning of \enquote{smallest} is not clearly defined. Nevertheless, there exists a partial ordering of decision rules which will allow to define a \enquote{good} decision rule.
+
+\vspace{.9cm}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 3}\end{defn}, colframe=black!60]
+A decision rule {\color{blue}$\delta_1$}, is $R$-\emph{better} than a decision rule {\color{red}$\delta_2$}, if ${\color{blue}R ( \theta , \delta_1)} \leq{\color{red}R ( \theta , \delta_2)}$ for all $\theta \in \Theta$, with strict inequality for some $\theta$. A decision rule {\color{blue}$\delta_1$}, is $R$-\emph{equivalent} to a decision rule {\color{red}$\delta_2$}, if ${\color{blue}R ( \theta , \delta_1)} = {\color{red}R ( \theta , \delta_2)}$ for all $\theta \in \Theta$.
+\end{tcolorbox}
+
+
+
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 4}\end{defn}, colframe=black!60]
+A decision rule {$\delta$} is said to be \textbf{admissible} if there does not exist $R$-\emph{better} decision rule. A decision rule {$\delta$} is \textbf{inadmissible} if there does exist an $R$-\emph{better} decision rule.
+\end{tcolorbox}
+
+
+
+From \underline{Definition \ref{defn: 4}} it is clear that an \textbf{inadmissible} decision rule should not be used, because we can always find decision rule with smaller risk. However, the class of \textbf{admissible} decision rules for a given decision problem can be large. This means that there will be \textbf{admissible} rules with risk functions ${\color{red}R ( \theta , \delta)}$ that are \enquote{better} in some regions of the parameter space ${\color{blue}\Theta}$, and \enquote{worse} in others, i.e. risk functions cross.
+
+\subsection{Example 3: Risk functions that cross} \label{example3}
+
+Consider a random variable $X\sim N(\theta,1)$. It is desired to estimate the unknown parameter $\theta$  under loss function $L ( \theta , a ) = ( \theta - a ) ^ { 2 }$. Let the decision rule be as follows: $\delta _ { c } ( x ) = c x$. The risk function is then as follows: 
+
+\vspace{.9cm}
+\begin{tcolorbox}[colback=black!10, colframe=black!60]
+
+$$\begin{aligned} {\color{red} R \left( \theta , \delta _ { c } \right)} & = E _ { \theta } ^ { X } L \left( \theta , \delta _ { c } ( X ) \right) = E _ { \theta } ^ { X } ( \theta - c X ) ^ { 2 } \\
+ & = E _ { \theta } ^ { X } ( c [ \theta - X ] + [ 1 - c ] \theta ) ^ { 2 } \\ & = c ^ { 2 } E _ { \theta } ^ { X } [ \theta - X ] ^ { 2 } + 2 c ( 1 - c ) \theta E _ { \theta } ^ { X } [ \theta - X ] + ( 1 - c ) ^ { 2 } \theta ^ { 2 } \\ & = {\color{red}c ^ { 2 } + ( 1 - c ) ^ { 2 } \theta ^ { 2 }} \end{aligned}$$
+\end{tcolorbox}
+
+Let {\color{blue}$c=1$}, in which case {\color{blue}$\delta _ { 1 }=x$}, and the risk function is {\color{blue}$R \left( \theta , \delta _ { 1 } \right) = 1$}. Clearly the decision rule {\color{blue}$\delta _ { 1 }$} is $R$-\emph{better} than {\color{red}$\delta _ { c }$} for values $c>1$:
+
+$${\color{blue}R \left( \theta , \delta _ { 1 } \right) = 1} < {\color{red}c ^ { 2 } + ( 1 - c ) ^ { 2 } \theta ^ { 2 } = R \left( \theta , \delta _ {c} \right)}$$
+
+The decision rules $\{{\color{red}\delta _ { c }}\}$, are then said to be \textbf{inadmissible} for $c>1$. The decision rules are \textbf{non-comparable} for $0 \leq c \leq 1$, because the risk functions associated with them cross. Let's consider ${\color{blue} c}= {\color{blue}1}$, then the corresponding risk function is ${\color{blue}R \left( \theta , \delta _ { 1 } \right) = 1}$, and also ${\color{red}c}= {\color{red} 0.5}$, with the corresponding risk function  ${\color{red}R \left( \theta , \delta _ { \frac{1}{2} } \right) = 0.5^2+0.5^2 \theta^2$. The risk functions for these decision rules are in Figure 1. 
+  \vspace{0.6mm}
+  
+\begin{figure}[h]
+\centering
+\caption{The risk functions of decision rules  ${\color{blue}\delta _ { 1 }(x)}$ and ${\color{red}\delta _ { \frac{1}{2} }(x)}$.} \label{risk_plot}
+\includegraphics[width=3in, height=1.6in]{risk_function1}
+\end{figure}
+   \vspace{0.3mm}
+According to \underline{Definition \ref{defn: 4}}, both decision rules {\color{blue} $\delta _ { 1 }$} and {\color{red} $\delta _ {\frac{1}{2} }$} are \textbf{admissible} since there are no $R$-\emph{better} decision rules for $0 \leq c \leq 1$. In fact, all decision rules $\{{\color{red}\delta _ { c }}\}$ are \textbf{admissible} for $0 \leq c \leq 1$. This also includes a nonsensical decision rule {\color{PineGreen} $\delta _ { 0 }=0$} with risk function ${\color{PineGreen}R \left( \theta , \delta _ {0 } \right) = \theta^2}$, which estimates $\theta$ to be $0$ completely ignoring the observed sample information $\textbf{x}$. Hence, although for a decision rule the {\textit{admissibility}} may be a desirable property, it does not guarantee that the decision rule will be reasonable.
+
+\subsection{Example 4: Risk functions in the absence of data}
+From \underline{Definition \ref{defn: 2}}, we can see that for a no-data decision problem ${R ( \theta , {\delta} )} = L ( \theta , {\delta} )$. Consider the following loss matrix:
+$$\begin{array}{ | c | c | c | c |} \hline 
+& {\color{blue}a _ { 1 }} & {\color{red} a _ { 2 } } & {\color{ForestGreen} a _ { 3 } } \\ 
+\hline \theta _ { 1 } & { 1 } & { 3 } & { 4 } \\ 
+\hline \theta _ { 2 } & { - 1 } & { 5 } & { 5 } \\ \hline \theta _ { 3 } & { 0 } & { - 1 } & {  1 } \\ 
+\hline \end{array}$$
+
+
+\begin{itemize}
+\item[] \textbf{Question 1:} Which decision rules (actions) are \textbf{inadmissible}?
+\item[] \textbf{Answer 1:} The action {\color{red} $a _ { 2 }$ } is $R$-\emph{better} than {\color{PineGreen} $a _ { 3 }$ } because {\color{red} $L(\theta_i,a_2)$} $\leq$ {\color{PineGreen}$L(\theta_i,a_3)$ }for all $i$, and {\color{red} $L(\theta_3,a_2)$} $<$ {\color{PineGreen}$L(\theta_3,a_3)$ }for $i=3$. However, it is not $R$-\emph{better} than {\color{blue} $a _ { 1 }$} (and {\color{blue} $a _ { 1 }$} is not $R$-\emph{better} than {\color{red} $a _ { 2 }$}). Hence, only {\color{PineGreen} $a _ { 3 }$} is \textbf{inadmissible}.
+
+\item[] \textbf{Question 2:} Which decision rules (actions) are non-comparable?
+\item[] \textbf{Answer 2:} Actions {\color{blue} $a _ { 1 }$ } and {\color{red} $a _ { 2 }$ } are non-comparable because {\color{blue} $L(\theta_1,a_1)$ = 1} $<$ {3 = \color{red}$L(\theta_1,a_2)$ }, and {\color{blue} $L(\theta_3,a_1)$ = 0} $>$ {-1 = \color{red}$L(\theta_3,a_2)$}. 
+\item[] \textbf{Question 3:} Which decision rules (actions) are \textbf{admissible}?
+\item[] \textbf{Answer 3:} From \underline{Definition \ref{defn: 4}} it is clear that actions {\color{blue} $a _ { 1 }$} and {\color{red} $a _ { 2 }$} are \textbf{admissible} since there are no $R$-\emph{better} actions.
+\vspace{3mm}
+\end{itemize}
+
+
+
+\section{The Bayes risk of a decision rule}
+
+\vspace{.3cm}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 5}\end{defn}, colframe=black!60]
+The Bayes risk of a decision rule $\delta$, with respect to a prior
+distribution $\pi$ on $\Theta$, is defined as:
+$${\color{red}r ( \pi , \delta )} = E ^ { \pi } [ R ( \theta , \delta ) ]$$
+\vspace{0.2mm}
+\end{tcolorbox}
+\vspace{.3cm}
+
+\subsection{Example 5: The Bayes risk of a decision rule}
+
+Let the prior distribution $\pi(\theta)$ be $N(0, \tau^2)$. Then the Bayes risk of 
+a decision rule $\delta_{ c }$ is:
+
+$$\begin{aligned} 
+{\color{red}r \left( \pi , \delta _ { c } \right)} & = E ^ { \pi } \left[ R \left( \theta , \delta _ { c } \right) \right] \\
+& = E ^ { \pi } \left[ c ^ { 2 } + ( 1 - c ) ^ { 2 } \theta ^ { 2 } \right] \\ 
+& = c ^ { 2 } + ( 1 - c ) ^ { 2 } E ^ { \pi } \left[ \theta ^ { 2 } \right] \\
+& = c ^ { 2 } + ( 1 - c ) ^ { 2 } \tau ^ { 2 } 
+\end{aligned}$$
+
+
+
+\subsection{Example 6}
+
+Let $Y$ be a random variable uniformly distributed on $[0,2\theta]$, where $\theta > 0$. It is of interest to estimate the unknown parameter $\theta$ under the loss function $L(\theta, a) = (\theta - a)^2$. Consider the decision rule $\delta_{c}(y) = c y$, where $c \geq 0$.
+\vspace{1cm}
+
+\textbf{a)} For what value of $c$ is $\delta_{c}(y)$ unbiased for $\theta$?  
+
+$\delta _ { c }(y)$ is unbiased if and only if $c = 1$.
+
+\textbf{b)} Derive the risk function for $\delta_{c}(y)$.
+
+The risk function $R \left( \theta , \delta_c \right)$ of the decision rule $\delta_c(y)$ is:
+\begin{align}\nonumber
+R \left( \theta , \delta _ { c } \right) = \int _ { 0 } ^ { 2\theta } ( \theta - c y ) ^ { 2 } \frac { 1 } { 2\theta } d y = \left( 1 - 2c + \frac{4}{3} c^{ 2 }\right) \theta ^ { 2 }
+\end{align}
+
+\textbf{c)} Using the value of $c$ found in part \textbf{a)}, state whether the decision rule $\delta_{c}(y)$ is admissible.
+
+The decision rule $\delta_c(y)$ is not admissible for $c = 1$ because there exists $\delta_{0.75}(y)$ such that $ R \left( \theta , \delta_{0.75} \right) < R \left( \theta , \delta_1 \right)$ for all $\theta>0\right$.
+
+    \begin{figure}[t] 
+    \centering
+  \caption{Risk functions, $\theta >0$.} \label{fig2}
+  \includegraphics[width=0.7\textwidth]{graph2}
+    \end{figure}
+\end{document}

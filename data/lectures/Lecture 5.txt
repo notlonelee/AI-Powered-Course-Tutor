@@ -1,0 +1,561 @@
+\begin{document}
+\begingroup
+\let\cleardoublepage\clearpage
+\setcounter{chapter}{5}
+\chapter*{\centering Decision and Risk \\ \vspace{1cm} \LARGE Lecture 5: Estimating the Probability of Extreme Events}
+\centering {\tiny Last updated on \today}
+\tableofcontents
+\endgroup 
+
+
+
+\section{Introduction}
+A key topic in risk analysis is estimating the probability of extreme and unlikely events occurring. Examples include:
+
+\begin{itemize}
+\item What is the probability that a financial institution will lose more than $\pounds 1$bn in a day, based on the  previous returns of a portfolio it owns?
+\item What is the probability of a terrorist attack more deadly than the 9/11 New York event occurring in the next 20 years?
+
+\end{itemize}
+
+We discussed the first example in the context of Value-at-Risk analysis. In this lecture we will focus on the second, and look at terrorism data. 
+
+The techniques used come from the area of \textbf{extreme value statistics} which is a branch of statistics that studies the probability of large/extreme events occurring. We will follow a methodology similar to that used in a recently published academic paper (available from the course Moodle page). As a small difference, their paper used frequentist methodology while we work in a broadly Bayesian setting.
+
+\section{Data}
+ We look at data from the RAND-MIPT terrorism database which contains a list of all terrorist attacks to occur worldwide between 1967-2007 (RAND is a famous policy think-tank). The data is publicly available, and can be downloaded from:
+ 
+  \href{www.rand.org/nsrd/projects/terrorism-incidents/download.html}{www.rand.org/nsrd/projects/terrorism-incidents/download.html}
+  
+\noindent Each attack record contains the following fields -- Date, City, Country, Perpetrator, Weapon, Injuries, Fatalities, Description. There are 13,274 deadly attacks in total over this period (i.e. attacks with more than 1 fatality). We will focus only on the Fatalities column. We are interested in modelling the number of people killed in a  typical terrorist attack. The purpose is to make statistical predictions about the probability of large terrorist attacks happening in the future.
+
+
+Whenever you work with data in any situation, the first thing to do is to \textbf{plot the data} to get an idea what it looks like. From Figure \ref{attackplot2} it seems that the frequency of terrorist attacks have increased drastically after 9/11. However the presence of outliers means its hard to interpret this plot since everything is so squashed together. To fix this, we can take the logarithm of the fatalities. This is a standard trick when plotting data with outliers in order to avoid the plot from being squashed. Figure \ref{logattackplot2} presents the plot of the transformed data. Although the frequency of attacks increased after 9/11, there is no obvious change in the number of fatalities. The data looks stationary (i.e. not changing over time). We can also plot the density of the fatalities data, which is presented in Figure \ref{density}.
+
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.5]{attackplot2.pdf}
+\caption{The number of fatalities in a terrorist attack.}\label{attackplot2}
+\end{center}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.4]{logattackplot2.pdf}
+\caption{The natural logarithm of the number of fatalities in a terrorist attack.}\label{logattackplot2}
+\end{center}
+\end{figure}
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[scale=0.5]{density.pdf}
+\caption{Logarithm of the number of fatalities in a terrorist attack.}\label{density}
+\end{center}
+\end{figure}
+
+We can also compute some summary statistics:
+
+\begin{itemize}
+\item The mean (average) number of deaths per attack is $4.14$
+\item The median number of deaths per attack is $1$
+\item The modal number of deaths per attack is $1$
+\item The standard deviation of the number of deaths per attack is $25.11$
+\end{itemize}
+
+In summary, most attacks do not kill many people. But there are several attacks that do cause high number of fatalities -- for example, 13 of the attacks killed more than $200$ people. The vast majority of attacks (7,965 out of 15,532) have only a single fatality, and $93.6\%$ of attacks kill fewer than 10 people.
+
+So deadly attacks are rare, and there are not many of them. Extreme value statistics is concerned with estimating the probabilities of rare events happening. 
+
+
+
+
+
+\section{Statistical Analysis}
+From a statistical perspective, our goal is to try and build a model that can predict the probability of deadly terrorist attacks occurring. This sort of analysis is useful when it comes to modelling terrorism risk (which is something insurance companies are actively involved in). We want to answer questions like ``Given that a terrorist attack occurs, what is the probability of 20 or more people dying?" or ``What is the probability of an attack more deadly than 9/11 occurring in the next 20 years?". Of course, the techniques we will use are not restricted to just modelling terrorist attacks - they can broadly be applied to any situation where we are concerned with estimating the probability of certain events happening (e.g. Value-at-Risk). 
+
+We will (for now) treat the fatality count of each attack as independent of all other attacks. This is broadly justified based on the previous plots of the data where there was no obvious serial correlation. Suppose we have $n$ attacks (here $n=13,274$). For $1 \leq i \leq n$, let $Y_i$ denote the number of deaths in the $i^{th}$ attack. We assume each $Y_i$ is independently drawn from some  distribution $p(y | \theta)$:
+
+$$Y_i \sim p(y | \theta), \quad 1 \leq i \leq n,$$
+
+where $p(y| \theta)$ specifies some probability distribution (e.g. Exponential) and $\theta$ is an unknown vector of parameters.
+
+\section{Basic Model - Exponential Distribution}
+For the first half of this lecture we will assume that the fatalities in terrorist attacks follow an Exponential distribution $p(y|\lambda) = \lambda e^{-\lambda y}$ (here $\theta=\lambda$). The Exponential distribution is a standard model for phenomena which seem to decay exponentially (such as the empirical density plot in Figure \ref{attackplot2}).  We will also explore how reasonable this assumption. Note that the exponential distribution assumes that $Y_i$ variables are continuous. However, here they are discrete (number of fatalities). Nevertheless, continuous distributions tend to be easy to work with, and modelling discrete data as if they were continuous is usually fine, as long as the numerical values cover a wide range (they are between 1 and 2,749 here).
+
+\subsection{Fatalities in a Single Attack}
+
+First consider the question: ``What is the probability of $D$ or more people dying in a single terrorist attack?". As a point of notation, we will use $Y_i$ to denote the fatalities in our data set (i.e. in the 13,274 attacks that have already happened), and $\tilde{Y}$ to denote the fatalities in a future attack that we are predicting (where we are assuming that $\tilde{Y}$ has the same distribution as $Y_{i}$, i.e. $\tilde{Y}\sim p(y|\theta)$). In other words, we are using the observed data $Y_1,\ldots,Y_n$  to make predictions about future attacks $\tilde{Y}$. So ``What is the probability of  $D$ or more people dying in a single terrorist attack?" is equivalent to computing $p(\tilde{Y} \geq D)$. If the distribution $p(y | \theta)$ is given, and $\theta$ \textbf{is also known} (i.e. for now we are treating it as known rather than estimating it), then the  probability of a particular attack killing more than $D$ people is given by integrating over the tail of the probability distribution
+
+$$p(\tilde{Y} \geq D) = \int_{D}^{\infty} p(y | \theta) dy = 1 -  F_Y(D|\theta) $$
+
+where $F_Y(D|\theta) = p(Y\leq D |\theta)$ is the distribution function. Note that we are using a continuous distribution to model $Y$ here, so $p(Y\leq D |\theta) = p(Y<D|\theta)$.
+
+\subsection{Example 1}
+
+Recall that we are modelling the fatalities using an Exponential distribution. The average number of fatalities is $4.17$, so the maximum likelihood estimate of $\lambda$ is $\hat{\lambda} = 1/4.17 = 0.24$. Assume for now that \textbf{this is the true value of $\lambda$} (i.e. that there is no estimation uncertainty). The probability of more than 10 people dying in a particular attack is then:
+
+$$1 - \int_{0}^{10} 0.24 e^{-0.24 y} dy = 0.091$$
+
+So there is a $9.1\%$ chance of 10 or more people dying in a single attack (remember that the \texttt{1-pexp(10,0.24)} function in R can be used to calculate this). Similarly for $D \in \{10,20,50,100,200,500,2749\}$ the probabilities of $D$ or more people dying in a single attack are presented in Table \ref{tab1}.
+
+So under this model the probability of over $100$ people dying is extremely small -- around $0.000000004\%$. The probability of 200 or more deaths is so small it is essentially zero.
+
+\begin{tcolorbox}[colback=black!10,title=Maximum likelihood estimation of the exponential distribution parameter.\label{defn: 3}, colframe=black!60]
+Here we show the derivation of the maximum likelihood estimator of the parameter of an exponential distribution. First step is to construct the likelihood function\footnote{Here we are using a common notation in the frequentist framework.}:
+\begin{align}
+\mathcal{L}\left(\lambda | y_{1}, \ldots, y_{n}\right)= \prod_{i=1}^{n}p(y_i|\lambda)
+=\prod_{i=1}^{n}\lambda e^{-\lambda y_i}
+=\lambda^{n} e^{-\lambda \sum_{i=1}^{n} y_{i}}
+\end{align}
+
+\vspace{-0.3cm}
+Typically, the log-likelihood function is used to derive the maximum likelihood estimator of the parameter $\lambda$. Hence, the next step is to take  the natural logarithm of the likelihood function to obtain the log-likelihood function. There are several good reasons for using the log-likelihood function. First, the log-likelihood function converts products into sums, which makes it much easier to compute derivatives. Second, since the logarithmic function is a monotonic function, the parameter value that maximises the log-likelihood function will also maximise the likelihood function (i.e. the log-likelihood will achieve its maximum at exactly the same place where the likelihood function achieves its maximum). Third, the statistical properties of sums are much more easier to analyse than those of the products. Furthermore, since the maximum likelihood estimation problem is often solved numerically, there is a nice computational benefit of working with sums instead of products. This is because sums are numerically stable than the products (if most densities of the individual observations turn out to be less than 1, then the product will become so small that the limited computer precision will not allow to distinguish it from 0).
+The log-likelihood function is  then:
+\vspace{-0.6cm}
+\begin{align}
+\ell \left(\lambda | y_{1}, \ldots, y_{n}\right)\equiv \log \mathcal{L}\left(\lambda | y_{1}, \ldots, y_{n}\right)=&\log\left(  \prod_{i=1}^{n}p(y_i|\lambda)\right) \\
+= & \log\left(  \prod_{i=1}^{n}\lambda e^{-\lambda y_i}\right) \\
+= & \log\left( \lambda^{n} e^{-\lambda \sum_{i=1}^{n} y_{i}}\right) \\
+=&n\log\lambda -\lambda \sum_{i=1}^{n} y_{i}
+\end{align}
+
+\vspace{-0.3cm}
+The maximum likelihood estimator of $\lambda$ is obtained as a solution to the following maximization problem:
+$$\widehat{\lambda}=\arg \max _{\lambda} \ell \left(\lambda | y_{1}, \ldots, y_{n}\right)$$
+Differentiating $\ell \left(\lambda | y_{1}, \ldots, y_{n}\right)$  with respect to $\lambda$, and equating to zero:
+\begin{align}
+\frac{d \ell\left(\lambda| y_{1}, \ldots, y_{n}\right)}{d \lambda}= \frac{n}{\widehat{\lambda}}-\sum_{i=1}^{n} y_{i} =0
+\end{align}
+
+\vspace{-0.3cm}
+Solving for $\widehat{\lambda}$ yields the maximum likelihood estimator of $\lambda$, which in this case is $\widehat{\lambda}=\frac{n}{\sum_{i=1}^{n} y_{i}}=\frac{1}{\bar{y}}$, where $\bar{y}=\frac{\sum_{i=1}^{n} y_{i}}{n}$ is the sample mean.
+\end{tcolorbox}
+
+
+
+\subsection{Distribution of Sample Maximum}
+So far we have considered how to compute the probability of \textbf{one particular attack} killing  $D$ or more people. However, there may be many attacks occurring over a given time period. Suppose there are $m$ attacks during some period. We now want to ask about the probability of \textbf{at least one} of these $m$ attacks killing $D$ or more people. Hence, if the $m$ attacks $\tilde{Y}_1,\ldots,\tilde{Y}_m$ occur what is the probability that at least one has a value greater than $D$? More formally, let $\tilde{Y}_1,\ldots,\tilde{Y}_m$ be independent draws from $p(y|\theta)$. What is the distribution of the sample maximum $M= \max_i \tilde{Y}_i$?
+
+
+
+Again we assume for now that $\theta$ is known exactly, not estimated. For any value $D$, the probability that the maximum $M$ is less than $D$ is equal to the probability that all the $\tilde{Y}_i$ variables are less than $D$:
+\begin{align} \nonumber
+p(M \leq D) = p(  \max_i \tilde{Y}_i \leq D) &= \prod_{i=1}^m p(\tilde{Y}_i < D) \\ \nonumber
+&= p(Y \leq D)^m \\
+&= F_Y(D)^m
+\end{align}
+So:
+$$p(M \geq D) = 1 - p(Y \leq D)^m = 1-F_Y(D)^m$$ %do i need greater than or equal to here?
+
+\begin{table}[t]
+\caption{}\label{tab1}
+\centering
+\scalebox{.9}{\begin{tabular}{rr}
+  \hline
+ D & Probability \\ 
+  \hline
+ 10 & $9.09 \times 10^{-2} $\\ 
+  20 &  $8.28 \times 10^{-3} $\\ 
+  30 &  $7.53 \times 10^{-4} $\\ 
+  50 &  $6.23 \times 10^{-6}$ \\ 
+  100 & $3.89 \times 10^{-11}$ \\ 
+  200 & $\approx 0$ \\ 
+  500 & $\approx 0$ \\ 
+  2749 & $\approx 0$ \\ 
+   \hline
+\end{tabular}}
+\end{table}
+
+\subsection{Distribution of Sample Maximum - Example}
+Based on the terrorism dataset, there have been approximately $2000$ terrorist attacks each year, from the year 2002 onwards. 
+
+\textbf{Question}: If fatalities in terrorist attacks are known to follow an $Exponential(0.24)$ distribution and 2000 attacks occur in a given year, what is the probability that at least one will kill  $30$ or more people?
+
+\textbf{Answer}: We need the probability that the sample maximum is equal to or greater than 30. By the previous slide, the distribution of the sample maximum $M$ is:
+
+$$p(M \geq 30) = 1 - p(Y \leq D)^m = 1 - \left[ \int_0^{30}  \hat{\lambda} e^{-\lambda y} dy \right]^{2000}= 0.78$$
+
+
+So there is a $78\%$ chance of at least one attack killing 30 or more people. Similarly, if 2000 attacks occur in a year, then the probabilities of seeing at least one that kills D or more people are presented in Table \ref{tab2}.
+
+\begin{table}[ht]
+\caption{}\label{tab2}
+\centering
+\begin{tabular}{rr}
+  \hline
+ D & Probability \\ 
+  \hline
+ 10 & $\approx 1$\\ 
+  20 &  $\approx 1$\\ 
+  30 &  $0.78$\\ 
+  50 &  $0.01$ \\ 
+  100 & $7.78 \times 10^{-8}$ \\ 
+  200 & $\approx 0$ \\ 
+  500 & $\approx 0$ \\ 
+  2749 & $\approx 0$ \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\vspace{6mm}
+\begin{tcolorbox}[colback=black!6,title= R example, colframe=black!60]
+\small
+\begin{verbatim}
+# Exponential distribution
+D=30
+lambda=0.24
+1-pexp(D,lambda)^2000
+
+[1] 0.7754663
+\end{verbatim}
+\vspace{3mm}
+\end{tcolorbox}
+
+\subsection{Incorporating Uncertainty}
+
+Of course in practice $\lambda$ is not known, and must be estimated. In the last few slides, we simply assumed that $\lambda$ was equal to the maximum likelihood estimate and plugged  in this number. As we have discussed, this is typically bad practice since it ignores the uncertainty in $\lambda$. To incorporate this uncertainty, we can estimate $\lambda$ using Bayesian inference\footnote{Bayesian theory will be explored in greater detail in the subsequent lectures.} and then perform analysis using the posterior distribution $p(\lambda |\textbf{y})$.
+
+One of the nice aspects of Bayesian statistics is that it is very easy to make predictions about future events -- we simply replace any unknown quantities with their posterior distribution, and  average over this (by integrating). Suppose $p(\lambda | \textbf{y})$ is our posterior estimate of $\lambda$ after observing some data $\textbf{y}=\{y_1,\ldots,y_n\}$. We predict future values $\tilde{Y}$ using:
+
+
+$$\begin{aligned}
+p(\tilde{Y} \geq D|\textbf{y}) = \int p(\tilde{Y} \geq D | \lambda) p(\lambda | y) d\lambda = \int (1-F_Y(D|\lambda) )p(\lambda | \textbf{y}) d\lambda
+\end{aligned}$$
+Remember our notation: $\textbf{y} = (y_1,\ldots,y_n)'$ denotes the 13,274 attacks we have observed, and $\tilde{Y}$ denotes a future attack we are predicting, which has the same distribution as $Y_i$.
+
+In our Exponential example we need to learn $\lambda$ using Bayesian inference. The conjugate prior is Gamma($\alpha, \beta$) where we choose $\alpha$ and $\beta$ to reflect prior beliefs about $\lambda$:
+
+$$p(\lambda) = \frac{\beta^{\alpha}}{\Gamma(\alpha)}  \lambda^{\alpha-1} e^{-\beta \lambda}$$
+
+The posterior distribution in this case is:
+$$p(\lambda | y) = Gamma(\alpha+n, \beta + \sum_i y_i)$$
+The cumulative distribution function for the  Exponential distribution is $p(Y\leq D) = 1-e^{-\lambda D}$.
+
+$$p(\tilde{Y} \geq D)  =  \int (1-F_Y(D|\lambda)) p(\lambda | Y) d\lambda =  \int (e^{-\lambda D})  \frac{\tilde{\beta}^{\tilde{\alpha}}}{\Gamma(\tilde{\alpha})}  \lambda^{\tilde{\alpha}-1} e^{-\tilde{\beta} \lambda} d\lambda$$
+where $\tilde{\alpha} = \alpha+n$ and $\tilde{\beta} = \beta + \sum_i y_i$.  
+
+Simplifying gives:
+
+$$p(\tilde{Y} \geq D)  = \frac{\tilde{\beta}^{\tilde{\alpha}}}{\Gamma(\tilde{\alpha})}  \int \lambda^{\tilde{\alpha}-1}e^{-\lambda(\tilde{\beta}+D)}d\lambda$$
+
+As always, when working with conjugate priors we evaluate this integral by recognising it has the same form as the prior distribution (Gamma in this case). We define $\hat{\beta} = \tilde{\beta}+D$ and part under the integral sign becomes:
+
+$$  \int \lambda^{\tilde{\alpha}-1}e^{-\lambda \hat{\beta}}d\lambda = \frac{\Gamma(\tilde{\alpha})} {\hat{\beta}^{\tilde{\alpha}}}$$
+
+Thus the whole thing becomes: 
+
+$$p(\tilde{Y} \geq D) = \frac{\tilde{\beta}^{\tilde{\alpha}}}{\Gamma(\tilde{\alpha})}   \frac{\Gamma(\tilde{\alpha})} {\hat{\beta}^{\tilde{\alpha}}} $$
+
+Substituting everything back in gives:
+
+$$p(\tilde{Y} \geq D) = \frac{ (\beta+S)^{\alpha+n}}{ (\beta+S+D)^{\alpha+n}}, \quad S=\sum_{i=1}^n y_i$$
+
+where $\alpha$ and $\beta$ are the parameters of the prior.
+
+
+As always, if we have strong prior knowledge about $\lambda$, then we  choose an informative prior that reflects this. Otherwise, we choose an uninformative prior which reflects our ignorance. A fairly common choice of uninformative prior for the Exponential distribution parameter is Gamma($0.01,0.01$), i.e. $\alpha=0.01$ and $\beta=0.01$. Using this prior, we compute the probability of more than $D$ people dying in a single attack for various values of $D$, and compare this to our previous findings when we assumed that $\lambda$ was equal to the maximum likelihood estimate: 
+\begin{table}[ht]
+\centering
+\scalebox{.9}{\begin{tabular}{rrr}
+  \hline
+ D & Probability assuming $\lambda=\hat{\lambda}$ & Probability With Estimated $\lambda$\\ 
+  \hline
+  10 & $9.09 \times 10^{-2} $ & $9.10 \times 10^{-2} $\\ 
+  20 &  $8.28 \times 10^{-3} $&  $8.29 \times 10^{-3} $\\ 
+  30 &  $7.53 \times 10^{-4} $&  $7.55 \times 10^{-4} $\\ 
+  50 &  $6.23 \times 10^{-6}$ &  $6.27 \times 10^{-6}$\\ 
+  100 & $3.89 \times 10^{-11}$ & $3.97 \times 10^{-11}$\\ 
+  200 & $\approx 0$  & $\approx 0$ \\ 
+  500 & $\approx 0$ &$\approx 0$\\ 
+  2749 & $\approx 0$ & $\approx 0$ \\ 
+   \hline
+\end{tabular}}
+\end{table}
+
+In this particular case, incorporating uncertainty about $\lambda$ makes very little impact on the final results. The main reason for this is that we used an uninformative prior, and also had a large number of observations (13,274) so the effect of the prior distribution is minimal. Recall that:
+$$p(\tilde{Y} \geq D) = \frac{ (\beta+S)^{\alpha+n}}{ (\beta+S+D)^{\alpha+n}}, \quad S=\sum_{i=1}^n y_i$$
+Since $S$ is very large when there are a lot of observations, it will dominate this term and  the prior term $\beta$ will hence have little effect unless it is very large (in the uninformative case it was $0.01$). Note that the variance of a random variable with a Gamma distribution is equal to $\alpha / \beta^2$ -- i.e. when $\beta$ is very large, the variance of the prior is very small, which corresponds to a very informative prior that contains a substantial amount of prior knowledge. In that case, the prior would have more impact on the results.
+
+
+
+\textbf{Summary}
+
+We have learned how to compute the probability of extreme events occurring under the Exponential probability model, both when $\lambda$ is known, and when it has been estimated. However there is a problem -- we are finding that the probability of terrorist attacks with 200 or more deaths occurring is so low that it is almost impossible. But the historical record shows that these attacks do happen -- specifically in our 13,274 attacks, there are 13 that have 200 or more deaths.
+
+How can this be explained?
+
+\subsection{The Role of Assumptions}
+The key issue here is that we \textbf{assumed} the Exponential distribution was a good model for this data. But the fact that we are assigning very small probabilities to events that regularly happen suggests that this may not be the case. This is a key lesson: while the choice of distribution $p(y|\theta)$ for the likelihood is important in all statistical modelling, it is \textbf{especially important} when it comes to analysing the probability of large (extreme) events occurring. If we model $p(y|\theta)$ using a different distribution than the Exponential, we might end up with very different results. Hence we must be \textbf{very} careful when it comes to choosing our statistical model.
+
+\subsection{The Role of Assumptions - Exponential Decay}
+
+Recall the form of the Exponential distribution:
+
+$$p(y|\lambda) = \lambda e^{-\lambda y}$$
+
+This function decays exponentially in $y$, which means that it decays very fast as $y$ becomes larger. This means that under the exponential model, the probability of large values occurring is very small. This is not a realistic model in many situations where outliers often occur!
+
+\subsection{Lognormal Distribtuion}
+ An alternative distribution which is often used to model the probability of extreme events occurring is the Lognormal distribution. A random variable $Z$ has a $Lognormal(LN)$ distribution with parameters $\mu$ and $\sigma^2$ if $\log(Z)$ has a $N(\mu,\sigma^2)$ distribution. In other words, if $Z\sim LN(\mu,\sigma^2)$ then $Z=e^X$, where $X$ has a $N(\mu,\sigma^2)$ distribution. Like the Exponential distribution (and unlike the Normal), the Lognormal distribution only puts non-zero probability on the interval $(0,\infty)$ -- i.e. draws from this distribution are always positive real numbers. The Lognormal distribution can replicate behaviour that looks like exponential decay. That is, if $\mu=0.68$ and $\sigma^2 = 0.84$ this distribution looks like:
+ 
+\begin{center}
+\includegraphics[scale=0.3]{lognormal.pdf}
+\end{center}
+
+The fact this has two parameters ($\mu,\sigma^2$) while the Exponential only has one ($\lambda$) means that it can better fit the tails of empirical data. We can easily derive the functional form of the Lognormal distribution using the standard univariate transformation theorem.
+ 
+Let $Z\sim Lognormal(\mu,\sigma^2)$ then $Z=e^X$ where $X$ $\sim$ N($\mu,\sigma^2$). Then:
+
+$$p(Z \leq z | \mu, \sigma^2) = p(e^X \leq z) = p(X \leq \log(z)) = \Phi_{\mu,\sigma^2}(\log(z))$$
+where $\Phi_{\mu,\sigma^2}$ denotes the Normal cumulative probability distribution:
+$$p(z|\mu, \sigma^2) = \frac{d}{dz} p(Z \leq z) = \frac{d}{dz}  \Phi_{\mu,\sigma^2}(\log(z)) = \frac{1}{z}  \phi_{\mu,\sigma^2}(\log(z))$$
+where $ \phi_{\mu,\sigma^2}$ is the Normal density, so:
+
+$$p(z|\mu, \sigma^2) = \frac{1}{z} \frac{1}{\sqrt{2\pi\sigma^2}}e^{ \left( -\frac{(\log(z) - \mu)^2}{2\sigma^2} \right)}$$
+
+
+\subsection{Parameter Estimation}
+To estimate the parameters of the Lognormal distribution, we essentially just take the log of the observations and treat them as if they were Normal. If our observations are $Y_1,\ldots,Y_n$ then the maximum likelihood estimates are:
+
+$$\hat{\mu} = \frac{1}{n}\sum_{i=1}^n \log(y_i)$$
+$$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n  (\log(y_i)-\hat{\mu})^2$$
+
+Bayesian inference for these parameters is done similarly -- just take the log of the observations and then use the methodology from last week.
+
+\subsection{Predictions Under The Lognormal Model}
+
+If we fit the Lognormal distribution to the terrorism data, the MLE of the parameters is $\hat{\mu}=0.68$ and $\hat{\sigma}^2=0.84$. We can then compute the probability of large terrorist attacks occurring under this model. If we again treat $\hat{\mu}$ and  $\hat{\sigma}^2$ as being equal to the true parameter values (ignoring estimation uncertainty) like we initially did for the Exponential distribution, we can find (e.g.) the probability of 10 people dying in a single attack in the same way as before:
+
+$$p(\tilde{Y} \geq 10) = \int_{10}^{\infty} p(y|\theta) dy$$
+
+where we now use a Lognormal model for  $p(y|\theta)$. 
+
+In R, this would be equal to \texttt{1-plnorm(10,0.68,sqrt(0.84))} (the square root is used because the R functions use $\sigma$ rather than $\sigma^2$).
+
+\subsection{Comparison - Single Attack}
+
+For $D \in \{10,20,30,50,100,200,500\}$ we can hence compare the probability of $D$ or more fatalities in a single attack under both the Exponential and Lognormal models:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ D & Exponential Model & Lognormal Model \\ 
+  \hline
+ 10 & $9.09 \times 10^{-2} $ & $3.80 \times 10^{-2} $  \\ 
+  20 &  $8.28 \times 10^{-3} $ & $5.71 \times 10^{-3} $ \\ 
+  30 &  $7.53 \times 10^{-4} $ & $1.48 \times 10^{-3} $ \\ 
+  50 &  $6.23 \times 10^{-6}$ & $2.08 \times 10^{-4} $ \\ 
+  100 & $3.89 \times 10^{-11}$ & $9.11 \times 10^{-6} $ \\ 
+  200 &  0 & $2.30 \times 10^{-7} $ \\ 
+  500 & 0 & $7.63 \times 10^{-10} $  \\ 
+  2749 & 0 & $1.33 \times 10^{-15}$  \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+So we can see that under the Lognormal model, extreme events are \textbf{much} more likely to occur. There is not much difference in the predictions of both models for relatively small values of $D$, but for (e.g) D=50, the Lognormal model says that an attack killing people is 100 times more likely to occur than under the Exponential model. This is an enormous difference!
+
+\subsection{Comparison - Multiple Attacks}
+
+Similarly, if 2000 attacks occur in a year, then the probability of seeing at least one that kills D or more people is:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ D & Exponential & Lognormal \\ 
+  \hline
+ 10 & $\approx 1$ & $\approx 1$ \\ 
+  20 &  $\approx 1$ &  $\approx 1$\\ 
+  30 &  $0.78$ & 0.95\\ 
+  50 &  $0.01$ & 0.34\\ 
+  100 & $7.78 \times 10^{-8}$ & 0.01 \\ 
+  200 & $\approx 0$ & $4.61 \times 10^{-4}$ \\ 
+  500 &$\approx 0$ & $1.53 \times 10^{-6}$  \\ 
+  2749 &$\approx 0$ & $2.67 \times 10^{-11}$  \\ 
+   \hline
+\end{tabular}
+\end{table}
+Again, large attacks are much more likely under the Lognormal model. This highlights how much the choice of likelihood function can affect the results -- particularly when $D$ is large. 
+
+%\vspace{6mm}
+\begin{tcolorbox}[colback=black!6,title= R example, colframe=black!60]
+\small
+\begin{verbatim}
+# Lognormal distribution
+D=30
+mu=0.68
+sigma=sqrt(0.84)
+1-plnorm(D,mu,sigma)^2000
+
+
+[1] 0.9496754
+\end{verbatim}
+%\vspace{3mm}
+\end{tcolorbox}
+
+\textbf{Summary}
+
+So, what have we learned? When carrying out statistical analysis, choosing the right model (e.g. Exponential vs Lognormal) is always important. But it is extremely important when measuring the probability of \textbf{rare} events happening. Since we don't have many observations in the tails of the distribution (only 13 of the 13,274 events had more than 200 fatalities), it will be parametric form of the distribution which carries most weight in prediction. As such, we have to get this right! Of course, the question is now -- how do we know which distribution to use? How do we know whether the Exponential or Lognormal distribution gives a better fit to the data? This leads us to the topic of \textbf{model selection}.
+
+
+\section{Extreme Value Theory}
+In the paper that this lecture is loosely based, it is claimed that the probability of an event as deadly as 9/11 (2,749 deaths) occurring over their 40 year period is as high as $0.35$. But we found that the probability of more than a few hundred deaths occurring was tiny. 
+
+So far we have only shown that the Lognormal distribution is preferable to the Exponential distribution for this data. But this does not mean it is the best (or even an appropriate) model! Normally when doing applied statistics we can look at plots of the data, come up with some reasonable choices of probability model, and then do model selection. And this would be fine if we are only interested in  $p(\tilde{Y} \geq D)$ when $D$ is small. However when $D$ is large (e.g. $D=2,749$), even small misspecifications of the probability model will lead our predictions to be out by many orders of magnitudes. So just assuming that the data is either Exponential or Lognormal is problematic. Fortunately there is a mathematical result that can help us out.
+
+\subsection{Pickands-Balkema-de Haan Theorem}
+We now come to what is essentially the \enquote{Fundamental Theorem of Extreme Value Statistics}. It is comparable to the Central Limit Theorem in the sense of being extremely general, and very powerful. The PBH theorem essentially says that if we go far enough into the extreme tails (i.e. when $D$ is large), almost \textbf{every} probability distribution eventually starts to look \enquote{the same}. This is comparable to the Central Limit Theorem, which tells us that if we add up enough independent and identically distributed random variables, the sum will always have the same distributional form (Normal) regardless of the distribution of the variables.
+
+More formally, suppose we have observations $Y_1,\ldots,Y_n$ from \textbf{any} probability distribution, and we are interested in computing $p(Y \geq D)$. We do not want to assume any particular function form for $p(y|\theta)$ (e.g. Exponential or Lognormal). Let $u$ denote some threshold value. The basic idea is that to avoid having to make assumptions about the form of $p(y|\theta)$, we can instead only model the distribution of the $Y_i$ values \textbf{above this threshold} rather than the whole distribution. So we only attempt to model the tail distribution to the right of $u$ (the dotted line), while ignoring the rest of it:
+ 
+\begin{center}
+\includegraphics[scale=0.4]{evt.pdf}
+\end{center}
+
+Define $F_u(D-u) = P(Y - u \leq D - u | Y \geq u)$ to be the ``conditional exceedance distribution" -- it models the distribution of $Y$ \textbf{conditional on Y being greater than u}. It is hence a model for the tail part of the distribution only. The PBH theorem states that as $u \rightarrow \infty$ then $F_u(D-u)$ converges to the Generalised Pareto Distribution \textbf{regardless of the true distribution of $Y$}. Hence for essentially any distribution (Exponential, Lognormal, etc) if we go far enough into the tails, we can model it using the Generalised Pareto Distribution  (GPD). As such, to estimate the probability of extreme events occurring when we don't have a good choice for $p(y|\theta)$, we can choose to instead model only the distribution tails, using the GPD. As long as we choose $u$ to be large enough, this will be a good model.
+
+\subsection{GPD distribution}
+Aside from the threshold choice $u$, the Generalised Pareto Distribution has two parameters $k$ and $\sigma$. Its distribution function is:
+
+$$p(Y \leq y | u, k, \sigma) = 1 - (1- k \frac{y-u}{\sigma})^{(1/k)}$$
+
+and the density function is:
+
+$$p(y | u, k, \sigma) = \frac{1}{\sigma}(1- k \frac{y-u}{\sigma})^{(1/k-1)}$$
+
+It is important to remember that we can only use this model when $Y\geq u$!
+
+\subsection{GPD distribution - Parameter Estimation}
+
+Estimating the parameters $(k,\sigma)$ can be difficult - there is no conjugate prior distribution.
+
+Point estimates can be derived using the method of moments, and these tend to be reasonably close to the MLE. Suppose that out of the $n$ observations $y_i$, there are $m$ of them greater than $u$. Denote these by $y'_1,\ldots,y'_m$. The estimators are:
+
+$$\hat{\sigma} = 1/2 ((\bar{y'}/s)^2 +1)\bar{y}'$$
+$$\hat{k} = 1/2 ((\bar{y'}/s)^2 -1)$$
+
+where $\bar{y'}$ and $s^2$ denote the sample mean and variance of the transformed observations $z_1 = y'_1 - u,\ldots,z_m = y'_m - u$:
+
+$$\bar{y'} = \frac{1}{m} \sum_{i=1}^{m} z_i, \quad s^2= \frac{1}{m-1} \sum_{i=1}^{m} (z_i-\bar{y'})^2$$
+
+\subsection{GPD distribution - Fitting to Our Data}
+
+Let's fit the GPD distribution to the terrorism data. The first step is choosing the threshold $u$ -- i.e. how to we determine the point in the tails above which the GPD gives a good approximation? This is a difficult question with no single answer! A heuristic which is often used is to choose $u$ to be the $95^{th}$ percentile of the observed data (i.e. if we have $n$ observations, then choose $u$ to be the $0.95\times n^{th}$ smallest observation, which is the $13274*0.95 = 12609^{th}$ smallest observation in our case.
+
+In the paper this lecture is based on they chose $u=10$, so we will also use this. We discard all values of $Y_i$ that are smaller than 10. This leaves $986$ attacks. Using only these attacks, we compute the estimates:
+
+$$\hat{\sigma} = 8.24$$
+$$\hat{k} = -0.60$$
+
+Now suppose we want to find the probability of $D$ or more people dying in a single terrorist attack under the GPD. The calculation is slightly different to before -- the GPD only models the tail behaviour, so we need an additional term which reflects the probability of an observation being in the tail (i.e. being greater than $u$).
+
+\subsection{GPD distribution - Making Predictions}
+
+By the theorem of total probability we have:
+
+$$p(Y \geq D) = p(Y\geq D | Y \geq u) p(Y \geq u) + p(Y\geq D | Y < u) p(Y < u)$$
+
+The term $p(Y\geq D | Y < u) $ is equal to zero when $D>u$. We can estimate  $p(Y \geq u)$ by the empirically observed frequency of attacks that killed at least $u$ people. When $u=10$ there are 986 such attacks, so $p(Y \geq u) = 986/13274 = 0.074$. Finally $p(Y \geq D | Y \geq u)$ comes from then cumulative distribution function of the GPD distribution. 
+
+
+
+
+\subsection{Comparison - Single Attack}
+For $D \in \{10,20,30,50,100,200,500,2749\}$ we can hence compare the probability of $D$ or more people dying in a single attack under the Exponential, Lognormal, and GPD models:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ D & Exponential Model & Lognormal Model & GPD Model\\ 
+  \hline
+ 10 & $9.09 \times 10^{-2} $ & $3.80 \times 10^{-2} $ & 0.07 \\ 
+  20 &  $8.28 \times 10^{-3} $ & $5.71 \times 10^{-3} $  & 0.03\\ 
+  30 &  $7.53 \times 10^{-4} $ & $1.48 \times 10^{-3} $ & 0.02\\ 
+  50 &  $6.23 \times 10^{-6}$ & $2.08 \times 10^{-4} $ &0.007 \\ 
+  100 & $3.89 \times 10^{-11}$ & $9.11 \times 10^{-6} $ &0.002\\ 
+  200 &  0 & $2.30 \times 10^{-7} $ &0.0008\\ 
+  500 & 0 & $7.63 \times 10^{-10} $  &0.0002\\ 
+  2749 & 0 & $1.33 \times 10^{-15}$  & 0.00001\\ 
+   \hline
+\end{tabular}
+\end{table}
+
+This results in a much higher probability that  extreme events will occur than under the previous models!
+
+
+\subsection{Comparison - Multiple Attacks}
+Similarly, if 2000 attacks occur in a year, then the probability of seeing at least one that kills D or more people is:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+ D & Exponential & Lognormal & GPD\\ 
+  \hline
+ 10 & $\approx 1$ & $\approx 1$ & $\approx 1$\\ 
+  20 &  $\approx 1$ &  $\approx 1$& $\approx 1$\\ 
+  30 &  $0.78$ & 0.95& $\approx 1$\\ 
+  50 &  $0.01$ & 0.34& $\approx 1$\\ 
+  100 & $7.78 \times 10^{-8}$ & 0.01 & $\approx 1$ \\ 
+  200 & $\approx 0$ & $4.61 \times 10^{-4}$ & $0.80$\\ 
+  500 &$\approx 0$ & $1.53 \times 10^{-6}$  & 0.30 \\ 
+  2749 &$\approx 0$ & $2.67 \times 10^{-11}$  & 0.02\\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{tcolorbox}[colback=black!6,title= R example, colframe=black!60]
+\small
+\begin{verbatim}
+# Generalised Pareto Distribution  (GPD).
+# p(Y ≥D)=p(Y ≥D∣Y ≥u)*p(Y ≥u)
+u=10
+D=30
+k = -0.60
+sigma = 8.24
+
+# Step 1: p(Y ≥D∣Y ≥u)
+p=1-(1-k*((D-u)/sigma))^(1/k)
+
+# Step 2: p(Y ≥ u)
+p_u=986/13274
+p_u
+
+# Step 3: p(Y ≥D)=p(Y ≥D∣Y ≥u)*p(Y ≥u)
+# Single Attack
+(1-p)*p_u
+[1] 0.01661127
+
+# Multiple Attacks
+1-(1-(1-p)*p_u)^2000
+[1] 1
+\end{verbatim}
+
+\end{tcolorbox}
+Now that we have fit a more principled tail model (rather than simply guessing Exponential or Lognormal) we see the probabilities of extreme events occurring is much higher! Under the GPD model we find that there is a $2\%$ probability that an attack at least as deadly  9/11 (which killed 2,749 people) will happen in any given year. This is very high! Doing a similar calculation, the probability of such an attack occurring in the next decade is around $19\%$. This assumes that the typical rate at which terrorist attacks occur remains at around 2000 attacks per year (recall that this has only been the case since the year 2002 - previously there were far fewer attacks each year). In this weeks exercise sheet we discuss whether this assumption is reasonable!
+
+
+\begin{tcolorbox}[colback=black!6,title= R example, colframe=black!60]
+\small
+\begin{verbatim}
+# The probability of such an attack occurring in the next decade (2000*10)
+#  is around 19%.
+D=2749
+p=1-(1-k*((D-u)/sigma))^(1/k)
+1-(1-(1-p)*p_u)^20000
+[1] 0.1945882
+\end{verbatim}
+
+\end{tcolorbox}
+\section{Summary}
+
+
+The purpose of this lecture was to show how to estimate the probability of extreme events occurring using a real dataset. Working with real data is difficult because we have to choose which probability model to use, which is something of an art. The choice of model becomes more and more important when the events we are trying to estimate become more and more extreme (i.e. as $D$ becomes larger). 
+
+One of the important messages from this lecture is that the probabilities we estimate are \textbf{very} sensitive to the modelling assumptions. As such you should be cautious whenever you read a newspaper article about a scientific study which claims to have estimated the probability of some catastrophic event occurring - it will usually be the case that they would have reached a very different answer if they had made small changes in their model! This is one of the difficult areas of applied statistics for this reason. 
+
+\end{document}

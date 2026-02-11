@@ -1,0 +1,454 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{csquotes}
+\usepackage{xcolor}
+\usepackage{tcolorbox} % framed box around text
+\usepackage{parskip, titling, subfig}
+\usepackage[dvips,xetex]{graphicx}
+\usepackage{fancyvrb}
+\usepackage{alltt}
+\usepackage{sverb}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{courier}
+\usepackage{framed,color}
+\title{Decision and Risk - Exercise 5}
+\author{}
+\date{}
+
+\setlength{\droptitle}{-10em}
+\newcommand\Solution[2][\\]{{\Question#1#2}}
+% TO PROVIDE NO SOLUTION
+\renewcommand\Solution[2][\\]{}
+
+\begin{document}
+
+\maketitle 
+
+\vspace{-10mm}
+
+\section*{Question 1}
+Let $X_t$ denote a daily log-return of a particular stock at time $t$. The historical record of log-returns over the last 5 days is as follows:
+
+$$X_1=-2.2, X_2=2.1, X_3=0.4, X_4=-3.4,  X_5=-2.6$$
+
+
+Find the corresponding probability of log-return, $Y_6$, on day six being below $-3$. Use a Generalised Pareto Distribution (GPD) to approximate the distribution of the log-returns below the threshold $u=-2$. You can use the method of moments to find point estimates for the GPD parameters.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+If X has a Generalised Pareto Distribution with threshold $u$ and parameters $k$ and $\sigma$, then the corresponding cumulative distribution function is:
+\begin{align}\label{gpd}
+p(X\leq D|u, k, \sigma) = 1 - \left(1-k\frac{D-u}{\sigma}     \right)^\frac{1}{k}    \hspace{2cm} X>u
+\end{align}
+
+The method of moments estimates of $k$ and $\sigma$ based on sample $X_1, \ldots, X_n$ where all $X_i$ are greater than $u$ are:
+
+\begin{eqnarray}\nonumber
+\hat{\sigma} & = \frac{\hat{X}'(\frac{\hat{X}'^2}{s^2}+1)}{2} \\ \nonumber
+\hat{k} & = \frac{(\frac{\hat{X}'^2}{s^2}-1)}{2}
+\end{eqnarray}
+where $\hat{X}'$ and $s^2$ denote the sample mean and variance:
+
+\[
+\bar{X}'= \frac{1}{n}\sum_{i=1}^{n} X_i'\]
+\[s^2= \frac{1}{n-1}\sum_{i=1}^{n} (X_i'-\bar{X}')^2
+\]
+for the transformed $X_i'=X_i-u$.
+
+
+Now, there are three observations $-2.2$, $-2.6$, and $-3.4$ below the threshold $u=-2$.  The required probability is  $p(X_6 < -3)$. 
+    
+However, in order to make use of GPD in the form provided in \eqref{gpd} we can reparameterize by considering the positive right tail instead of the left tail, where the threshold would now be $u=2$. The observations are then: $2.2$, $2.6$, and $3.4$. Hence, the required probability would be $p(X_6 >3)$ and can be computed as follows: $p(X_6 >3)=p(X_6>3|X_6>2)*p(X_6>2)$
+ 
+     Using the results above, the method of moments yields: $\hat{\sigma}=0.89$ and $\hat{k}=0.22$.
+
+    Using the GPD and estimated parameters $\hat{\sigma}$ and $\hat{k}$:
+        
+    \begin{align} \nonumber
+p(X_6>3|X_6>2)&= 1- (X_6\leq3|X_6>2) \\\nonumber
+&= 1- 0.72 = 0.28
+    \end{align} 
+    
+    We can also compute $p(X_6>2) = \frac{3}{5} =0.6$. 
+    
+    Hence:
+    \begin{align} \nonumber
+p(X_6 >3)&=p(X_6>3|X_6>2)*p(X_6>2)\\  \nonumber
+&= 0.28*0.6 = 0.166
+    \end{align} 
+}
+
+
+
+
+\section*{Question 2}
+In the lecture, we saw that the terrorism data-set showed there were around 2000 deadly attacks per year, in the years 2002-2007. In actual fact, here are the number of attacks per year:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ Year & Number of Attacks \\ 
+  \hline
+2002 & 883\\
+2003 & 648\\
+2004 & 960\\
+2005 & 2361\\
+2006 & 3555\\
+2007 & 2763\\
+   \hline
+\end{tabular}
+\end{table}
+
+There hence seems to be a large amount of variation in the number of attacks. Suppose that we now want to model how many attacks occur each year (so we want to ask questions such as "What is the probability of more than 2500 attacks occurring in a single year). I want you to construct a Bayesian model to answer this question.
+
+We will treat the number of attacks each year between 2002-2007 as independent random variables from some distribution. Let $Y_i$ denote the number of attacks per year, where $Y_1$ is the number of attacks in 2002, and $Y_6$ is the number of attacks in 2007 (we ignore the years prior to 2002,  since the 9/11 event in 2001 changed terrorist behaviour substantially).
+
+\begin{enumerate}[(a)]
+\item A commonly used distribution for this sort of data is the Poisson distribution, i.e. we assume that  $Y_1,\ldots,Y_6$ is an independent sample from a  Poisson distribution with parameter $\lambda$. This means that:
+
+$$p(y_t|\lambda) = \frac{\lambda^y_t}{y_t!} e^{-\lambda}$$
+
+The conjugate prior for the Poisson distribution is the Gamma($\alpha,\beta$) distribution (as it was for the Exponential). So:
+
+$$p(\lambda) = \frac{\beta^\alpha}{\Gamma(\alpha)} \lambda^{\alpha-1} e^{-\beta \lambda}$$
+
+If we have $n$ observations $y_1,\ldots,y_n$, show that the corresponding posterior distribution is:
+
+$$p(\lambda | y_t) = Gamma(\alpha+\sum_{t=1}^n y_t, \beta+n)$$
+
+%(if you get stuck, read the solution to Exercise Sheet 1, Question 5)
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+ The likelihood and prior are:
+$$p(\boldsymbol{y}|\lambda) = \prod_{t=1}^n \frac{\lambda^{y_t}}{y_t !} e^{-\lambda} = \frac{\lambda^{S}} {C} e^{-n\lambda}, \quad S = \sum_{t=1}^n y_t, \quad C = \prod_{t=1}^{n} y_t!$$
+$$p(\lambda) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} \lambda^{\alpha-1}e^{-\beta \lambda}$$
+
+By Bayes' Theorem: 
+
+$$p(\lambda | \boldsymbol{y}) = \frac{p(\boldsymbol{y}|\lambda)p(\lambda)}{p(\boldsymbol{y})}$$
+
+Substituting in, we that the numerator is:
+
+$$p(\boldsymbol{y}|\lambda)p(\lambda) =  \frac{1}{{C}}\frac{\beta^{\alpha}}{\Gamma(\alpha)} \lambda^{\alpha+S-1}e^{-\lambda(\beta+n)}$$
+
+The denominator is:
+
+$$p(\boldsymbol{y}) =  \frac{1}{C} \frac{\beta^{\alpha}}{\Gamma(\alpha)} \int \lambda^{\alpha+S-1}e^{-\lambda(\beta+n)} d\lambda $$
+
+As usual, we use a substitution to make it the same form as the prior, and utilise the fact that all probability densities integrate to 1.
+
+Since the conjugate prior is Gamma, we want to put this into the same form as the Gamma distribution. So, we make the substitutions $\tilde{\alpha} = \alpha+S$ and $\tilde{\beta} = \beta+n$:
+
+$$p(\boldsymbol{y}) = \frac{1}{C} \frac{\beta^{\alpha}}{\Gamma(\alpha)} \int \lambda^{\tilde{\alpha}-1}e^{-\lambda \tilde{\beta}} d\lambda $$
+
+
+We recognise that the part under the integral has a similar form to a Gamma distribution. The Gamma distribution integrates to 1 (since it is a probability distribution), i.e we know that: 
+
+ $$\int \frac{\tilde{\beta}^{\tilde{\alpha}}}{\Gamma(\tilde{\alpha})}  \lambda^{\tilde{\alpha}-1}e^{-\lambda \tilde{\beta}}  d\lambda = 1$$
+ 
+ Therefore taking the $\tilde{\beta}^{\tilde{\alpha}}/\Gamma(\tilde{\alpha})$ term outside the integral and 'taking it over to the other side' of the equation:
+ 
+ $$ \int \lambda^{\tilde{\alpha}-1}e^{-\lambda \tilde{\beta}} d\lambda = \frac{\Gamma(\tilde{\alpha})}{\tilde{\beta}^{\tilde{\alpha}}}$$
+ 
+ So:
+ 
+ $$p(\boldsymbol{y}) =   \frac{1}{C}\frac{\beta^{\alpha}}{\Gamma(\alpha)}\frac{\Gamma(\tilde{\alpha})}{\tilde{\beta}^{\tilde{\alpha}}}$$
+ 
+Putting it all together:
+
+$$p(\lambda | \boldsymbol{y}) = \frac{ p(\boldsymbol{y}|\lambda)p(\lambda)}{p(\boldsymbol{y})} = \frac{ \frac{1}{C}\frac{\beta^{\alpha}}{\Gamma(\alpha)} \lambda^{\alpha+S-1}e^{-\lambda(\beta+n)} } {  \frac{1}{C}\frac{\beta^{\alpha}}{\Gamma(\alpha)}\frac{\Gamma(\tilde{\alpha})}{\tilde{\beta}^{\tilde{\alpha}}}} = \frac{\tilde{\beta}^{\tilde{\alpha}}}{\Gamma(\tilde{\alpha)}} \lambda^{\tilde{\alpha}-1}e^{-\lambda\tilde{\beta}}  $$
+
+which is a Gamma($\tilde{\alpha}, \tilde{\beta})$ distribution (it had to be Gamma, since the conjugate prior was Gamma). Substituting back in for $\tilde{\alpha}$ and $\tilde{\beta}$ we have: 
+
+$$p(\lambda | \boldsymbol{y}) = Gamma(\alpha + \sum_{t=1}^n y_t, \beta + n)$$
+}
+
+\vspace{5mm}
+
+\item Since we only have 6 years of data (i.e. only $6$ values of $Y_i$), the prior we choose will make a lot of difference -- remember that the prior has more impact when there is only a small amount of data. Ideally, we want to use an informative prior since there are so few observations, so having some sensible prior knowledge will allow us to get a better estimate.
+
+Suppose that an analyst has told you that based on his expert knowledge of terrorism, he believes that the average number of attacks is 1000, with a standard deviation of 700.  We now want to choose the parameters $\alpha$ and $\beta$ of the Gamma prior to reflect this.
+
+If a random variable $X$ has a Gamma($\alpha, \beta$) distribution, then its mean and variance are:
+
+$$E[X] = \frac{\alpha}{\beta}, \quad Var[X] = \frac{\alpha}{\beta^2}$$
+Using this information, work out the values of $\alpha$ and $\beta$ that would reflect the prior beliefs of the analyst (i.e. rearrange the above equations). Plot the resulting Gamma prior in R.
+
+Note: you can check that you have found the right values of $\alpha$ and $\beta$ by simulation a large number (e.g. 10000) observations from a Gamma distribution with your computed parameter values, using the rgamma() function in R. In other words if you think $\alpha=a$ and $\beta=b$, then doing
+
+mean(rgamma(10000,a,b))
+
+should return around 1000, and 
+
+sd(rgamma(10000,a,b))
+
+should be around 700.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+$$E[X] = \frac{\alpha}{\beta}, \quad Var[X] = \frac{\alpha}{\beta^2}$$
+
+rearranging gives:
+
+$$Var[X] = \frac{\alpha}{\beta^2} =\frac{E[X]\cdot\beta}{\beta^2}= \frac{E[X]}{\beta} $$
+
+So $\beta = \frac{E[X]}{Var[X]}$, and:
+
+$$\alpha = \beta \cdot E[X] = \frac{E[X]^2}{Var[X]}$$
+
+To represent the analyst's  beliefs we want to choose a prior distribution with $E[X] = 1000$ and $Var[X] = 700^2$. Substituting in gives:
+
+$$\alpha = \frac{1000^2}{700^2} = 2.04$$
+$$\beta = \frac{1000}{700^2} = 0.002$$
+}
+
+\vspace{5mm}
+
+\item Using the above, write down the posterior distribution of $\lambda$ based on the 6 years of data, and the analyst's prior knowledge.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+The posterior is $p(\lambda) \sim Gamma(\tilde{\alpha}, \tilde{\beta})$ with:
+
+$$\tilde{\alpha} = 2.04 + 883 + 648 + 960 + 2361 + 3555 + 2763, \quad \tilde{\beta} = 0.002 + 6$$
+
+So Gamma($11172.04$, $6.002$)
+}
+
+\vspace{5mm}
+
+\item Find the posterior probability of there being more than 1900 attacks in a single year. Recall from the lecture that:
+
+$$p(\tilde{Y} > D| \boldsymbol{y}) = \int p(\tilde{y} >D | \lambda)p(\lambda | \boldsymbol{y})d\lambda$$
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+Let $\tilde{Y}$ be a future observation. We know that the distribution of $\tilde{Y}$ is:
+
+
+
+$$p(\tilde{Y} | Y) = \int p(\tilde{Y} | \lambda) p(\lambda | Y) d\lambda = \int  \frac{\lambda^{\tilde{Y}}}{\tilde{Y}!} e^{-\lambda}  \frac{\tilde{\beta}^{\tilde{\alpha}}}{\Gamma(\tilde{\alpha})} \lambda^{\tilde{\alpha}-1}e^{-\tilde{\beta} \lambda} d\lambda$$
+
+where $\tilde{\alpha} = 11172.04$ and $\tilde{\beta} = 6.002$ are quantities of the posterior distribution for $\lambda$. So:
+
+$$p(\tilde{Y} | Y) = \frac{\tilde{\beta}^{\tilde{\alpha}}}{\Gamma(\tilde{\alpha})} \frac{1}{\tilde{Y}!} \int \lambda^{\tilde{\alpha}+\tilde{Y}-1} e^{-\lambda (\tilde{\beta}+1)} d\lambda =  \frac{\tilde{\beta}^{\tilde{\alpha}}}{\Gamma(\tilde{\alpha})} \frac{1}{\tilde{Y}!} \frac{\Gamma(\tilde{\alpha}+\tilde{Y})}{ (\tilde{\beta}+1)^{\tilde{\alpha}+\tilde{Y}}}$$
+
+using the usual method  (hopefully these sort of calculations are starting to become routine now!)
+
+Now, we want 
+
+$$p(\tilde{Y} > 1900 | Y) = \sum_{D=1901}^{\infty} p(\tilde{Y}=D | Y) $$
+
+Clearly this can't be done by hand, so we can use R instead. However we must take care here:  notice that we are working with numbers like $\tilde{\beta}^{11172.04}$, which are absolutely enormous and cannot be evaluated on a normal computer ($\Gamma(\tilde{\alpha})$ is also enormous). In this situation, the standard approach is to work with logarithms instead, to avoid have to evaluate these large numbers. Taking logs: 
+
+\begin{align}\nonumber
+\log p(\tilde{Y} | Y) = &\tilde{\alpha} \log \tilde{\beta} - \log (\Gamma(\tilde{\alpha})) + \log(1) - \log( \mathrm{Gamma}(\tilde{Y}+1)) +\\ \nonumber
+&+ \log (\mathrm{Gamma}(\tilde{\alpha}+\tilde{Y}) )- (\tilde{\alpha}+\tilde{Y}) \log(\tilde{\beta}+1)
+\end{align}
+
+where I have used the fact that $\tilde{Y}! = \Gamma(\tilde{Y}+1)$ (this is the definition of the Gamma function). This can be implemented in R by:
+
+\begin{tcolorbox}[colback=black!6,colframe=black!0]
+\begin{verbatim}
+
+fn <- function(Y,alpha,beta) \{
+
+	exp(alpha*log(beta) - lgamma(alpha) + log(1) - lgamma(Y+1) +
+	   lgamma(alpha+Y)-(alpha+Y)*log(beta+1))
+\}
+\end{verbatim}
+\end{tcolorbox}
+
+where \mbox{lgamma()} evaluates the logarithm of the gamma function. So we can finally compute $p(\tilde{Y} > D | Y) $ by:
+
+\begin{tcolorbox}[colback=black!6,colframe=black!0]
+\begin{verbatim}
+
+temp <- 0
+
+for (D in 1901:10000) \{
+
+  temp <- temp + fn(D,11172.04, 6.002)  
+   
+\}
+\end{verbatim}
+\end{tcolorbox}
+which evaluates to 0.2
+(note: I stopped the above sum at 10000 because we obviously cannot go all the way up to infinity in practice, and the terms after this point are so small they are essentially equal to 0).
+
+Note that you could also modify the loop to compute $p(\tilde{Y} \leq D | Y)$, and then subtract the result from 1 to obtain the required probability, $p(\tilde{Y} > D | Y) = 1-p(\tilde{Y} \leq D | Y)$:
+
+\begin{tcolorbox}[colback=black!6,colframe=black!0]
+\begin{verbatim}
+
+temp <- 0
+
+for (D in 0:1900) \{ 
+
+\quad  temp <- temp + fn(D,11172.04, 6.002)
+
+\} 
+
+1-temp
+\end{verbatim}
+\end{tcolorbox}
+Note: this example was particularly difficult since we had a cumulative distribution function that could not practically be evaluated by hand, and huge numbers that could not even be calculated by computer. The technique of using logarithms to avoid having to evaluate such large numbers is very standard and comes up all the time in applied mathematics and computer science - it is very important to know. 
+
+ I do not necessarily expect you to have been able to solve the last part of this question without looking at this solution (although well done if you did!), but it is important to understand the steps now that you have seen them.
+}
+
+\item Find the probability of there being more than 1900 attacks in a single year when we treat $\lambda$ as being known and equal to the maximum likelihood estimator, rather than estimating it. Note that the maximum likelihood estimate of $\lambda$ in a Poisson distribution is;
+
+$$\hat{\lambda} =\frac{1}{n} \sum_{i=1}^n  Y_i$$
+
+The \texttt{ppois()} function in R can be used to evaluate the tail probability (remember that typing \texttt{?ppois} will give you the function documentation).
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+The MLE is:
+
+$$\hat{\lambda} = \frac{1}{n} \sum Y_i = \frac{1}{6} (883 + 648 + 960 + 2361 + 3555 + 2763) = 1861.667$$
+
+Therefore, the probability of more than 1900 attacks in a single year is \texttt{1-ppois(1900,1861)} in R, which is equal to 0.18. 
+%Note, there was originally a typo in the MLE formula on the exercise sheet.
+}
+
+%\Solution{
+%\vspace{.3cm}
+%\color{blue}
+%{\bf Solution}
+%
+%Similar to above.
+%}
+\vspace{5mm}
+
+\item Now find the probability of there being more than $2500$ attacks in a given year given that $\lambda$ is equal to the maximum likelihood estimate. What can you conclude about the choice of the Poisson distribution for $p(Y|\lambda)$ here?
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+ \texttt{1-ppois(2500,1861) $\approx 0$}. This is extremely low yet the 6 years on record do have instances where more than 2500 attacks occurred in a year. Therefore the Poisson model is probably not reasonable
+}
+\end{enumerate}
+
+%
+%\section*{Question 3}
+%There were on average around 2000 deadly attacks a year during the years 2002-2007. However the database also has data for the years 2008 and 2009. The following table shows the number of attacks for these additional years (I have also added data for the years 2000-2001 from the database).
+%
+%\begin{table}[h]
+%\centering
+%\begin{tabular}{rr}
+%  \hline
+% Year & Number of Attacks \\ 
+%  \hline
+% 2000 & 235\\
+% 2001 & 415\\
+%2002 & 883\\
+%2003 & 648\\
+%2004 & 960\\
+%2005 & 2361\\
+%2006 & 3555\\
+%2007 & 2763\\
+%2008 & 1387\\
+%2009 & 287\\
+%   \hline
+%\end{tabular}
+%\end{table}
+%
+%Based on this data, the conclusion that I drew in the lecture (that the probability of a large terrorist attack occurring in a single year is $2\%$, assuming that 2000 attacks occur each year) was possibly an exaggeration. Its possible that  2005-2008 may have been a period of abnormally high levels of terrorism, so we would expect to see fewer than 2000 attacks a year in the future.
+%
+%\begin{enumerate}[(a)]
+%\item For $D \in '\{10, 30, 50\}$, find the probability of a year having a terrorist attack that kills more than $D$ people assuming there are 500 attacks that year under both the Exponential and Lognormal models assuming the parameters of these distributions are equal to the MLEs given in the lectures. Note: in the lecture I claimed that the average number of attacks per year was 2000. Compare your results to those from the lecture.
+%
+%\Solution{
+%\vspace{.3cm}
+%\color{blue}
+%{\bf Solution}
+%
+%From the lectures, the MLE of $\lambda$ in the Exponential model was 0.24. So we have:
+%\begin{tcolorbox}[colback=black!6,colframe=black!0]
+%\begin{verbatim}
+%
+%> 1-pexp(10,0.24)^ \land 500
+%
+%[1] 1
+%
+%> 1-pexp(30,0.24)^ \land 500
+%
+%[1] 0.3116324
+%
+%> 1-pexp(50,0.24)^ \land 500
+%
+%[1] 0.003067401
+%
+%\end{verbatim}
+%\end{tcolorbox}
+%
+%The corresponding numbers from the lecture were 1, 0.78, and 0.01, so this is quite a big change. This (again) illustrates the impact that assumptions  can have on the results, and stresses the need to look at the data carefully.
+%
+%Similarly for the lognormal model, the MLEs are $\mu=0.68$ and $\sigma^2=0.84$. So:
+%
+%
+%\begin{tcolorbox}[colback=black!6,colframe=black!0]
+%\begin{verbatim}
+%
+%> 1-plnorm(10,0.68,sqrt(0.84))^ \land 500
+%
+%[1] 1
+%
+%> 1-plnorm(30,0.68,sqrt(0.84))^ \land 500
+%
+%[1] 0.5263635
+%
+%> 1-plnorm(50,0.68,sqrt(0.84))^ \land 500
+%
+%[1] 0.09995743
+%\end{verbatim}
+%\end{tcolorbox}
+%
+%}
+%
+%\item Repeat the above assuming only 200 attacks occur in a year.
+%
+%
+%\Solution{
+%\vspace{.3cm}
+%\color{blue}
+%{\bf Solution}
+%
+%Similar to above.
+%}
+%
+%\end{enumerate}
+
+\end{document}
+
+
+
+
+
+

@@ -1,0 +1,297 @@
+\begin{document}
+\begingroup
+\let\cleardoublepage\clearpage
+\setcounter{chapter}{3}
+\chapter*{\centering Decision and Risk \\ \vspace{1cm} \LARGE Lectures 3 -- 4: Time Series Models}
+\centering {\tiny Last updated on \today}
+\tableofcontents
+\endgroup 
+
+
+\section{Introduction}
+In previous lectures we assumed that log-returns are independent and identically normally distributed. This is a strong assumption which rarely holds in practice. In this lecture we are going to relax this assumption. In particular, we are going to assume that log-returns evolve over time as follows:
+
+		    	       $$ Y_t = \mu_t + \sigma_t\varepsilon_t $$
+
+ where              
+\begin{itemize}
+\item[] $\mu_t$ is the conditional mean.
+\item[] $\sigma^2_t$ is the conditional variance.
+\item[] $\varepsilon_t$ is $i.i.d.$ process, e.g. $\varepsilon_t\overset{i.i.d.}{\sim} N(0,1)$.
+
+\end{itemize}
+
+We are going to consider the following structure, where the log-return at time $t$ has conditional mean $\mu_t$ and conditional variance $\sigma^2_t$.
+
+clearly that the observations are not identically distributed, and also there is some degree of dependence, although it is immediately apparent. 
+
+The first part of this lecture considers models for the conditional mean. In the second part we will consider models for the conditional variance.
+
+
+
+\section{Models for the time-varying conditional mean $\mu_t$}
+First, let's focus on the conditional mean, and let's assume that the conditional variance is constant, so $\sigma_t\varepsilon_t = \sigma\varepsilon_t \equiv u_t$. One of the simplest models for the conditional mean is the \textbf{autoregressive model}.
+
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 3}\end{defn}, colframe=black!60]
+An autoregressive model of order $p$, denoted as $AR(p)$, has the following form:
+  \begin{align}\label{armodel}
+  Y_t = c + \alpha_1 Y_{t-1} + \alpha_2 Y_{t-2} + \ldots + \alpha_p Y_{t-p} + u_t  \end{align}
+where  $c$, $\alpha_1, \ldots, \alpha_p$ are unknown parameters.
+\vspace{3mm}
+\end{tcolorbox}
+ This equation tells us that, in an autoregressive model, the value of a variable $Y_t$ at time period $t$ depends only on the values of the variable in previous periods plus an error term $u_t$. Here $c$, $\alpha_1,\ldots ,\alpha$ are unknown parameters which need to be estimated. Note that if we assume that $\varepsilon_t$ follows a standard normal distribution, i.e. $\varepsilon_t\overset{i.i.d.}{\sim} N(0,1)$, then the error term $u_t$ will also follow a normal distribution with mean 0 and variance $\sigma^2$, i.e. $u_t \overset{i.i.d.}{\sim} N(0,\sigma^2)$. Furthermore, if $u_t$ follows a normal distribution, then the conditional distribution of $Y_t$ will be also normal, i.e.:
+  \begin{align}\label{conditional}
+  Y_t|\Omega_{t-1} \sim N(c + \alpha_1 y_{t-1} + \alpha_2 y_{t-2} + \ldots + \alpha_p y_{t-p}, \; \sigma^2)
+    \end{align} 
+
+
+So what are we conditioning on? At time period $t$, this consists of a conditioning set $\Omega_{t-1}$, which includes all relevant information up to time $t-1$. $\Omega_{t-1}$ usually consists of the following set of variables:
+\begin{itemize}
+
+\item Past observations of the variable under consideration, $y_{t-1}, y_{t-2}, \ldots$.
+\item Past innovations, $u_{t-1}, u_{t-2}, \ldots$ \footnote{ In practice $u_{t-1}, u_{t-2}, \ldots$ are not observed, but we can use residuals $\widehat{u}_t, \widehat{u}_{t-1}, \ldots$}.
+\end{itemize}
+In the case of $AR(p)$ model, the information set consists of $y_{t-1}, \ldots, y_{t-p}$. Therefore, we can rewrite \eqref{conditional} as follows:
+  \begin{align}\label{conditional2}
+  Y_t|y_{t-1}, \ldots, y_{t-p} \sim N(c + \alpha_1 y_{t-1} + \ldots + \alpha_p y_{t-p}, \; \sigma^2)
+    \end{align} 
+The derivation of this conditional distribution is straightforward when $u_t$ follows a normal distribution. First, let's derive the conditional mean, $\mathbb{E}(Y_t|\Omega_{t-1})$: 
+
+\begin{align}\nonumber
+\mathbb{E}\left\{Y_{t} \mid \Omega_{t-1}\right\}=&\mathbb{E}\left\{c + \alpha_1 Y_{t-1} + \ldots + \alpha_p Y_{t-p} + u_t \mid \Omega_{t-1}\right\}\\ \label{condititonal_der1}
+=&c + \alpha_1 \mathbb{E}\left\{Y_{t-1} \mid \Omega_{t-1}\right\} + \ldots + \alpha_p \mathbb{E}\left\{Y_{t-p} \mid \Omega_{t-1}\right\} + \mathbb{E}\left\{u_t \mid \Omega_{t-1}\right\}\\\label{condititonal_der2}
+= &c + \alpha_1 \mathbb{E}\left\{y_{t-1} \mid \Omega_{t-1}\right\} + \ldots + \alpha_p \mathbb{E}\left\{y_{t-p} \mid \Omega_{t-1}\right\} + \mathbb{E}\left\{\sigma \varepsilon_{t} \mid \Omega_{t-1}\right\} \\\label{condititonal_der3}
+=&c + \alpha_1 y_{t-1} + \ldots + \alpha_p y_{t-p} +  \sigma\mathbb{E}\left\{\varepsilon_{t} \mid \Omega_{t-1}\right\} \\\nonumber
+=& c + \alpha_1 y_{t-1} + \ldots + \alpha_p y_{t-p} + \sigma\mathbb{E}\left\{\varepsilon_{t}\right\} \\\nonumber
+=& c + \alpha_1 y_{t-1} + \ldots + \alpha_p y_{t-p} + \sigma\cdot 0 \\\nonumber
+=& c + \alpha_1 y_{t-1} + \ldots + \alpha_p y_{t-p} 
+ \end{align}
+
+The move from \eqref{condititonal_der1} to \eqref{condititonal_der3} can interpreted as follows: when we condition on past values $ y_{t-1}, \ldots,  y_{t-p}$, these quantities $ Y_{t-1}, \ldots,  Y_{t-p}$ are no longer random because we are given their values (in other words, they are constant). 
+
+Therefore, the conditional expectation of a constant, is a constant itself.
+
+Next, we can derive the conditional variance, $\textrm{Var}(Y_t|\Omega_{t-1})$ \footnote{This derivation is slightly different to what we've seen in Exercise 6. This is because using that approach is a bit tedious in this context. Instead, here we use a relatively `neater' approach using variance operators, $Var(\cdot)$.}:
+
+
+\resizebox{0.98\textwidth}{!}{
+\begin{minipage}{1.1\textwidth}
+\begin{align}\nonumber
+\textrm{Var}\left(Y_{t} \mid \Omega_{t-1}\right)=&\textrm{Var}\left(c + \alpha_1 Y_{t-1} + \ldots + \alpha_p Y_{t-p}+u_{t} \mid \Omega_{t-1}\right) \\\nonumber
+=&\textrm{Var}\left(c \mid \Omega_{t-1}) + \alpha_1^2\cdot \textrm{Var}\left(Y_{t-1} \mid \Omega_{t-1}) + \ldots + \alpha_p^2\cdot \textrm{Var}\left(Y_{t-p} \mid \Omega_{t-1}) + \textrm{Var}\left(u_t \mid \Omega_{t-1})\\ \label{condititonal_der4}
+=&0 + \alpha_1^2 \cdot\textrm{Var}\left(y_{t-1} \mid \Omega_{t-1}) + \ldots + \alpha_p^2\cdot \textrm{Var}\left(y_{t-p} \mid \Omega_{t-1}) + \textrm{Var}\left(\sigma \varepsilon_t \mid \Omega_{t-1})\\\label{condititonal_der5}
+=&0 + \alpha_1^2 \cdot 0 + \ldots + \alpha_p^2 \cdot 0 + \sigma^2\cdot \textrm{Var}\left( \varepsilon_t \mid \Omega_{t-1})\\\label{condititonal_der6}
+=&0 + 0 + \ldots + 0 + \sigma^2 \cdot \textrm{Var}\left(\varepsilon_{t})\\\nonumber
+%=&0 + 0 + \ldots + 0 + \sigma^2 \cdot \underbrace{ \textrm{Var}\left(\varepsilon_{t})}_{=1}\\\nonumber
+=& \sigma^2   \hspace{6cm} \textrm{\color{OliveGreen}(since $\textrm{Var}\left(\varepsilon_{t})=1$)}
+\end{align}
+\end{minipage}}
+
+The move from \eqref{condititonal_der4} to \eqref{condititonal_der6} can be interpreted as follows: when we condition on past values $ y_{t-1}, \ldots,  y_{t-p}$, these quantities $ Y_{t-1}, \ldots,  Y_{t-p}$ become constants. The variance of a constant is 0 (hence the name \enquote{constant}!) and, therefore, the conditional variance of each $Y_{t-1}, \ldots,  Y_{t-p}$ given past values $y_{t-1}, \ldots,  y_{t-p}$ is  0 (  $c$ is a constant regardless whether we condition on previous values or not). 
+
+Finally, the conditional distribution in \eqref{conditional2} is determined by using the well-known result which states that, adding a constant to a normally distributed random variable affects the mean, but not the standard deviation of the distribution, i.e. if $X\sim N(0,\sigma^2)$, then $Y=c+X \sim N(c,\sigma^2)$.
+
+\subsection{Building $AR$ models: the Box-Jenkins approach}
+
+The next natural question that arises is how do we determine the order of the $AR$ model? In 1976 Box and Jenkins proposed a practical approach to estimate an $AR$ model in a systematic manner\footnote{This approach also applies to the Moving Average ($MA$) models, but we will not consider them in this course.}. The Box and Jenkins approach involves three steps:
+\begin{enumerate}
+\item \textbf{Identification}:
+The first step involves determining the order of the autoregressive model which can adequately capture features of the data.
+
+\item \textbf{Estimation}:
+Second step involves estimation of the parameters of the model specified in step 1.
+
+\item \textbf{Model checking}:
+Third step involves determining whether the model specified and estimated in previous steps is adequate. 
+\end{enumerate}
+
+\subsubsection{Identification}
+The identification step involves determining the order of the model required to capture the dynamic features of the data. Graphical procedures such as autocorrelation function (ACF) and partial autocorrelation function (PACF) can be used to determine the most appropriate model specification. For example, ACF is a measure of the correlation between $Y_t$ and $Y_{t-k}$ that are separated by $k$ time periods, whilst  PACF is a measure of the correlation between $Y_t$ and $Y_{t-k}$ after removing the effects of  $Y_{t-k+1}$, $Y_{t-k+2}$, $\ldots, Y_{t-1}$. 
+
+A pure $AR(p)$ process will have:
+\begin{itemize}
+\item a geometrically decaying ACF.
+\item a PACF which cuts off to zero after $p$ lags (which will determine the AR order).
+\end{itemize}
+Hence, the PACF can be used to identify the order of an $AR$ model.
+
+\subsubsection{Estimation}
+Once we determine the order of the $AR$ model, the estimation of the unknown parameters of the $AR$ model  can be carried out using least squares or maximum likelihood method. We will not focus on estimation theory in this course, we will simply use the statistical software package R to estimate parameters. 
+
+
+\subsubsection{Model checking}
+
+Once we select the order of the $AR$ model, and estimate its parameters, the next step is to determine whether the specified model is adequate. Box and Jenkins suggest two methods: 
+\begin{itemize}
+\item \emph{Overfitting}
+\item  \emph{Residual diagnostics}. 
+ \end{itemize}
+\emph{Overfitting} method involves deliberately including more lags than it is required to describe the properties of the data, and then test whether those extra lags are significant. In this course we are going to focus on the latter, \emph{residual diagnostics}. In this approach, we extract residuals $\widehat{u}_t$ from the estimated model, and then check for autocorrelation:
+
+$$\widehat{u}_t= y_t - \widehat{c} - \widehat{\alpha}_1 y_{t-1} - \widehat{\alpha}_2 y_{t-2} - \ldots - \widehat{\alpha}_p y_{t-p}$$
+
+where $\widehat{c}$, $\widehat{\alpha}_1$, $\widehat{\alpha}_2, \ldots, \widehat{\alpha}_p$ are parameter estimates from step 2 for $AR(p)$ model in \eqref{armodel}. If we find evidence of autocorrelation, then this would suggest that the model specified in previous steps is inadequate to describe the observed features (i.e. autocorrelation) present in the data. 
+We can use the \textbf{Ljung-Box test} for autocorrelation. The test statistic is:
+\begin{itemize}
+\item[]\vspace{-.3cm}
+$$ Q(m) = T ( T + 2 ) \sum _ { k = 1 } ^ { m } \frac { \hat { \rho } _ { k } ^ { 2 } } { T - k } \sim \chi _ { m } ^ { 2 } $$
+where:
+\item[] $T$ is the sample size.
+\item[] $\hat { \rho } _ { k }$ is the sample autocorrelation at lag $k$.
+\item[] $m$ is the number of lags that are being tested.
+ \end{itemize}
+This $Q$-statistic is asymptotically distributed as $\chi^2$ (chi-squared) with $df=m-d$ under the null hypothesis that all $m$ autocorrelation coefficients are zero. Here $d$ is the number of coefficients in the model (the order of the model $p$, plus a constant $c$, i.e. $d=p+1$). If the test is applied to the original series of log-returns before fitting an $AR(p)$ model, then the $Q$-statistic has asymptotic $\chi^2$ distribution with $df=m$ degrees of freedom. The hypothesis that is being tested is:
+\begin{itemize}
+{\small
+\item[] $H_0:$ All of the first $m$ autocorrelation coefficients are jointly zero.
+\item[] $H_1:$ The data are not independently distributed.}
+ \end{itemize}
+Testing jointly $m$ lags avoids the need to be specific about which lag to test. However, the Ljung-Box test is not insensitive to the number of lags $m$ involved in the test. Different values of $m$ have been suggested in the literature\footnote{ Ljung (1986) proposed $m=5$; Tsay (2010) proposed $m=\ln(T)$ where $T$ is the sample size; Shumway and Stoffer (2011) proposed $m=20$; Hyndman and Athanasopoulos (2018) proposed $m=\min(10,T/5)$.}, although the optimal value of $m$ will depend on the sample size as well as the test's significance level $\alpha$.
+C)).
+
+\section{Models for the time-varying conditional variance $\sigma_t^2$}
+So far we have considered models where only the conditional mean is changing over time. However, in the case of financial log-returns, the \textbf{conditional variance} also changes over time, so $ u_t = \sigma_t\varepsilon_t$. Note that we introduced back the subscript $t$ on $\sigma$. Recall that the log-returns are $Y_t = \log \left( \frac{P_t}{P_{t-1}} \right)$ where $P_t$ is the price on day $t$. 
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{ftse100.pdf}
+\caption{FTSE100 log-returns}\label{log-returns}
+\end{figure}
+
+
+
+Let's consider Figure \ref{log-returns} which plots log-returns for a financial stock index FTSE100. The first evident feature of financial log-returns is that the conditional variance is not constant over time. Another important feature is that the conditional variance (or conditional volatility\footnote{In finance volatility is another word for standard deviation.}) comes in clusters, a feature that is known as \textit{volatility clustering}. \textit{Volatility clustering} refers to the tendency of large changes in financial asset prices to be followed by large changes, and small changes to be followed by small changes (Mandelbrot, 1963). Almost all financial return series exhibit this pattern where the conditional variance changes over time. Hence, it is sensible to consider a model which is able to take these features into account. This provides the motivation for the $ARCH$/$GARCH$ class of models, which are the most popular time-varying \textbf{conditional} variance models used in finance. 
+
+Returning to Figure \ref{log-returns}, it can be observed that there are periods where the conditional volatility is high, for example, between 2000-2003, and also between 2007-2012, which coincides with the recent financial crisis of 2007. Also, there are periods of low volatility roughly between 2003-2007. It seems that the conditional volatility is autocorrelated. If we construct ACF plots for the squared log-returns, then this feature becomes apparent. Although, financial returns exhibit moderate autocorrelation, autocorrelation of squared log-returns is usually stronger.
+
+\subsection{$ARCH(p)$ models}
+
+In 1982 Engle introduced $ARCH$ model in which the variance at time period $t$ is modelled as a linear function of past squared residuals. $ARCH$ stands for \enquote{Autoregressive Conditional Heteroskedasticity},  which is defined as follows:
+\begin{align} \label{} \nonumber
+      y_{t}&= \mu+u_{t} \quad \textrm{where} \quad  u_{t}=\sigma_{t} \epsilon_{t}\quad \textrm{and} \quad \epsilon_t \overset{i.i.d.}{\sim} N(0,1)\\ \nonumber \label{}
+      \sigma^2_{t}&=\omega_{}+\sum_{p=1}^{P}\alpha_{p} u_{t-p}^2
+\end{align}
+      where $\sigma^2_{t}$ is the \textbf{conditional} variance given past information, and $\epsilon_{t}$  are $i.i.d.$ random variables. Furthermore, the condition $\omega_{}$, $\alpha_{p}>0$  ensures that the conditional variance $\sigma^2_{t}$ is strictly positive. The simplest model for time-varying conditional variance is the $ARCH(1)$  model:
+$$y_t  = u_{t} \quad \textrm{where} \quad  u_{t}=\sigma_{t} \epsilon_{t}\quad \textrm{and} \quad \epsilon_t \overset{i.i.d.}{\sim} N(0,1)$$
+$$\sigma^2_{t} = \beta_0  + \beta_1 u_{t-1}^2$$
+
+
+ In this specification $Y_t$ has a conditional mean equal to 0 (and also unconditional), and a time-varying conditional variance $\sigma^2_t$. Using the same derivation from \eqref{condititonal_der1}-\eqref{condititonal_der6}, it can be shown that the \textbf{conditional} distribution of $Y_t$ is $N(0,\sigma_t^2)$, where $\sigma_t^2$ depends on the previous value $u_{t-1}$ (hence conditional!). When the conditional variance evolves according to the above equation, this is called an $ARCH(1)$ model. It is also worth pointing out that, simulating a random variable from a $N(0,1)$ distribution and multiplying it by $\sigma$ is equivalent to simulating from a $N(0,\sigma^2)$ distribution.
+
+\subsubsection{Simulating from an $ARCH(1)$ model}
+
+Below is an R code to simulate from an $ARCH(1)$ model. The parameters $\beta_0$ and $\beta_1$ are specified to be 0.1 and 0.8 respectively, and the number of simulations is 1000. Figure \ref{simARCH} plots the simulated values of log-returns $y_1,\ldots,y_{1000}$, where we can notice that we were able to generate data that exhibit some degree of volatility clustering.
+
+\vspace{6mm}
+\begin{tcolorbox}[colback=black!6,title=Simulating from an $ARCH(1)$ model, colframe=black!60]
+\small
+\begin{verbatim}
+beta0 <- 0.1; beta1 <- 0.8 
+n <- 1000
+sigma2s <- numeric(n); 
+y <- numeric(n)
+
+sigma2s[1] <- 1; 
+y[1] <- rnorm(1,0,sqrt(sigma2s[1]))
+
+for (i in 2:n) {
+  sigma2s[i] <- beta0 + beta1 * y[i-1]^2 
+  y[i] <- rnorm(1,0,sqrt(sigma2s[i]))
+}
+\end{verbatim}
+\vspace{3mm}
+\end{tcolorbox}
+
+
+\begin{figure}[h]
+\includegraphics[scale=0.8]{arch1.pdf}
+\caption{Simulated ARCH(1) process} \label{simARCH}
+\end{figure}
+
+
+
+
+ \subsubsection{Limitations of $ARCH(p)$ models}
+ $ARCH(p)$ models are rarely used in practice since they have limitations associated with them:
+ \begin{itemize}
+ \item There is no clear guidance on the choice of the number of lags $p$ of squared residuals.
+ \item The number of lags of squared residuals required to capture all of the dependence could be very large, and hence the number of parameters to be estimated. In this case, the resulting model would not be parsimonious. 
+ \item Consequently, non-negativity constraints could be violated due to the large number of parameters in the model. This is because the more parameters there are in the model, the more likely it is that there will be at least one negative estimated value.
+ \end{itemize}
+
+
+
+\subsection{$GARCH(p, q)$ models}
+To address limitations associated with $ARCH$ model, Bollerslev (1986) and Taylor (1986) independently developed the $GARCH$ model. The $GARCH(p, q)$ model of Bollerslev (1986) is defined as follows:
+ \begin{align} \label{1_margin_AR2} \nonumber
+      y_{t}&=\mu+u_{t} \quad \textrm{where} \quad  u_{t}=\sigma_{t} \epsilon_{t} \quad \textrm{and} \quad \epsilon_t \overset{i.i.d.}{\sim} N(0,1)\\ \label{1_margin_GARCH} \nonumber
+      \sigma^2_{t}&=\omega_{}+\sum_{p=1}^{P}\alpha_{p} u_{t-p}^2+\sum_{q=1}^{Q}\beta_{q}\sigma^2_{t-q}
+      \end{align}
+      where $\sigma_{t}$ is the conditional variance given past information, $\epsilon_{t}$  are $i.i.d.$ random variables, restrictions $\omega_{}$,\: $\alpha_{ 1 }, \ldots, \alpha_{P}$,\: $\beta_{1},\ldots,\beta_{Q}>0$ assure that the conditional variance $\sigma^2_{t}$ is positive and $\sum_{p=1}^{P}\alpha_{p} +\sum_{q=1}^{Q}\beta_{q} <1$  ensures stationarity and that the unconditional variance is defined.
+
+      Under this specification, the conditional variance is related not only to the previous values of the squared error terms, but also to the conditional variances from previous periods.
+\subsubsection{$GARCH(1,1)$ Model}
+The simplest $GARCH$ model for the time-varying conditional variance is the $GARCH(1,1)$ model. 
+ \begin{align} \label{} \nonumber
+      y_{t}&=u_{t} \quad \textrm{where} \quad  u_{t}=\sigma_{t} \epsilon_{t} \quad \textrm{and} \quad \epsilon_t \overset{i.i.d.}{\sim} N(0,1)\\ \label{} \nonumber
+      \sigma^2_{t}&=\omega_{}+\alpha_{1} u_{t-1}^2+\beta_{1}\sigma^2_{t-1}
+      \end{align}
+
+The $GARCH(1,1)$ model has 3 unknown parameters: $\omega, \alpha_1$, and $\beta_1$. The only difference between $ARCH(1)$ and $GARCH(1,1)$ models is the $\beta_1 \sigma_{t-1}^2$ term. The $\beta_1$ coefficient essentially allows the conditional variance to persist over time. This typically results in a better fit to real financial log-returns data. The closer parameter $\beta_1$ is to 0, the less persistent is the conditional volatility. 
+
+The $GARCH$ model can be extended to higher orders. However, these are mainly of academic interest. In practice, when people (both in academia and industry -- banks, hedge funds, \textit{etc}.) use a $GARCH$ model for time-varying conditional  variance, it is overwhelmingly the $GARCH(1,1)$ model which is chosen. Despite being a simple model with only 3 parameters, it tends to give a very good fit to real financial data.
+\begin{figure}
+\includegraphics[scale=0.8]{garch11cvar.pdf}
+\caption{Simulated values for the conditional variance $\sigma^2_t$ using $GARCH(1,1)$ model.} \label{simGARCHvar}
+\end{figure}
+
+\subsubsection{Simulating from a $GARCH(1,1)$ model}
+ The following R code illustrates how we can simulate $GARCH(1,1)$ process. The parameters $\omega$, $\alpha_1$, and $\beta_1$ are specified to be 0.1, 0.2, and 0.8 respectively, and the number of simulations is 1000. Figures \ref{simGARCHvar} and \ref{simGARCH11} plot the simulated values for the conditional variance $\sigma^2_t$ and the simulated values of log-returns $y_1,\ldots, y_{1000}$ respectively. We can immediately see that $GARCH(1,1)$ model does a better job than $ARCH(1)$ model in reproducing volatility clustering observed in the real time-series of log-returns for FTSE100.
+ 
+ \vspace{2mm}
+ \begin{tcolorbox}[colback=black!6,title=Simulating from a \textrm{$GARCH(1,1)$} model, colframe=black!60]
+ \small
+ \begin{verbatim}
+omega <- 0.1; alpha1 <- 0.2; beta1 <- 0.8
+n <- 1000
+sigma2s <- numeric(n); 
+y <- numeric(n)
+
+sigma2s[1] <- 1; 
+y[1] <- rnorm(1,0,sqrt(sigma2s[1]))
+
+for (i in 2:n) {
+  sigma2s[i] <- omega + alpha1 * y[i-1]^2 + beta1 * sigma2s[i-1]
+  y[i] <- rnorm(1,0,sqrt(sigma2s[i]))
+}
+\end{verbatim}
+% \vspace{3mm}
+ \end{tcolorbox}
+
+\begin{figure}
+\includegraphics[scale=0.8]{garch11.pdf}
+\caption{Simulated $GARCH(1,1)$ process.} \label{simGARCH11}
+\end{figure}
+
+\subsubsection{\large The unconditional variance under $GARCH$ specification}
+It is important to note that, although the conditional variance of $u_{t}^2$ is changing, the unconditional variance is constant. Again, consider the $GARCH(1, 1)$ model. Then the unconditional variance of $Y_{t}$ is constant and defined as follows:
+$$ \operatorname { Var } \left( Y _ { t } \right)= \sigma^2 = \frac { \omega _ {  } } { 1 - \left( \alpha _ { 1 } + \beta_{1} \right) } $$
+
+Note the absence of subscript $t$. From this definition it is evident why the restriction $\alpha_{1} + \beta_{1} < 1$ is required. For $\alpha_{1} + \beta_{1} \geq 1$, the unconditional variance of $u_{t}$ is not defined. If the sum is greater than 1, then this would result in a negative variance, which would not make any sense. Recall that variance is computed as the average of the squared deviations from the mean, and squaring a real number always produces a positive number! When $\alpha_{1} + \beta_{1} = 1$, the model is termed $IGARCH$, i.e. \textit{integrated} $GARCH$, which means a \enquote{unit root in variance}. This results in the process being non-stationary (i.e. the conditional variance will grow over time to infinity, which would also result in the unconditional variance being infinite).
+
+\subsection{$TGARCH$ model}
+An extension of $GARCH$ model has been proposed in order to account for the \textit{leverage effects}. \textit{Leverage effects} refer to the tendency of volatility to react differently to a positive change in price than to a negative change. The \textit{threshold} $GARCH(p, q)$ model is defined as follows:
+ $$\begin{align} \label{1_margin_AR3}
+      y_{t}&=\mu+u_{t} \quad \textrm{where} \quad  u_{t}=\sigma_{t} \epsilon_{t}\\ \label{1_margin_TGARCH}
+      \sigma^2_{t}&=\omega_{}+\sum_{p=1}^{P}\alpha_{p} u_{t-p}^2+\sum_{o=1}^{O}\gamma_{o} u_{t-o}^2I_{[u_{t-o}<0]}+\sum_{q=1}^{Q}\beta_{q}\sigma^2_{t-q}
+      \end{align}$$
+      \justifying     
+      where $\sigma^2_{t}$ is the conditional variance given past information, and $\epsilon_{t}$  are $i.i.d.$ random variables, $\omega_{}$,\: $\alpha_{ 1 }, \ldots, \alpha_{P}$,\: $\gamma_{ 1 }, \ldots, \gamma_{O}$,\: $\beta_{1},\ldots,\beta_{Q}>0$  assures that the conditional variance $\sigma^2_{t}$ is positive. 
+
+Under this specification, the \textit{leverage effects} are captured by adding extra terms to $GARCH$ model, which consist of the previous values of the squared error terms. Note that these additional past squared error terms are added only when error terms are negative. Intuitively, this specification says that a negative shock to returns, such as bad news, is likely to increase volatility in the next period by more than a positive shock of the same size. This volatility model is also known as the GJR model, named after the authors Glosten, Jagannathan and Runkle (1993). 
+      
+\subsubsection{Testing for ARCH Effect}
+The natural question that arises is -- how do we determine whether $ARCH$/$GARCH$ models are needed? Well, we need to test for $ARCH$/$GARCH$ effects\footnote{ If a time series exhibits time-varying conditional variance (i.e. conditional heteroskedasticity), then it is said to have $ARCH$/$GARCH$ effects.}. Again, let's consider residuals from the conditional mean equation $\widehat{u}_t= y_t - \widehat{c} - \widehat{\alpha}_1 y_{t-1} - \widehat{\alpha}_2 y_{t-2} - \ldots - \widehat{\alpha}_p y_{t-p}$. Then the resulting series of squared residuals $u_{it}^2$ can be used to test for the $ARCH$/$GARCH$ effects (i.e. conditional heteroskedasticity). Here we can use the familiar Ljung-Box test. We can also carry out preliminary visual diagnostics using ACF plot for the squared residuals. Usually the plot will display a slowly geometrically decaying ACF.
+
+
+\end{document}

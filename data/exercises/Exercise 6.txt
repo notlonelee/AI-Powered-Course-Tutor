@@ -1,0 +1,257 @@
+\documentclass{article}
+
+\usepackage{color, graphicx, parskip, framed, titling, subfig}
+\usepackage{ragged2e} %justifying
+
+
+\title{Decision and Risk - Exercise 6}
+\author{}
+\date{}
+
+\setlength{\droptitle}{-10em}
+\newcommand\Solution[2][\\]{{\Question#1#2}}
+% TO PROVIDE NO SOLUTION uncomment
+\renewcommand\Solution[2][\\]{}
+
+\begin{document}
+
+\maketitle 
+
+%I would strongly advise doing all these questions, but make sure you try Questions 4 and 5 especially.
+%
+%Note: Question 4 will require a computer.
+\section*{Bayes Theorem}
+
+\subsection*{Question 1}
+
+You are planning a vacation in Italy. Before packing, you hear that there might be an earthquake the day you arrive.
+
+After consulting Google, you learn that in recent years there have been (on average) five earthquakes a year in the part of the country you are visiting (ignore leap years). Moreover, you learn that when there is an earthquake, the earthquake forecast service has correctly predicted it $90\%$ of the time. However, when there was no earthquake, the forecast service incorrectly predicted 10$\%$ of the time that there would be one.
+
+What is the probability that there will be an earthquake on the day you arrive given forecast of an earthquake? 
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+Define:
+
+\begin{itemize}
+\item E: There is an earthquake on the day you arrive
+\item F: The forecast system says an earthquake will occur on the day you arrive
+\end{itemize}
+
+We need $p(E| F) = p(F|E)p(E)/p(F)$. 
+
+From the given information:
+
+\begin{itemize}
+\item $p(E) = 5/365 \approx 0.014$
+\item $p(F|E) = 0.9$
+\item $p(F) = p(F|E)p(E) + p(F|E')p(E') = 0.9*0.014 + 0.1*(1-0.014) = 0.1112$
+\end{itemize}
+
+so $p(E|F) = 0.9 * 0.014/0.1112 = 0.113$ and there is hence an $11\%$ chance of there being an earthquake. Does this seem low to you?  Think about it this way -- only around 1 in 73 days actually have earthquakes ($0.014*73 \approx 1$). But on the days where there is no earthquake, the chance of a false alarm is 1 in 10 ($0.1*10=1$). So most alarms are going to be false.
+
+}
+
+\subsection*{Question 2}
+
+Consider a woman who has a brother with haemophilia, but whose father does not have haemophilia. This implies that her mother must be a carrier of the haemophilia gene on one of her X chromosomes and that her father is not a carrier. The woman herself thus has a fifty-fifty chance of having the gene.
+
+\vspace{3mm}
+
+The situation involving uncertainty is whether or not the woman carries the haemophilia gene. The parameter of interest $\theta$ can take two states:
+
+\begin{itemize}
+\item Carries the gene ($\theta=1$)
+\item Does not carry the gene ($\theta=0$).
+\end{itemize}
+
+1) Write down the prior distribution for $\theta$ using the above information.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+The prior is $p(\theta = 0) = 1/2$ and $p(\theta=1) = 1/2$
+
+}
+
+2) The data $Y$ is the number of the woman's sons who are infected. Suppose she has two sons, neither of whom is affected. Assuming the status of the two sons is independent, write down the likelihood function $p(Y|\theta)$ (if the woman is not a carrier then her sons cannot be affected, but if she is a carrier they each have a $50\%$ chance of being affected).
+
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+Let
+ $$Y = \left\{ \begin{array} { l l } { 0 } & { \textrm{ neither son is affected } } \\ { 1 } & { \textrm{ one of the sons is affected } } \\ 
+ { 2 } & { \textrm{ both sons are affected } } \end{array}  \right.$$
+
+Then:
+
+$p(Y=0 | \theta=0) = 1$  (if the woman is not a carrier, then neither son can be infected)
+
+$p(Y=0   | \theta =1) = 0.5 * 0.5 = 0.25$, since the infection status of both sons is independent of each other
+
+}
+
+3) Find the corresponding posterior distribution for $\theta$.
+
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+
+First note that $p(Y=0) = p(Y=0 |\theta=0)p(\theta=0) + p(Y=0 |\theta=1)p(\theta=1) = 1*0.5 + 0.25*0.5 = 0.625$
+
+
+$$p(\theta = 0 | Y=0 ) = \frac{p(Y=0  | \theta=0)p(\theta=0)}{p(Y=0 )} =  \frac{1*0.5}{0.625} = 0.8 $$
+$$p(\theta = 1 |Y=0) = \frac{p(Y=0  | \theta=1)p(\theta=1)}{p(Y=0 )} =  \frac{0.25*0.5}{0.625} =  0.2$$
+
+
+}
+
+\section*{Bernoulli/Binomial Distribtuion}
+
+\subsection*{Question 3}
+
+1) Items are produced on an assembly line and the probability that any item is defective is given by $\theta$. A uniform prior on $\theta$ is assumed (i.e. Beta(1,1)). An item is selected from the line and tested. What is the posterior distribution for $\theta$  if the item is
+
+(a) defective?
+
+(b) non defective?
+
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+The prior is Beta(1,1). Let $Y$ correspond to the defective status of the sampled item, so that $Y=1$ if it is defective, otherwise $Y=0$. Then
+
+$$\theta | Y=0 \sim Beta(1,2)$$
+$$\theta | Y=1 \sim Beta(2,1)$$
+
+}
+
+2) The uniform prior is here used to represent the state of having no prior knowledge about $\theta$ -- i.e. that any value is equally likely. An alternative way to represent lack of knowledge is the \textbf{Haldane's prior} which is given here by
+
+$$p(\theta) \propto \frac{1}{\theta (1-\theta)}$$
+
+Write this prior as a Beta distribution, and hence find the posterior given that there are Y defective items in a batch of $N$ items. Give a point estimate for $\theta$ using the mean of this posterior distribution.
+
+
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+The Haldane's prior corresponds to a Beta(0,0) distribution. The posterior is:
+
+$$\theta | Y \sim Beta(Y,N-Y)$$
+
+The posterior mean is $Y/N$, corresponding to the frequentist maximum likelihood estimate. So in this case we can see that the Haldane's prior is in some sense less informative than the uniform prior!
+
+}
+
+%\section*{Credible Intervals}
+%
+%\subsection*{Question 4}
+%
+%In the coin tossing example we used in the lectures, John's posterior for $\theta$ ended up being Beta($186.4, 190.4$). Construct a rough $95\%$ credible interval for $\theta$, which represents a range of values which is he $95\%$ sure $\theta$ lies within.
+%
+%Note: there are sophisticated ways to do this, but I would like you do it in the most basic way possible to ensure you understand what is happening. Recall from lectures that a 95$\%$ credible interval is any interval that contains 0.95 of the area of the posterior distribution for $\theta$. John's  posterior distribution is  Beta($186.4, 190.4$). So for any interval [a,b] you can compute the integral of Beta($186.4, 190.4$) over this interval in R either by
+%
+%pbeta(b, 186.4, 190.4) - pbeta(a,186.4, 190.4)
+%
+%Experiment with different choices of a and b until you find an interval containing roughly 0.95 of the posterior area (you will not get exactly 0.95, but thats fine, just get it close). This will be a $95\%$ credible interval for John. Note -- like confidence intervals, it is not unique! There are many different intervals containing 0.95 of the area. For each of them, John has $95\%$ belief in the statement that $\theta$ lies inside that interval.
+%
+%Now construct a $95\%$ credible interval which represents Sarah's beliefs about $\theta$.
+%
+%
+%
+
+\section*{Exponential Distribution}
+
+\subsection*{Question 4}
+In the lectures, we started discussing how to perform Bayesian inference for the times between earthquakes. We will now finish the example.
+
+Let $Y=\{\tau_1,\ldots,\tau_n \}$ denote the $n$ inter-event times. The likelihood function is Exponential:
+
+$$p(Y|\lambda) = \prod_{i=1}^n \lambda e^{-\lambda \tau_i}$$
+
+Derive the posterior distribution for $\lambda$ using the conjugate Gamma($\alpha, \beta$) prior, in a similar way as I did in the lectures using the Beta prior for the Binomial distribution.
+
+Key hint: since the prior is conjugate, the posterior is going to also be a Gamma distribution. You can perform the $p(Y) = \int p(Y|\lambda) p(\lambda) d\lambda$ integral in the posterior denominator using the same 'trick' we used in the lectures by taking everything that isn't dependent on $\lambda$ outside the integral, and 'recognising' that everything left inside has the same form as the Gamma distribution (which integrates to 1, since it is a probability distribution).
+
+
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+The likelihood and prior are:
+$$p(Y|\lambda) = \prod_{i=1}^n \lambda e^{-\lambda Y_i} = \lambda^n e^{-\lambda S},\quad S=\sum_{i=1}^n Y_i$$
+$$p(\lambda) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} \lambda^{\alpha-1}e^{-\beta \lambda}$$
+
+By Bayes'' Theorem: 
+
+$$p(\lambda | Y) = \frac{p(Y|\lambda)p(\lambda)}{p(Y)}$$
+
+Substituting in, we see that the numerator is:
+
+$$p(Y|\lambda)p(\lambda) =  \frac{\beta^{\alpha}}{\Gamma(\alpha)} \lambda^{\alpha+n-1}e^{-\lambda(\beta+S)}$$
+
+The denominator is:
+
+$$p(Y) = \int  \frac{\beta^{\alpha}}{\Gamma(\alpha)} \lambda^{\alpha+n-1}e^{-\lambda(\beta+S)} d\lambda =   \frac{\beta^{\alpha}}{\Gamma(\alpha)} \int \lambda^{\alpha+n-1}e^{-\lambda(\beta+S)} d\lambda  $$
+
+We do this integral in the same way as we done when using the Beta prior for the Binomial distribution -- use a substitution to make it the same form as the prior, and utilise the fact that all probability densities integrate to 1.
+
+Since the conjugate prior is Gamma, we want to put this into the same form as the Gamma distribution. So, we make the substitutions $\tilde{\alpha} = \alpha+n$ and $\tilde{\beta} = \beta+S$:
+
+$$p(Y) =  \frac{\beta^{\alpha}}{\Gamma(\alpha)} \int \lambda^{\tilde{\alpha}-1}e^{-\lambda \tilde{\beta}} d\lambda $$
+
+
+We recognise that the part under the integral has a similar form to a Gamma distribution. The Gamma distribution integrates to 1 (since it is a probability distribution), Ie we know that: 
+
+ $$\int \frac{\tilde{\beta}^{\tilde{\alpha}}}{\Gamma(\tilde{\alpha})}  \lambda^{\tilde{\alpha}-1}e^{-\lambda \tilde{\beta}}  d\lambda  = 1$$
+ 
+ Therefore taking the $\tilde{\beta}^{\tilde{\alpha}}/\Gamma(\tilde{\alpha})$ term outside the integral and 'taking it over to the other side' of the equation:
+ 
+ $$ \int \lambda^{\tilde{\alpha}-1}e^{-\lambda \tilde{\beta}} d\lambda = \frac{\Gamma(\tilde{\alpha})}{\tilde{\beta}^{\tilde{\alpha}}}$$
+ 
+ So:
+ 
+ $$p(Y) =   \frac{\beta^{\alpha}}{\Gamma(\alpha)}\frac{\Gamma(\tilde{\alpha})}{\tilde{\beta}^{\tilde{\alpha}}}$$
+ 
+Putting it all together:
+
+$$p(\lambda | Y) = \frac{p(Y|\lambda)p(\lambda)}{p(Y)} = \frac{ \frac{\beta^{\alpha}}{\Gamma(\alpha)} \lambda^{\alpha+n-1}e^{-\lambda(\beta+S)} } {  \frac{\beta^{\alpha}}{\Gamma(\alpha)}\frac{\Gamma(\tilde{\alpha})}{\tilde{\beta}^{\tilde{\alpha}}}} = \frac{\tilde{\beta}^{\tilde{\alpha}}}{\Gamma(\tilde{\alpha)}} \lambda^{\alpha+n-1}e^{-\lambda(\beta+S)}  $$
+
+which is a Gamma($\tilde{\alpha}, \tilde{\beta})$ distribution (it had to be Gamma, since the conjugate prior was Gamma). Substituting back in for $\tilde{\alpha}$ and $\tilde{\beta}$ we have: 
+
+$$\lambda | Y \sim Gamma(\alpha + n, \beta + \sum_{i=1}^n Y_i)$$
+
+
+
+}
+
+
+
+\end{document}
+
+
+
+
+
+

@@ -1,0 +1,509 @@
+\begin{document}
+
+\begingroup
+\let\cleardoublepage\clearpage
+\setcounter{chapter}{6}
+\chapter*{\centering Decision and Risk \\ \vspace{1cm} Lecture 6: Bayesian Inference}
+\centering {\tiny Last updated on \today}
+\tableofcontents
+\endgroup 
+\chaptermark{Bayesian Inference}
+
+\section{Why Bayesian Statistics - Three Advantages}
+\begin{enumerate}
+\item It allows prior information (e.g. from expert judgement, or previous data) to be incorporated into the analysis, which is helpful in situations where there is not much data. For example, in earthquake modelling, it could be that only 4 or 5 earthquakes have ever occurred.
+
+\item Bayesian probability statements are easy to interpret which is important when communicating with non-statisticians. For example, interpret the frequentist 95\% confidence interval for a parameter $\theta$.
+
+
+\item It makes analysis a lot easier - all inference is directly based on the posterior distribution of the parameters. This makes it easy to combine information from a variety of data sources.
+\end{enumerate}
+
+\section{The General Principles of Bayesian Methodology}
+Frequentist and Bayesian interpretations disagree about what sort of objects probabilities should be assigned to. The main difference is that in a Bayesian analysis, probabilistic statements reflect degrees of beliefs.  In frequentist statistics only the data are assumed to be random with associated probability distributions; parameters are regarded as fixed but unknown quantities, with associated $p$-values and confidence intervals being based on long-run frequency properties under repeated sampling. From a Bayesian perspective, both data and parameters can have probability distributions, and so Bayes' theorem can be used to learn about probabilities of unobservable parameters as well as observable events \footnote{Lunn \textit{et al}., (2012)}.
+
+The modern understanding of Bayesian methodology contains the following statements:
+\begin{tcolorbox}[colback=black!6]
+\begin{itemize}
+\item[] \textbf{Statement 1}. The parameter of a stochastic system under study is random, and it is assigned prior distribution. The \enquote{randomness} is understood not only in a classical sense but also as \enquote{uncertainty}.
+
+\item[] \textbf{Statement 2}. The observed empirical data and the prior distribution are unified by the Bayes' theorem in order to obtain a posterior distribution of a parameter.
+
+Bayes' theorem provides the foundation to transfer from prior to posterior information by incorporating empirical data. At the initial stage of research, one may have certain information about the characteristics of the stochastic system under study based on previous knowledge or experience. During the study the researcher collects new information that changes his judgement about the properties of the stochastic system. This results in re-evaluation of the prior information. Therefore, at any point in time the description of the stochastic system is complete in a sense that all the available information has been taken into account. This process continues with each arrival of new information.
+
+\item[] \textbf{Statement 3}. A statistical conclusion or decision rule is accepted with a condition of maximal estimated utility, in particular, the minimization of loss related to this rule.
+\end{itemize}
+\end{tcolorbox}
+
+Lecture 1 will cover mainly Statement 1 and Statement 2; and Statement 3 will be covered in more detail in Lecture 2. 
+
+Unlike classical estimate theory dealing with non-random parameters, Bayes' theory assumes random parameters. A distinctive characteristic of the Bayesian approach to inference is that it regards probability as representing a degree of reasonable belief, rather than a frequency. Therefore, it allows numerical probabilities to be associated with degrees of confidence about the empirical phenomena. Estimators based on this posterior distribution are usually called Bayesian because they are constructed from Bayes' rule.
+
+Graphically, the process of revising probabilities as new empirical data arrives is represented in Figure \ref{revising_probabilities}. In box (2) the prior probability density function ($pdf$) of the parameter $\theta$ is specified. This prior represents initial beliefs about the parameter $\theta$ based on initial information in box (1). In box (4) the likelihood function is constructed, which is the joint probability density function of the observed data $\textbf{y}=(y_1, \ldots y_n)$  in box (3) written as a function of the parameter $\theta$. Then this likelihood function $p(\textbf{y}|\theta)$ is combined with the prior probability $p(\theta)$ using Bayes' theorem in box (5), which yields the posterior probability $p(\theta|\textbf{y})$ in box (6). This posterior $pdf$ incorporates initial information as represented in the prior, and sample information $\textbf{y}$ \footnote{Zellner (1996)}. Consequently, the posterior $pdf$ can be used to make probability statements about parameter of interest $\theta$. 
+
+Furthermore, under non-restrictive conditions, if two researchers use two different prior $pdf's$ due to having different initial information, their posterior $pdf's$ will become similar as additional common empirical data is incorporated into the process of revising probabilities. This is because as the sample size grows, the information it provides will overwhelm the initial prior information.
+Thus, the empirical data will dominate the posterior $pdf$ which will subsequently become more concentrated about the true parameter value. On the contrary, when there is small amount of empirical data available, the prior distribution plays a predominant role in the updated beliefs. If the prior $pdf$ remains the same during the collection of empirical data, then this process of revising probabilities is known as an \textit{orthodox Bayes' procedure}.
+
+\vspace{.9cm}
+\begin{tcolorbox}[colback=black!10,title=A note on proportionality symbol $\propto$, colframe=black!60]
+The symbol of proportionality, $\propto$, denotes cases where terms constant with respect to the random variable have been dropped from the $pdf$ of that random variable. For example, suppose that the random variable, $X$, has a $pdf$ as follows:
+\begin{align}
+ p(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}
+\end{align}
+ Then, using the symbol of proportionality, we can write:
+ \begin{align} \label{proportional}
+  p(x) \propto e^{-\frac{x^2}{2}}
+ \end{align}
+ It is often customary to retain in the expressions for the posterior $pdf$ only the terms that contain the unknown parameter(s), and dropping the terms that are constant with respect to the parameter(s).
+\end{tcolorbox}
+\vspace{.9cm}
+
+
+\begin{figure}[t] 
+ \includegraphics[width=6in,height=2.1in]{revising_probabilities}  
+ \caption{The process of revising probabilities} \label{revising_probabilities}
+ \end{figure}
+
+
+\section{Bayes' theorem}
+
+\textit{Bayes' theorem}, also known as \textit{Bayes' rule} or \textit{Bayes' law}, is the cornerstone of the Bayesian framework. For Bayesian proponents, it is the representation of the philosophical principle that probability is a measure of the degree of belief one has about an uncertain event \footnote{Rachev (2008)}. 
+Bayes' theorem is a simple mathematical result that follows from the axioms of conditional probability. Nevertheless, it has profound implications. The importance of Bayes' theorem comes from its use for updating probabilities in light of new information (e.g. observed data).
+
+Bayes' theorem applies to both discrete and to continuously distributed random variables, and is usually stated in terms of probabilities for observable events.
+Let $A$ and $B$ be events, then:
+\begin{align} \label{Bayes conditional}
+p(A|B) = \frac{{\color{blue} p(A)}\cdot {\color{red}p(B|A)}}{{\color{green!60!black}p(B)}}
+\end{align}
+
+\section{Bayesian Inference for Parameters}
+The above result in \eqref{Bayes conditional} can be used to make probability statements about $\theta$ given the known value of the data $\textbf{y} =(y_1, \dots , y_n)$. In order to do that, we begin with developing a model providing a joint probability distribution for $\theta$ and $\textbf{y}$. The joint probability density (or mass) function can be written as a product of two densities that are often referred to as the \textit{prior distribution} $p(\theta)$ and the data distribution (or the conditional density of the data \textbf{y} given $\theta$) $p(\textbf{y}|\theta)$ respectively:
+\begin{align}
+p(\theta, \textbf{y})=p(\theta)\cdot p(\textbf{y}|\theta).
+\end{align}
+Simply conditioning on the known value of the data \textbf{y}, and using the basic property of
+conditional probability known as Bayes' theorem, yields the \textit{posterior density} which can be used for inference about parameters:
+\begin{align}\label{Bayes theorem}
+p(\theta|\textbf{y})= \frac{p(\theta, \textbf{y})}{p(\textbf{y})}=\frac{{\color{blue}p(\theta)}\cdot {\color{red}p(\textbf{y}|\theta)}}{{\color{green!60!black}p(\textbf{y})}}.
+\end{align}
+where:
+
+$p(\theta|\textbf{y})$ - is the \textit{posterior density} for $\theta$ and represents the uncertainty about $\theta$ after conditioning on the data \textbf{y};
+
+${\color{blue}p(\theta)}$ -  is the \textit{prior density} for $\theta$ that expresses our uncertainty about the values of $\theta$ before taking into account the observed data (i.e. sample information). Such knowledge is 'subjective' in that it is not based on the data. The prior distribution captures knowledge obtained from sources other than the observed data, while recognizing the provisional and imperfect nature of such knowledge; 
+
+${\color{red}p(\textbf{y}|\theta)}$ -  when regarded as a function of $\theta$, for fixed \textbf{y}, it is the well-known \textit{likelihood function};
+
+${\color{green!60!black}p(\textbf{y})}$ -  is the marginal density of the data \textbf{y}. In the case of discrete $\theta$, it is normally written as the sum over all possible values of $\theta$, $p(\textbf{y})= \sum_{\theta}p(\theta)p(\textbf{y}|\theta)$, or $p(\textbf{y})= \int p(\theta)p(\textbf{y}|\theta) d\theta$ in the case of continuous $\theta$. It acts as a normalising constant to ensure that the value of $p(\theta|\textbf{y})$ is a valid probability, i.e. a number between $0$ and $1$. 
+
+\vspace{.9cm}
+\begin{tcolorbox}[colback = black!10,title = Bayes' Theorem - Proof, colframe=black!60]
+
+Given two events $A$ and $B$, the probability of both occurring  is equal to the probability of $A$ occurring, multiplied by the probability of $B$ occurring given that $A$ occurs, i.e.:
+$$p(A \cap B) = p(A)p(B|A)$$
+
+On the other hand, the probability of both events occurring is also equal to the probability of $B$ occurring multiplied by the probability of $A$ occurring given that event $B$ occurs:
+
+$$p(A \cap B) = p(B)p(A|B)$$
+
+Equating the two gives: 
+
+$$ p(A)p(B|A) = p(B)p(A|B)$$
+
+Dividing both sides by the probability $p(B)$ yields the Bayes' theorem:
+
+$$p(A|B) = \frac{p(B|A)p(A)}{p(B)}$$
+\end{tcolorbox}
+\vspace{.9cm}
+
+Hence, Bayes' theorem tells us how to move from $p(\theta)$ to $p(\theta| \textbf{y})$. That is, given we have some beliefs, $p(\theta)$, about $\theta$ before seeing the data, it tells us the beliefs, $p(\theta|\textbf{y})$, we should have about $\theta$ after seeing the data.
+As it was suggested in \eqref{proportional}, an equivalent form of \eqref{Bayes theorem} can be written omitting the factor $p(\textbf{y})$, which does not depend on $\theta$, and with \textbf{y} being fixed, it can thus be considered a constant, which yields the \textit{unnormalized posterior density}, which is the right-hand side of \eqref{unnormalized posterior density}:
+\begin{align}\label{unnormalized posterior density}
+p(\theta|\textbf{y}) &\propto {\color{blue}p(\theta)}\cdot {\color{red}p(\textbf{y}|\theta)}\\ \nonumber
+&\propto {\color{blue} \textrm{prior \textit{pdf}}}\cdot {\color{red}\textrm{likelihood function}}
+\end{align}
+
+\begin{tcolorbox}[colback = black!10, title=Bayes' Theorem - a more general case, colframe = black!60]
+
+Let the $k$ events $\{B_1, B_2, B_3, \ldots , B_k\}$ constitute a partition of the sample space $\Omega$. That is, the $B_i$ are mutually exclusive: 
+\begin{align}\nonumber
+B_i \cap B_j = \emptyset \quad \textrm{for} \quad i \neq j
+\end{align}
+and exhaustive:
+\begin{align}\nonumber
+\Omega = B_1 \cup B_2 \cup \ldots \cup B_k
+\end{align}
+Also, suppose the prior probability of the event $B_i$ is positive, that is, $P(B_i) > 0$ for $i = 1, \ldots , k$. Now, if $A$ is an event, then $A$ can be written as the union of $k$ mutually exclusive events:
+\begin{align}\nonumber
+A = (A \cap B_1) \cup (A \cap B_2) \cup... \cup (A \cap B_k)
+\end{align}
+Therefore: 
+\begin{align}\nonumber
+P(A)&=P(A\cap B_1)+P(A\cap B_2)+\ldots+P(A\cap B_k)\\\nonumber &=\sum_{i=1}^{k}P(A\cap B_i)\\\nonumber
+&=\sum_{i=1}^{k}P(B_i)×P(A|B_i) 
+\end{align}
+And so, as long as $P(A) > 0$, the posterior probability of event $B_m$ given event $A$ has occurred is:
+\begin{align}\nonumber
+P(B_m|A)= \frac{P(B_m\cap A)}{P(A)}=\frac{P(B_m)×P(A|B_m)}{\sum_{i=1}^{k}P(B_i)×P(A|B_i)}
+\end{align}
+\end{tcolorbox}
+
+
+\subsection*{Example 1: Coin Tossing}
+
+Suppose we toss a coin three times. There are eight equally likely outcomes: 
+
+\vspace{.3cm}
+$\Omega=\{HHH, HHT, HTH, THH, HTT, THT, TTH, TTT\}$. 
+
+Define the events/statements:
+
+\begin{itemize}
+\item A: "There are two heads in three tosses"
+\item B: "The first toss was heads"
+\end{itemize}
+
+In this case, we can compute the quantities $p(A)$, $p(B)$, $p(A|B)$, $p(B|A)$ directly by enumerating the outcomes, and hence verify Bayes' theorem:
+$$p(A): \{HHH, \textcolor{red}{HHT},  \textcolor{red}{HTH},  \textcolor{red}{THH}, HTT, THT, TTH, TTT\} = 3/8$$
+$$p(B): \{\textcolor{red}{HHH}, \textcolor{red}{HHT}, \textcolor{red}{HTH}, THH, \textcolor{red}{HTT}, THT, TTH, TTT\} = 4/8 = 1/2$$
+$$p(A|B) = \{HHH, \textcolor{red}{HHT}, \textcolor{red}{HTH}, HTT\} = 2/4 = 1/2$$
+$$p(B|A) =  \{\textcolor{red}{HHT}, \textcolor{red}{HTH}, THH\} = 2/3$$
+
+So :
+
+$$p(A|B) = \frac{p(B|A)p(A)}{p(B)} = \frac{ 2/3 * 3/8}{1/2} = 1/2$$
+
+Sometimes the denominator of Bayes' theorem $p(B)$ will not be given explicitly, and will have to be derived.
+
+\vspace{3mm}
+
+In this case we can often compute $p(B)$ using a simple version of the Theorem of Total Probability, which we will discuss in a more general context in a future lecture.
+
+\vspace{3mm}
+
+\begin{tcolorbox}[colback=black!10,title= Law of Total Probability, colframe=black!60]
+
+Let $\{B_1, B_2, B_3, \ldots , B_k\}$ be a partition of the sample space $\Omega$, then for any event $A$ we have  \footnote{In words, you can interpret the result in \eqref{law_of_total_prob} as follows: How could event A happen at all - just add up all the ways it could happen.}:
+\begin{align} \label{law_of_total_prob}
+P(A)= \sum_{i=1}^{k}P(A\cap B_i)=\sum_{i=1}^{k}P(A|B_i)P(B_i)
+\end{align}
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=black!10,title= Law of Total Probability - Proof, colframe=black!60]
+
+Let $k=6$ and $\{B_1, B_2, B_3, \ldots , B_6\}$ be a partition of the sample space $\Omega$. As illustrated by the below Venn diagram, we can express event $A$ as:
+\begin{align} \nonumber
+A &= (A \cap B_1) \cup (A \cap B_2) \cup (A \cap B_3) \cup \ldots \cup (A \cap B_6)\\\nonumber
+&= \bigcup_{i=1}^6(A \cap B_i)\qquad \textrm{(disjoint union)}
+\end{align}
+
+\begin{center}
+\flushright $\boldsymbol{\Omega}$
+\includegraphics[scale=0.8]{total_probability4}
+\end{center}
+We hence have:
+\begin{align} \nonumber
+p(A) &= p\left( \bigcup_{i=1}^6(A \cap B_i)\right) \\\nonumber
+&= \sum_{i=1}^{6}p(A \cap B_i) \qquad\qquad \textrm{as all $A\cap B_i$ are disjoint}\\\nonumber
+&= \sum_{i=1}^{6}p(A|B_i)p(B_i) \qquad \; \; \textrm{by conditional probability}
+\end{align}
+
+In other words, the probability of event $A$ occurring can be interpreted as a weighted average. This general idea of using \textbf{conditioning} to break down $p(A)$ is very powerful.
+\end{tcolorbox}
+
+
+\subsection*{Example 2: Medical Diagnosis}
+A new medical screening test is developed to assess whether a patient has a particular disease. The test is advertised to have the following degree of accuracy: \enquote{if the patient truly has the disease, then the test will correctly detect this and return a positive result with probability 0.95. If the patient truly does not have the disease, the test will correctly detect this and return a negative result with probability 0.98}.
+
+\vspace{3mm}
+
+Given that 1 in 1000 people in the population have the disease, what is the chance that a person testing positive on the test really has the disease?
+
+\vspace{.3cm}
+
+We first define the statements/events:
+
+\begin{itemize}
+\item A: The person truly has the disease
+\item A': The person truly does not have the disease
+\item B: The test comes back positive
+\end{itemize}
+
+We need to compute $p(A|B)$.
+
+Representing the given information mathematically, we have:
+
+\begin{itemize}
+\item $P(A) = 1/1000 = 0.001$
+\item $P(B|A)  = 0.95$
+\item $P(B|A') = 0.02$
+\end{itemize}
+
+So:
+
+$$p(A|B) = \frac{p(B|A)p(A)}{p(B)} =  \frac{p(B|A)p(A)}{p(B|A)p(A) + p(B|A')p(A')}$$
+$$$$
+$$ =  \frac{0.95 * 0.001}{0.95*0.001 + 0.02 * 0.999} = 0.045$$
+
+
+\vspace{ .3cm}
+Hence, the person has a $4.5\%$ probability of having the disease if the test comes back positive. This is lower than we might expect given that the test had accuracies of $95\%$ and $98\%$! The reason for this is that the prior probability $p(A)$ of the person having the disease is very low.
+
+
+\section*{Example 3} \label{Example 3}
+
+Suppose we are given a coin and told that it could be biased, so the probability of landing heads is not necessarily 0.5. Let $\theta$ denote the probability of it landing heads. We wish to learn about $\theta$.
+
+We toss the coin $N$ times and obtain $Y$ heads. In frequentist statistics, the point estimate of $\theta$ would be $Y/N$, and a confidence interval can be constructed around this.
+
+Is this reasonable? Well, say we performed 100 tosses and got 48 heads. The point estimate would be $\theta = 0.48$. However, in this situation it may be more reasonable to conclude that the coin isn't biased. The vast majority of coins in the world are not biased, and observing 48 heads in 100 tosses is a 'normal' outcome from tossing an unbiased coin (due to sample variability). In other words, rather than concluding that $\theta = 0.48$, we may wish to include prior information to make a more informed judgement.
+
+In a Bayesian analysis, we first need to represent our prior beliefs about $\theta$. Specifically, we construct a probability distribution $p(\theta)$ which encapsulates our beliefs. There are lots of ways of doing this, and not necessarily everyone would agree with all of them. Because $p(\theta)$ represents the beliefs of one particular person based on their assessment of the prior evidence - it will not be the same for different people if they have different knowledge about what proportion of coins are biased. In some cases, $p(\theta)$ may be based on subjective judgement\footnote{The main critique of Bayesian inference concerns this subjective nature of prior. There is no single method for choosing a prior, so different people may produce different priors, and as a result, may arrive at different posterior distributions, and subsequently different conclusions.}, while in others it may be based on objective evidence. This is the essence of Bayesian statistics - probabilities express degrees of beliefs.
+
+However since $\theta$ here represents the probability of the coin landing heads, it must lie between $0$ and $1$. So the function we use to represent our beliefs should only have mass in the interval $[0, 1]$, which rules out, for example, the Normal distribution.
+\begin{figure}[t] 
+\centering
+\includegraphics[scale=0.36]{betaprior1}
+\caption{John's Prior} \label{john_prior}
+ \end{figure}
+In this situation it is usual to represent our prior beliefs as a Beta distribution (I will explain why in more detail later). The Beta distribution only has mass in $[0, 1]$ so it is a sensible choice when $\theta$ is a probability.
+Recall that the Beta distribution has the form:
+\begin{align}
+p(\theta) = \frac{\theta^{\alpha -1}(1 - \theta)^{\beta-1}
+}{B(\alpha, \beta)}
+\end{align}
+where $B(\alpha, \beta)$ is the Beta function; $\alpha$ and $\beta$ are parameters that completely parameterize and uniquely define a probability distribution. As parameters that control parameters, $\alpha$ and $\beta$ are commonly called \textbf{hyperparameters}. We choose these to reflect our prior beliefs about $\theta$. How do we do this?
+
+It can be shown that the mean and the variance of the Beta distribution is given by:
+\begin{align}
+E(\theta)&=\mu= \frac{\alpha}{\alpha + \beta}\\
+Var(\theta)&=\sigma^2 = \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}
+\end{align}
+So, if we have a prior belief about the most likely value of $\theta$ (e.g. 0.5), then we can choose $p(\theta)$ to have this as the expected value. Furthermore, we can express how uncertain we are about this value by specifying the size of the variance. Rearranging the above equations, we can express $\alpha$ and $\beta$ in terms of the mean and the variance:
+\begin{align}\label{alpha}
+\alpha&=\left( \frac{1-\mu}{\sigma^2}-\frac{1}{\mu}\right)\mu^2\\\label{beta}
+\beta &=\alpha\left( \frac{1}{\mu}-1\right) 
+\end{align}
+
+For example, let's say that John has prior belief that $E(\theta) = 0.5$. He doesn't expect the coin to be biased (most coins are not biased), so he takes the standard deviation to be low, say 0.03. Based on the previous equations \eqref{alpha} and \eqref{beta}, his prior is $Beta(138.4, 138.4)$, which is depicted in Figure \ref{john_prior}.
+
+ 
+ \begin{figure}[t] 
+ \centering
+ \includegraphics[scale=0.4]{betaprior2}
+ \caption{Sarah's Prior} \label{sarah_prior}
+  \end{figure}
+
+Note there is also a special case of the Beta distribution when $\alpha$ = 1 and $\beta$ = 1. For these values of $\alpha$ and $\beta$, the Beta distribution is flat, and equal to the $Uniform(0,1)$ distribution, which is depicted in Figure \ref{uniform_prior}. This represents complete uncertainty, where any value of $\theta$ is assumed to be equally likely.
+
+The prior distribution is hence $Beta(\alpha, \beta)$. Since this is a coin tossing, each of the $N$ tosses has probability $\theta$ to be heads. Each individual toss follows a $Bernoulli(\theta)$ distribution, and hence the likelihood $p(Y|\theta)$ for the number of heads $Y$ is a $Binomial(N, \theta)$ distribution:
+\begin{align}
+p(Y|\theta) = \binom{N}{Y} \theta^{Y}(1-\theta)^{N-Y}
+\end{align}
+
+To learn about $\theta$ from the data, we need the posterior $p(\theta|\textbf{y})$, which by Bayes' theorem is:
+\begin{align}
+p(\theta|Y) = \frac{p(\theta)\cdot p(Y|\theta)}{\int p(\theta)p(Y|\theta)d\theta} 
+\end{align}
+￼The numerator here is:
+\begin{align}
+p(\theta)\cdot p(Y|\theta) &= \frac{\theta^{\alpha -1}(1 - \theta)^{\beta-1}
+}{B(\alpha, \beta)} \cdot \binom{N}{Y} \theta^{Y}(1-\theta)^{N-Y}\\
+&= \binom{N}{Y} \frac{\theta^{\alpha +Y-1}(1-\theta)^{\beta+N-Y-1}}{B(\alpha, \beta)}
+\end{align}
+
+\begin{figure}[t]
+\begin{tabular}{ll}
+\includegraphics[scale=.36]{betaprior3}
+&
+\includegraphics[scale=.36]{betaposterior3}
+\end{tabular}
+\caption{Uniform Prior and Beta(49, 53) Posterior}
+\label{uniform_prior}
+\end{figure}
+ 
+The denominator is:
+
+\begin{align}
+\int p(\theta)p(Y|\theta)d\theta &= \int \binom{N}{Y} \frac{\theta^{\alpha+Y-1}(1-\theta)^{\beta+N-Y-1}}{B(\alpha, \beta)}d\theta
+\end{align}
+
+This expression does not look particularly aesthetic, but there is a standard trick we can use here to simplify it. First, take everything that doesn't depend on $\theta$ outside the integral:
+\begin{align}
+\int p(\theta)p(Y|\theta)d\theta &= \frac{\binom{N}{Y}}{B(\alpha, \beta)}\int \theta^{\alpha+Y-1}(1-\theta)^{\beta+N-Y-1}d\theta
+\end{align}
+Now, recognise that the $\theta$-dependent part inside the integral has the same form as the Beta distribution, which recall was:
+\begin{align}
+p(\theta) = \frac{\theta^{\alpha -1}(1 - \theta)^{\beta-1}
+}{B(\alpha, \beta)}
+\end{align}
+
+So we make the substitution $\gamma = \alpha+Y$ and $\lambda = \beta+N-Y$, giving:
+\begin{align}
+\int p(\theta)p(Y|\theta)d\theta &= \frac{\binom{N}{Y}}{B(\alpha, \beta)}\int \theta^{\gamma-1}(1-\theta)^{\lambda-1}d\theta
+\end{align}
+
+Now, using the fact that this resembles the Beta distribution, and that the Beta distribution, like all probability distributions, must integrate to 1, we have:
+\begin{align}
+\int \theta^{\gamma-1}(1-\theta)^{\lambda-1}d\theta = B(\gamma, \lambda)
+\end{align}
+￼So:
+\begin{align} \nonumber
+\int p(\theta)p(Y|\theta)d\theta &= \binom{N}{Y}\frac{B(\gamma, \lambda)}{B(\alpha, \beta)}\\\nonumber  
+&\\ 
+&= \binom{N}{Y}\frac{B(\alpha+Y, \beta+N-Y)}{B(\alpha, \beta)}
+\end{align}
+
+Combining this with the numerator gives:
+\begin{align}
+p(\theta|Y) &= \frac{\binom{N}{Y} \frac{\theta^{\alpha+Y-1}(1-\theta)^{\beta+N-Y-1}}{B(\alpha, \beta)}}{\binom{N}{Y}\frac{B(\alpha+Y, \beta+N-Y)}{B(\alpha, \beta)}} = \frac{ \theta^{\alpha+Y-1}(1-\theta)^{\beta+N-Y-1}}{B(\alpha+Y, \beta+N-Y)}
+\end{align}
+
+Thus, the posterior $p(\theta|Y)$ has a $Beta(\alpha+Y, \beta+N-Y)$ distribution.  
+
+Before the experiment in which the coin was tossed 100 times, and 48 heads were obtained, John's prior beliefs about $\theta$ were represented by a
+$Beta(138.4, 138.4)$. After seeing the data, his beliefs are updated to be a $Beta(138.4 + 48, 138.4 + 100 - 48) = Beta(186.4, 190.4)$ distribution.
+Similarly, Sarah's prior beliefs about $\theta$ were represented by $Beta(5.1, 5.1)$, and her posterior resulted in $Beta(5.1 + 48, 5.1 
++100 - 48) = Beta(53.1, 57.1)$.
+If the prior beliefs were represented by the uniform $Beta(1,1)$ prior, the posterior would be $Beta(49, 53)$.
+
+We can generalise these results as follows: if we start our prior beliefs were that $\theta$ had a $Beta(\alpha, \beta)$ distribution. After seeing the data, the revised beliefs about $\theta$ will have a $Beta(\alpha+Y, \beta+N-Y)$ distribution.
+
+The coin was tossed 100 times, and 48 tosses were heads.
+
+
+\begin{figure}[t]
+\begin{tabular}{ll}
+\includegraphics[scale=.36]{betaposterior1}
+&
+\includegraphics[scale=.36]{betaposterior2}
+\end{tabular}
+\caption{}
+\label{Fig:Race}
+\end{figure}
+
+\section{Posterior Summaries}
+Key point: The \textit{posterior distribution} $p(\theta|Y)$ represents all our knowledge about $\theta$ after observing $Y$. In other words, any statements we make about $\theta$, they should be based on the posterior and nothing else.
+In many situations we will want to give a point estimate of $p(\theta|Y)$ (e.g. similar to the frequentist maximum likelihood estimate). We have several choices, for example:
+\begin{itemize}
+\item We could estimate $\theta$ using the posterior \textbf{mean} 
+\item We could estimate $\theta$ using the posterior \textbf{median}
+\item We could estimate $\theta$ using the posterior \textbf{mode}
+\end{itemize}
+All may be useful in different situations - in subsequent lectures we will be more precise about this. But for now, suppose we choose to use the posterior \textbf{mean}.
+
+\section*{Example 3 - continued}
+John’s posterior $p(\theta|Y)$ was $Beta(186.4, 190.4)$. Recall from earlier that the mean of a Beta distribution is given by $\frac{\alpha}{\alpha +\beta}$. So the mean of John's posterior is $186.4/(186.4 + 190.4) = 0.49$
+Similarly, the mean of Sarah's posterior is $53.1/(53.1 + 57.1) = 0.48$, and the mean of the posterior based on the uniform prior is $49/(49 + 53) = 0.48$.
+Each person had a prior with a mean of 0.5. John has been less influenced by the data than Sarah because his prior beliefs that the coin was unbiased were stronger (i.e. his prior had less variance).
+
+The previous prior was $Beta(\alpha, \beta)$ and the posterior was $Beta(\alpha+Y, \beta+N-Y)$. Looking closely, we see the posterior depends on the data through the number of heads $Y$ and the number of tails $N-Y$.
+The prior parameters $\alpha$ and $\beta$ seem to feature in the posterior as additional heads and tails. That is, our prior beliefs in this particular situation seem to be adding extra heads and tails to the data we have observed. This is (in this particular situation) how our prior beliefs get incorporated mathematically.
+This suggests ways in which priors can be set up using objective information rather than subjective beliefs. Suppose that prior to the current round of 100 tosses, we had previously seen the same coin be tossed 20 times, of which 3 were heads. Then a reasonable prior for the current round of tosses would be $Beta(3,17)$.
+In most situations we will try to construct sensible priors by incorporating previous information in this way.
+
+Furthermore, we can easily incorporate new data if we do more tosses in the future. Suppose we tossed the coin another 200 times, and got 103 heads. What is John’s posterior for $\theta$?
+Well, after the earlier 100 tosses, his posterior was $Beta(186.4, 190.4)$. This is his belief about $\theta$ after those 100 tosses, but before the next 200 tosses. So it becomes his prior for the next round of tosses.
+So his eventual posterior after all 300 tosses is
+$Beta(186.4 + 103, 190.4 + 200 - 103) = Beta(289.4, 287.4)$, which has a mean of 0.502.
+This fact that new information can be easily incorporated in this way is a key feature of Bayesian inference.
+
+\section{Credible Intervals}
+In addition to point summaries, one may also use the posterior distribution to construct an interval estimate for $\theta$ to represent our uncertainty. If an interval summary is desired, a central interval of posterior probability can be reported, which in the case of a $100(1-\alpha)$\% interval, corresponds to the range of values above and below which lies exactly $100(\alpha/2)$\% of the posterior probability. The Bayesian 95\% \textbf{credible interval} for $\theta$ is an interval $[a, b]$ of the posterior distribution which contains $\theta$ with 0.95 probability.
+
+Recall that a frequentist \textit{95\% confidence interval} for $\theta$ is an interval $[a, b]$ which has the property that, on average over repeated applications, it will capture the true mean $\theta$ only 95\% of the time. However, after observing data and computing $[a, b]$, a statement that this interval contains the true $\theta$ with a 0.95 probability is not valid.
+\vspace{.3cm}
+
+\begin{tcolorbox}[colback=black!10, colframe=black!60]
+\textbf{Key point}:  In contrast to \textit{confidence intervals}, \textit{credible intervals} express degrees of belief. If $[a, b]$ is a 95\% credible interval for $\theta$, this means we assign probability 0.95 to the statement that \enquote{$\theta$ lies in the interval $[a,b]$}. This is not the case for confidence intervals.
+\end{tcolorbox}
+
+\section{Choice of Prior Distribution}
+One of the most important questions in Bayesian analysis is the choice of prior distribution. The posterior distribsution in this example was easy to analyse since it had a standard form - a Beta distribution. However, in many situations things will not be as simple, and the posterior might end up being an unknown distribution, or one which cannot be solved analytically.
+The key point here is the integral in the denominator of Bayes' theorem: $p(Y)=\int p(\theta)p(Y|\theta)d\theta$. If we can solve this integral analytically, then the posterior will be easy to analyse. However, in many cases we will no be able to solve this integral analytically.
+In this case the integral must be solved numerically instead. We will discuss this at length in a future lecture, but for now we'll focus on the cases where this integral can be solved analytically.
+Note that we solved it here by recognising that it had the same form as a Beta distribution. This was not a coincidence!
+
+To make the posterior distribution easy to analyse mathematically, we often choose priors which are \textit{conjugate to the likelihood}. Conjugacy means that the posterior distribution has the same form as the prior distribution, for example, a Beta prior with a Beta posterior, or a Gamma prior leading to a Gamma posterior, etc.
+
+When using conjugate priors, we can solve the integral
+$p(Y)=\int p(\theta)p(Y|\theta)d\theta$ analytically by using the trick we used earlier - i.e \enquote{recognising that it has the same form as the prior} and must integrate to 1 due to being a probability distribution. This makes the posterior easy to analyse. So, choosing a conjugate prior makes things much simpler. How do we find conjugate priors?
+\subsection{Conjugate Priors}
+\begin{tcolorbox}[colback=black!10,title= Definition, colframe=black!60]
+ 
+ If $\mathcal{F}$ is a class of sampling distributions $p(\textbf{y}|\theta)$, and $\mathcal{P}$ is a class of prior distributions for $\theta$, then the class $\mathcal{P}$ is \textit{conjugate} for $\mathcal{F}$ if:
+$$
+ p(\theta|\textbf{y}) \in \mathcal{P} \; \textrm{for all} \; p(\cdot|\theta) \in \mathcal{F}\; \textrm{and} \; p(\theta)
+$$
+ In other words, if a prior density $p(\theta)$ belongs to the same family of probability distributions as $p(\theta|\textbf{y})$, then the prior density $p(\theta)$ is said to be conjugate with respect to a likelihood $p(\textbf{y}|\theta )$. 
+\end{tcolorbox}
+
+
+From Bayes' theorem, focusing only on the numerator, this will be true if $p(\theta|Y )$ has the same general form as $p(\theta)p(Y|\theta)$. By \enquote{general form} it is meant the part which depends on $\theta$.
+In our Example 3 the likelihood was Binomial:
+\begin{align}
+p(Y|\theta) = \binom{N}{Y} \theta^{Y}(1-\theta)^{N-Y}
+\end{align}
+If the prior density is of the same form, with its own values $Y$ and $N-Y$, then the posterior density will also be of this form.
+In order for the prior to keep its same form when multiplied by this, the part depending on $\theta$ must be proportional to:
+\begin{align}
+p(\theta) \propto \theta^{\alpha-1}(1-\theta)^{\beta -1}
+\end{align}
+which is the Beta distribution with parameters $\alpha$ and $\beta$. The property that the posterior distribution follows the same parametric form as the prior distribution is called \textit{conjugacy}. So the Beta prior distribution is the conjugate prior for the Binomial likelihood.
+
+\begin{figure}[t]
+\centering
+\includegraphics[scale=.7]{conjugate_prior}
+\caption{Conjugate prior relationships for some common distributions}
+\label{conjugate_prior}
+\end{figure}
+
+Figure \ref{conjugate_prior} displays conjugate prior relationships for a number of sampling distributions, where arrows point from a sampling distribution to its conjugate prior distribution. For example, if the sample distribution is Binomial, and we choose a Beta prior, $p(\theta)$, then the resulting posterior $p(\theta|\textbf{y})$ will have a Beta distribution, as we have seen in Example 3. Similarly, if the sample distribution is Geometric, and we choose a Beta prior, $p(\theta)$, then the resulting posterior $p(\theta|\textbf{y})$ will also have a Beta distribution.
+
+\section*{Example 4}
+Suppose that in a particular region of the world, $N$ earthquakes have occurred over the last 2000 years. Their occurrence times are
+$t_1, t_2 , \ldots , t_N$ . Under the most simple model of seismicity, these earthquakes are assumed to follow a Poisson process, in which case the time between events $\tau_i = t_i - t_{i-1}$ follow an Exponential distribution with parameter $\lambda$.
+For the purpose of predicting the occurrence of future earthquakes, we wish to learn about $\lambda$. That is, given the independent and identically distributed observations $\tau_1, \ldots , \tau_{N-1}$ where $\tau_i \sim Exponential(\lambda)$, we wish to infer about the parameter $\lambda$.
+
+As before, we start with a prior distribution which represents our knowledge about $\theta$ before analysing the data. Let's try to find a conjugate prior.
+
+Since the data is Exponential, the likelihood is:
+\begin{align}
+p(Y|\lambda) = \lambda e^{-\lambda Y}
+\end{align}
+For the prior distribution to keep its same form after being multiplied by the likelihood, it must be proportional to:
+\begin{align}
+p(\lambda) \propto \lambda^r e^{-\lambda s}
+\end{align}
+for some $r$ and $s$. If we consult list of probability distributions, we find that distribution with this form is the Gamma distribution, $\Gamma(\alpha,\beta)$:
+\begin{align}
+p(\lambda) = \frac{\beta^\alpha}{\Gamma(\alpha)}\lambda^{\alpha-1} e^{-\lambda \beta}
+\end{align}
+Hence, the Gamma distribution is the conjugate prior for the Exponential distribution
+
+\newpage
+\begin{itemize}
+\item  Consider a company that produces widgets. These widgets area produced in batches, and each batch contains 10,000 widgets.
+\item Due to the nature of the manufacturing process, each batch can be good or bad. When it is good, each widget in that batch has the probability of being defective equal to 1\%. When it is bad, the probability of each widget in that batch being defective is 5\%.
+\item Now the parameter $\theta$ indicates whether a given batch is good or bad. When the batch is good, $\theta$ takes value of 0, and when the batch is bad, $\theta$ takes value of 1. However the value of $\theta$ is unknown.
+\item The company does not want to send too many defective widgets to the market, and, therefore, the goal is to determine whether each particular batch is bad. If it is a good batch, it will be sent to the market to be sold. Otherwise the company will throw away the bad batch.
+\item Now, the company could test each widget in a particular batch, however testing widgets is expensive. So instead, the company selects 100 widgets at random from a particular batch and tests them. Of these, $y=3$ are found to be defective. Now, given the observed data, the company can compute the posterior distribution for $\theta$. So, we need to specify the prior and the likelihood.
+\item Based on previous experience, the company knows that only $0.3\%$ of batches are bad. Therefore, the prior probability that the batch is good is $p(\theta=0) = 0.997$, and the prior probability that the batch is bad is $p(\theta=1) = 0.003$.
+\item Next, let's specify the likelihood. Let Y be a binomial random variable which represents the number of defective widgets out of 100 widgets with probability p, whcih corresponds to the probability of a widget being defective. This probability p will depend on whether $\theta=0$  or $\theta=1$, that is whether the batch is good or bad. Hence, if $\theta=0$, that is the batch is good, then Y has the binomial distribution, Binomial($100, 0.01$). If $\theta=1$, that is the batch is bad, then Y has the binomial distribution, Binomial($100, 0.05$). Therefore, given that we observed $3$ defective widgets out of 100, the likelihood that $\theta=0$ is ${100 \choose 3} 0.01^3 0.99^{97}$, and the likelihood that $\theta=1$ is ${100 \choose 3} 0.05^3 0.95^{97}$.
+\item The last ingredient to compute the posterior distribution is the marginal probability of data y, which we can compute using the law of total probability.
+\item Next, we can compute the posterior probabilities using Bayes' theorem. Now that we have the posterior probabilities, we can see that our posterior belief after seeing the data is that we are 99.3\% sure that the batch is good, in other words, the posterior probability of $\theta=0$ is 99.3\%. However, this is not the end of the story, there are costs associated with taking a particular action. Therefore, before deciding to send this batch to the  market, we need to specify loss function. The company estimates the cost of sending a bad batch to market as being equal to 20 times the cost of throwing out a good batch, due to the cost of potential lawsuits, replacing defective products, etc. Therefore, the \textit{loss matrix} is as follows:
+\end{itemize}
+\begin{center}
+  \begin{tabular}{ c |c c }
+    & $\theta=0$ & $\theta=1$\\
+    \hline 
+    $a_1$ & 0 & 20 \\
+    $a_2$ & 1 & 0 \\
+  \end{tabular}
+\end{center}
+\item Next, we need to compute the Bayesian expected loss, and choose the optimal action.
+\end{itemize}
+
+\nocite{gelman2013}
+\bibliography{references}
+\end{document}

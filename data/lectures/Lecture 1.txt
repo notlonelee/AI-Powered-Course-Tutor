@@ -1,0 +1,160 @@
+
+
+\begin{document}
+
+\begingroup
+\let\cleardoublepage\clearpage
+\setcounter{chapter}{1}
+\chapter*{\centering Decision and Risk \\ \vspace{1cm} \LARGE Lecture 1: Value-at-Risk}
+\centering {\tiny Last updated on \today}
+\tableofcontents
+\endgroup 
+\chaptermark{Value-at-Risk}
+
+
+\section{Introduction}
+\textbf{Value-at-Risk} (VaR) is probably the most widely used risk measure in financial institutions.  The VaR was popularized by J.P. Morgan in the 1990s when the executives asked their risk managers to generate one simple statistic at the end of each day, which would summarise the risk of the company's entire portfolio. Hence, the VaR was proposed. It is a measure for assessing the risk (i.e. the amount of potential loss) associated with an investment or a portfolio of investments. It is used by banks, pension funds, etc. Value-at-Risk is the \textit{market risk} measure prescribed by Basel Accord II and III to ensure that a bank has adequate capital to be able to absorb losses\footnote{Basel III builds on Basel I and Basel II.}. The Basel III accord is a set of internationally agreed measures which was developed in response to the weaknesses in the financial regulation revealed during the financial crisis of 2007-08. These measure are designed to improve the regulation, supervision and risk management within the financial sector. \textit{Market risk} refers to the risk that the value of an investment or portfolio of investments will decrease due to the factors that affect the performance of the financial market as a whole. 
+
+Suppose a company holds a certain number of financial assets such as stocks, bonds, derivatives, etc. This collection of assets is called a \textbf{portfolio}. Every day, the value of the portfolio will change, since the price of the individual assets in the portfolio change frequently. Hence, the value of the portfolio can go up or down. The company typically wants to know the answer to questions such as ``what is the probability of the value of the portfolio dropping by more than $\$10$ million on a given day?". Knowing this, is essential to risk management.
+
+
+
+\subsection{Value-at-Risk}
+\vspace{.2cm}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 1} (Value-at-Risk)\end{defn}, colframe=black!60]
+ Let the random variable $L$ denote the loss of a portfolio over the period {\color{blue}$h$}\let\thefootnote\relax\footnote{ In this course we will use $L_t$ to denote the loss incurred at time period $t$, and we will use $r_t$, $X_t$ or $Y_t$, to denote log-return at time period $t$ (it will be obvious from the context whether we are talking about the losses or log-returns).}.
+\vspace{3mm}
+
+$\mathrm { VaR } _ { {\color{red}\alpha} } = \inf \{ l \in \mathbb { R } : P ( L > l ) \leq {\color{red}1- \alpha} \} = \inf \left\{ l \in \mathbb { R } : F _ { L } ( l ) \geq {\color{red}\alpha} \right\}$
+\vspace{3mm}
+\end{tcolorbox}
+\vspace{.9cm}
+That is, given some confidence level ${\color{red}\alpha} \in (0, 1)$, the Value-at-Risk of a given portfolio is the  threshold such that the probability of losing more than this threshold over a time horizon {\color{blue}$h$} is equal to {\color{red}$1-\alpha$}. In probabilistic terms, VaR is simply a quantile of the loss distribution.
+
+VaR is hence a measure of \textbf{risk exposure}. Risk managers use VaR to measure and control the level of risk exposure. We can compute VaR for a particular asset, or whole portfolio, or to measure firm-wide risk exposure. For example, if ${\color{red}\alpha=0.99}$ and the VaR is $\$1m$, this means that there is a ${\color{red}1\%}$ probability of losing more than $\$1m$ in a single day. 
+
+Normally, we will be given the portfolio, and the value ${\color{red}\alpha}$, then asked to find the VaR -- i.e. for risk management the company will choose some value of ${\color{red}\alpha}$ (e.g. ${\color{red}\alpha=0.99}$) then try to find what sum of money it has a ${\color{red}100(1-\alpha)\%}$ chance of losing in a single day. Typical values for ${\color{red}\alpha}$ are ${\color{red}\alpha=0.95}$ or ${\color{red}\alpha=0.99}$. In \textit{market risk} management the time horizon {\color{blue}$h$} is usually 1 or 10 days. In \textit{credit risk} and \textit{operational risk} management {\color{blue}$h$} is usually 1 year.
+
+
+
+\subsection{Value-at-Risk: Estimation}
+There are several ways of computing the VaR, which have varying degrees of sophistication:
+
+\begin{enumerate} 
+\item First is the \textit{Historical Simulation} approach, which is a non-parametric approach. It uses the realised values of financial returns to compute the Value-at-Risk (i.e. it uses empirical distribution).  
+\item Second is the \textit{parametric} approach. Usually this approach assumes that financial returns follow a normal distribution. The covariance matrix is central to this approach and for this reason it is also known as the \textit{Variance-Covariance} approach.
+\item Third is the \textit{Monte Carlo simulation} approach. This approach uses simulated values of financial returns. The Monte Carlo VaR approach is extremely flexible and it can accommodate many different assumptions about the multivariate distribution of financial returns.
+\end{enumerate}
+
+
+\subsection{Log-returns}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: 2}\end{defn}, colframe=black!60]
+The \textbf{net return}, {\color{red}$R_{t}$}, on the asset between dates $t-1$ and $t$ is  defined as follows:
+\vspace{-0.4cm}
+\begin{align} 
+{\color{red}R_{t}} \equiv \frac{P_{t}-P_{t-1}}{P_{t-1}} = \frac{P_{t}}{P_{t-1}} - 1
+\end{align}
+\vspace{-0.4cm}
+
+The \textbf{gross return} between dates $t-1$ and $t$ is defined as follows:
+\begin{align} 
+{\color{red}1 + R_{t} }\equiv \frac{P_{t}}{P_{t-1}}
+\end{align}
+\vspace{-0.4cm}
+
+The \textbf{log-return} {\color{red}$r_{t}$} on the asset between dates $t-1$ and $t$ is defined as the natural logarithm of its gross return  $(1+R_{t})$:
+\begin{align}
+{\color{red}r_{t}} \equiv \textup{log}(1+R_{t}) = \textup{log} \frac{P_{t}}{P_{t-1}} =  \textup{log} P_{t}- \textup{log} P_{t-1}
+\end{align}
+\vspace{3mm}
+\end{tcolorbox}
+
+
+\textbf{Why use log-returns?}
+
+Generally, log-returns are used instead of net returns.  However, it can be observed that log-returns are not quite the same as net returns or gross returns. However, in finance, log-returns are widely used. So, why do we use log-returns? It turns out that the difference is not substantial when the values of net returns $R_{t}$ are small. In this case, the log-returns and the net returns will be approximately the same. However, one of the main reasons is the statistical properties of log-returns.  It is much easier to model the statistical behaviour of asset returns over time. This is due to the \textit{additivity} property of log-returns, and this property is useful when considering multiperiod log-returns. Deriving the time-series properties of the product of random variables is much more complicated than deriving the time-series properties of the sum of random variables.  
+ 
+
+\section{Value-at-Risk - parametric approach}
+
+Let's consider the parametric approach to compute Value-at-Risk. Let $X_t$ denote log-return at some time period $t$, and let's assume that it follows a normal distribution with mean $\mu$ and $\sigma^2$, $X_t\overset{i.i.d.}{\sim} N(\mu, \sigma^2)$, $t=0, \pm 1, \pm 2,  \ldots$. 
+
+Next, suppose we want to find teh VaR at the $\alpha$ confidence level. That is, we want to find the threshold $q$, such that the probability of the log-return $X_t$ dropping below that threshold is $(1-\alpha)$. Then the formula for {\color{red}$q$}, such that $p(X_t < {\color{red}q}) = 1-\alpha$, is as follows:
+ 
+ $$P\left(X_t< {\color{red}q}\right)=P\left(\frac{X_t-\mu}{\sigma}<\frac{{\color{red}q}-\mu}{\sigma}\right)=P\left(Z_t<\frac{{\color{red}q}-\mu}{\sigma}\right)$$
+ 
+Because we assumed that the log-returns follow a normal distribution, we can use the standard normal transformation to find the value of $q$. So we can re-write this expression as follows in terms of this new variable $Z_t$, which follows a standard normal distribution, $Z_t \sim N(0,1)$:
+
+ $$P\left(Z_t<\frac{{\color{red}q}-\mu}{\sigma}\right)=1-\alpha$$
+
+By definition $P\left(Z_t<\Phi^{-1}(1-\alpha)\right)=1-\alpha$, where $\Phi$ is the standard normal distribution function. Hence: \begin{align} \label{var}
+  \frac{{\color{red}q}-\mu}{\sigma}=\Phi^{-1}(1-\alpha)
+  \end{align}
+  
+  Since we are considering returns distribution (as opposed to the loss distribution), the VaR will be negative, i.e. ${\color{red}q}= - VaR_{\alpha}$ (remember that we are using log-returns which can take negative values, i.e. $X_t \in (-\infty, \infty)$).  There is no agreement in the literature on how the Value-at-Risk should be reported - should it be reported as a negative value or as a positive value. However, in this example (and throughout most of the course), we will report VaR as a positive value. Therefore, because ${\color{red}q}= - VaR_{\alpha}$, we multiply by $-1$ to obtain a positive VaR. Also, due to the symmetry of the standard normal distribution, we know that $\Phi^{-1}(1-\alpha)=-\Phi^{-1}(\alpha)$. Substituting these into \eqref{var} yields an analytic formula for the $VaR_\alpha$ for an $i.i.d.$ normal log-return:
+  \begin{align}\mathrm{VaR}_{\alpha}=\Phi^{-1}(\alpha) \sigma-\mu
+  \end{align}
+
+
+ We can also express the $VaR_{\alpha}$ in value terms simply by multiplying the percentage $VaR_{\alpha}$ by the price at time $t$ when the $VaR_{\alpha}$ is measured:
+     \begin{align}VaR^{*}_{\alpha, t}= VaR_{\alpha}\cdot P_{t}=\left(\Phi^{-1}(\alpha) \sigma_{}-\mu_{}\right)\cdot P_{t}
+     \end{align}
+ Note that, when the $VaR^{}_{\alpha}$ is expressed in value terms, it will depend on time $t$. Also, due to ${\color{red}r_{t}}=\log \left(1+R_{t}\right) \approx {\color{red}R_{t}}$, the $VaR^{}_{\alpha}$ using continuously compounded returns is an approximation to
+     $VaR^{}_{\alpha}$ using net returns. The smaller the ${\color{red}R_{t}}$, the better the approximation.
+  
+\subsection{Example 1}
+  
+Let's assume that daily log-returns of a financial asset $ABC$ are independent and normally distributed with mean 0.06 and volatility 0.1. What is the 99\% VaR over a 1-day horizon of $\pounds1$ million invested in $ABC$ stock?
+
+ \textbf{Solution:} Let $X_t$ denote the daily log-return of a financial asset $ABC$. Then $X_t\overset{i.i.d.}{\sim}N(0.06, 0.1^2)$. We know that 99\% VaR is the $1^{st}$ percentile of the distribution, so we need to find the $1^{st}$ percentile (or $1^{st}$ 100-quantile) of the  log-return distribution  of $X_t$, i.e. $p(X_t < {\color{red}q}) = 0.01$. Applying standard normal transformation:
+          $$P\left(Z_t<\frac{{\color{red}q}-0.06}{0.1}\right)=0.01$$
+Note that $X_t$ is a continuous random variable so nothing changes if we use $\leq$ or $<$. Next, using the standard normal distribution we know that $\frac{{\color{red}q}-0.06}{0.1}=-2.33$. Solving for {\color{red}q} yields:
+$${\color{red}q}=-2.33*0.1+0.06=-0.173$$
+Thus the 99\% 1-day $VaR$ is 17.3\%. With $\pounds 1$ million invested, the $VaR^*_{0.99}$ is $\pounds 1m * 0.173 = \pounds 173,000$. In other words, we are 99\% confident that we will not lose more than $\pounds 173,000$ from investing in this asset over the next day.                    
+  
+ 
+\subsection{Multiperiod VaR}
+So far we have measured $VaR_{\alpha}$ over 1 day. How should we proceed if we want to estimate $VaR_{\alpha}$ over a longer risk horizon? It turns out that there is a simple formula for scaling $VaR_{\alpha}$ from a $1$-day horizon to an $h$-day horizon:
+  \begin{align}\mathrm{VaR}_{\alpha, h}=\Phi^{-1}(\alpha) \sigma*\sqrt{h}-\mu*h
+  \end{align}
+The advantage of continuously compounded returns (i.e. log-returns) becomes clear when we consider multiperiod return.
+
+\subsection{Portfolio VaR}
+The $VaR$ measure can be easily extended to more than one asset. In the two-asset case, the variance of the portfolio is:
+                         $$\sigma_{\mathrm{P}}^{2}=w_{1}^{2} \sigma_{1}^{2}+w_{2}^{2} \sigma_{2}^{2}+2 w_{1} w_{2} \rho \sigma_{1} \sigma_{2}$$
+                         
+We can also express this more compactly using matrix notation:
+                         $$\sigma_{\mathrm{P}}^{2}=\boldsymbol{w'\Sigma w} = \left(\begin{array}{cc}{w_{1}} & {w_{2}}\end{array}\right)\left(\begin{array}{cc}{\sigma_{1}^{2}} & {\sigma_{12}} \\ {\sigma_{12}} & {\sigma_{2}^{2}}\end{array}\right)\left(\begin{array}{c}{w_{1}} \\ {w_{2}}\end{array}\right)$$
+                         
+      where $ \sigma^2_{i}$ for $i=1,2$ is the variance,  $\sigma_{12}=\rho \sigma_{1} \sigma_{2}$ is the covariance, $\boldsymbol{w}$ is a $K \times 1$ matrix of portfolio weights, and $\boldsymbol{\Sigma}$ is a $K \times K$ covariance matrix.
+
+                         
+
+Similarly, using matrix notation, the expected return on the portfolio is:
+                         $$\mu_{P}=E\left[\boldsymbol{w}^{\prime} \boldsymbol{R}\right]=\boldsymbol{w}^{\prime} E[\boldsymbol{R}]=\boldsymbol{w}^{\prime} \boldsymbol{\mu}=\left(w_{1} \; w_{2}\right) \left(\begin{array}{c}{\mu_{1}} \\ {\mu_{2}} \end{array}\right)=w_{1} \mu_{1}+w_{2} \mu_{2}$$
+ 
+ Then, the analytic formula for the $VaR_{\alpha}$ for portfolio of two assets can be expressed as follows:
+        \begin{align}\mathrm{VaR}_{\alpha, P}=\Phi^{-1}(\alpha) \sigma_P-\mu_P
+        \end{align}
+
+
+One of the reason VaR gained popularity is because it is easy to compute, understand and interpret. However, VaR has some drawbacks. For example, VaR does not say anything about the size of losses once they exceed VaR. Nevertheless, one of the main objections to using VaR is that it is not a \textit{coherent} risk metric, i.e. it is not sub-additive. \textit{Sub-additivity} property states that diversification helps reduce risk. When two risky assets are combined in a portfolio, the total risk measure for the portfolio should be no greater than the sum of individual asset risk measures before they were combined. That is, the total risk measure for the portfolio should either decrease or stay the same. However, the VaR does not always satisfy that property:
+$$VaR_\alpha(X+Y) \leq VaR_\alpha(X) +VaR_\alpha(Y)$$
+where $X$ and $Y$ are two financial assets.
+
+
+  \section{Expected Shortfall}                   
+ The most common alternative risk measure that addresses the problem of lack of subadditivity in the $VaR$ is the  \textit{expected shortfall} (ES). Let's consider the following definition.
+ 
+ \begin{tcolorbox}[colback=black!10,title=\begin{defn}\label{defn: ES}(Expected shortfall)\end{defn}, colframe=black!60]
+Expected loss conditional on $VaR_\alpha$ being violated is:
+$$ ES_\alpha= E[L | L \geq VaR_\alpha]$$
+\end{tcolorbox}
+
+In other words, it is the average value of all the losses exceeding the VaR! If log-returns are assumed to follow normal distribution, then it can be shown that the expected shortfall is equal to: 
+\begin{align}
+E S_{\alpha}=\mu+\sigma \frac{\varphi\left(\Phi^{-1}(\alpha)\right)}{1-\alpha}
+\end{align}
+where $\varphi(x)$ is the standard normal p.d.f., and $\Phi(x)$ is the standard normal c.d.f.
+
+\end{document}

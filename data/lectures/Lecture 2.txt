@@ -1,0 +1,460 @@
+
+\begin{document}
+
+
+
+\begingroup
+\let\cleardoublepage\clearpage
+\setcounter{chapter}{2}
+\chapter*{\centering Decision and Risk \\ \vspace{1cm} \LARGE Lecture 2: Value-at-Risk Using Copulas}
+\centering {\tiny Last updated on \today}
+\tableofcontents
+\endgroup 
+\chaptermark{Copula Theory}
+
+
+\section{Introduction}
+
+\begin{enumerate}
+\item[] \justifying \emph{The ``era of i.i.d." is over: and when dependence is taken seriously, copulas naturally come into play. It remains for the statistical community at large to recognize this fact. And when every statistics text contains a section or chapter on copulas, the subject will have come of age.}
+
+ \hfill - Berthold Schweizer
+\end{enumerate}
+
+In previous lecture we considered portfolio Value-at-Risk using the assumption that the joint distribution of log-returns was bivariate normal. In that case the dependence structure was completely described by the linear correlation coefficient $\rho$. If the joint distribution of log-returns is not bivariate normal, then the linear correlation coefficient may provide an inaccurate measure of the dependence structure, and therefore the Value-at-Risk estimates may be misleading. For example, a particular portfolio of assets may seem less risky than it actually is. Hence, alternative methods for describing the dependency structure should be considered. Copulas offer a popular framework for both defining multivariate distributions and modelling multivariate data.
+
+Before introducing the basic definitions and properties of copulas, it is worthwhile to motivate the need for adequate and flexible models to describe the dependence structure between random variables. Understanding and quantifying dependence is at the core of all modelling efforts in multivariate analysis. Since multivariate normal distribution is one of the most widely used models, we will start by highlighting the limitations of the linear correlation coefficient with the help of scatterplots.  
+
+First, let's consider the Anscombe's quartet in Figure \ref{anscombe}. In 1973, Frank Anscombe developed idealized data sets to demonstrate the importance of graphing data before analyzing it. This figure presents four data sets that have very similar statistical properties in the sense that the correlation coefficient is approximately 0.8 in all four plots. However, it can be noticed that the relationships in all four plots are quite different. If we consider Figure \ref{anscombe}, the interpretation of a strong correlation is only appropriate in Plot 1, and to some extent in Plot 3. However, Plot 2 and 4 exhibit a non-linear relationship between the two variables, and therefore the correlation coefficient cannot adequately describe this relationship.
+
+
+
+
+\begin{figure}[t]
+\begin{minipage}{0.55\textwidth}
+\centering
+\caption{Anscombe's quartet, correlation $\rho=0.8$}
+\includegraphics[scale=0.31]{anscombe2b}
+\label{anscombe}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+\centering
+\caption{Correlation $\rho=0$}
+\includegraphics[width=0.88\linewidth]{corr} 
+\label{corr}
+\end{minipage}
+\end{figure}
+
+Next, let's consider Figure \ref{corr} which illustrates another inaccurate belief that zero correlation implies independence. This figure depicts two variables, $X \sim N(0, 1)$, and $Y=X^2$. A linear correlation coefficient of zero does not necessarily mean that the two variables are independent.  In this plot it can be seen clearly that there exists a non-linear U-shaped relationship between two variables $X$ and $X^2$ despite the linear correlation coefficient being equal to zero. 
+
+
+
+\begin{figure}[h]
+\centering
+
+\caption{Identical correlation $\rho=0.7$, but different dependence structure}
+\includegraphics[scale=0.5]{copulaplot4b}
+\label{copmodel}
+\end{figure}
+
+
+
+
+
+Let's consider a third graphical example with simulated log-returns presented in Figure \ref{copmodel}. In all these bivariate plots the linear correlation coefficient is the same, $\rho= 0.7$, and all marginal distributions are standard normal. However, it can be clearly seen that the dependence structure is not the same in these plots. For example, in Plot 2 we can observe that extreme negative log-returns have a tendency to occur together, that is, under this model it is much more likely to see large joint losses.  We can easily verify this by counting the number of observations in the highlighted green rectangle in all plots (note that the sample size is the same in all plots). Therefore, this model can be considered to be the most dangerous out of these four models from the point of portfolio diversification and risk management. However, if we use the linear correlation as a measure of dependence, then we will not be able to distinguish these differences in the dependence structure. Another interesting fact that these plots demonstrate is that the joint distribution of two normally distributed random variables is not necessarily normal (remember that marginal distributions are standard normals in all these plots). Here only Plot 1 contains draws from the bivariate normal distribution.
+
+The model presented in Plot 1 is called Gaussian copula \footnote{ When the multivariate Gaussian copula is used with normal marginal distributions, the resulting joint distribution is the multivariate normal}. It can be shown that the tail dependence of the Gaussian copula approaches zero when one goes far enough into the lower (or upper) tail. This is referred to as "asymptotic independence", and means that regardless of how high the correlation between two assets is, if we just go far enough into the lower (or upper) tails, extreme events appear to  occur independently. 
+
+In the context of portfolio risk management, failure to take into account extreme joint losses could have devastating consequences. Therefore, if the joint distribution of log-returns is not normal, then using the linear correlation coefficient as a measure of dependence may lead to misleading conclusions. Therefore, alternative methods for capturing the dependence structure are required. Copulas offer a popular framework for modelling multivariate data.
+
+\begin{figure}
+\centering
+\fontsize{9}{6}\selectfont
+\includegraphics[scale=0.5]{wallstreet}
+\caption{In the mid-'80s, Wall Street turned to the quants -- brainy financial engineers -- to invent new ways to boost profits. Their methods for minting money worked brilliantly...until one of them devastated the global economy. \textbf{Source}: https://www.wired.com/2009/02/wp-quant/}
+\end{figure}
+ 
+To sum up, the correlation coefficient can adequately describe only a specific type of dependence - a linear relationship, which indicates how close the points lie around a straight line. If the dependence structure between two random variables is non-linear, then the linear correlation coefficient is unable to accurately describe that type of dependence.
+
+
+
+\subsubsection{Recipe for Disaster: The Formula That Killed Wall Street}
+
+In February 2009, journalist Felix Salmon described Gaussian copula as the formula that \enquote{devastated the global economy} and that it \enquote{will go down in history as instrumental in causing the unfathomable losses that brought the world financial system to its knees.} 
+
+One of the main limitations of Gaussian copula (model in Plot 1 in Figure \ref{copmodel}) in the financial context is that it has the property known as \enquote{asymptotic independence} between random variables (in simpler words, extreme joint negative or positive returns are very unlikely). This particular property manifested itself during the financial crisis of 2007, and as a result the Gaussian copula attracted a lot criticism. Models are not perfect, but that doesn't mean they're not useful. The Gaussian copula has been misused and and subsequently criticised, but that does not mean it is useless. It has certain properties which are appropriate in certain circumstances.
+
+\end{frame}
+
+
+
+\section{Preliminaries}
+In this section we consider well-known results that play important role in all statistical simulations, and also prepare the ground for the definition of copulas.
+
+The first result is so special and important that it has its own name -- The Probability Integral Transform. In short, what this result is saying is that, we can convert any continuous random variable  $X$ to a standard uniform random variable using its own CDF $F_{X}$.
+
+\vspace{.1cm}
+\begin{tcolorbox}[colback=black!10,title=\begin{theorem}\label{defn: 2} The Probability Integral Transform \end{theorem}, colframe=black!60]
+Let $X$ be a continuous r.v. with CDF $F_{X}(x)$ which is strictly increasing over the range of $X$. Then $U \equiv F_{X}(X) \sim \textrm{U}(0,1)$.
+%\vspace{3mm}
+\end{tcolorbox}
+%\vspace {.9cm}
+
+The simple proof of this result is as follows:
+ \begin{align} \nonumber
+ F_{U}(u) & = \mathbb{P}(U\leq u) \\ \nonumber
+          &{ = \mathbb{P}(F_{X}(X) \leq u)} \\\nonumber
+          & = \mathbb{P}(F_{X}^{-1}(F_{X}(X)) \leq F_{X}^{-1}(u)) \\\nonumber
+          & = \mathbb{P}(X \leq F_{X}^{-1}(u)) \\\nonumber
+          & = F_{X}( F_{X}^{-1}(u))\\ \nonumber
+          & = u
+ \end{align}
+ where $\quad u\in[0,1]$ 
+
+Second result is known as The Inverse Probability Integral Transform, which is simply the inverse of the previous result. What this result is saying is that, we can transform the standard uniform random variable $U$  into a random variable $X$ with the desired target distribution simply by choosing $F _ { X } ^ { - 1 }$. This result is extremely useful for generating random samples from any desired distributions, using as input only a standard uniform number generator.
+
+
+\begin{tcolorbox}[colback=black!10,title=\begin{theorem}\label{defn: 1} The inverse Probability Integral Transform \end{theorem}, colframe=black!60]
+Let $U \sim$ \textrm{U(0,1)}, and $F_{X}$ be any CDF. Then, $X \equiv F _ { X } ^ { - 1 } ( U ) \sim F _ { X }$
+
+\end{tcolorbox}
+
+
+Again, the proof of this result is quite simple:
+ \begin{align} \nonumber
+\mathbb{P}(X \leq x) & = \mathbb{P}(F_{X}^{-1}(U) \leq x) \\\nonumber
+          & = \mathbb{P}(F_{X}(F_{X}^{-1}(U)) \leq F_{X}(x)) \\\nonumber
+          & = \mathbb{P}(U \leq F_{X}(x)) \\\nonumber
+          & = F_{X}(x)
+ \end{align}
+ where $\quad x\in\mathbb{R}$ 
+
+Now that we are fully equipped with these two results, we introduce the definition of a copula. Let's consider the following definition for the bivariate case, which can be easily extended to a multivariate case.
+
+\vspace{3mm}
+\begin{tcolorbox}[colback=black!10,title=\begin{defn}Copula\label{definition} \end{defn}, colframe=black!60] A $2$-dimensional copula $C:[0, 1]^{2}\rightarrow[0, 1]$ is a joint cumulative distribution function (CDF) of a $2$-dimensional random vector with standard uniform marginals $U(0, 1)$. \\
+
+A 2-dimensional copula is a function with the following properties:
+\begin{enumerate}
+\item $C(0, u_{2}) = 0$ and $C(u_{1}, 0) = 0$
+\item $C(1, u_{2}) = u_{2}$ and $C(u_{1}, 1) = u_{1}$
+\item $C$ is $2$-increasing. That is, for all $u_{1}, u'_{1}, u_{2}, u'_{2} \in [0, 1]$ such that $u_{1} \leqslant u'_{1}$ and $u_{2} \leqslant u'_{2}$:
+
+$$C(u'_{1}, u'_{2}) - C(u'_{1}, u_{2}) - C(u_{1}, u'_{2}) + C(u_{1}, u_{2}) \geqslant0$$
+\end{enumerate}
+\end{tcolorbox}
+
+From the above we can see that a copula can be characterised both from a probabilistic and analytic point of view. A probabilistic interpretation is that a two dimensional copula is a bivariate probability distribution function with standard uniform marginal distribution functions. That is, we can describe the joint distribution of $X_1,X_2$ using the marginal distribution functions and the copula $C$. An analytic definition is that a copula can be viewed as an analytic function which is a mapping from a unit square to a unit interval which satisfies all three properties. Therefore, if you can find a function that satisfies all three properties, then you may call this function a copula.
+
+\section{Sklar's Theorem}  
+Next we will consider Sklar's Theorem, which is central to the theory of copulas and is the foundation of most applications of copula theory to statistics. Sklar's Theorem is a very important result that enables the splitting of a multivariate distribution into marginal distributions and an associated copula function. 
+
+Sklar's Theorem (in the bivariate case) states that if we take a random vector with elements $X_1$ and $X_2$, which has joint distribution function $F_{1,2}(x_{1}, x_{2})$ and marginal distribution functions $F_{1}(x_{1})$ and $ F_{2}(x_{2})$, then there exists a $2$-dimensional copula ${\color{red}C}$ for all values of $x$. The word \enquote{copula} stems from the Latin verb \enquote{copulare} meaning to bind, to connect, to link. Thus, the copula links the marginal distributions to form the joint distribution. From a modelling perspective, Sklar's Theorem allows us to separate the modelling of the marginal distributions from the dependence structure, which is captured by a copula function $C$.
+
+\vspace{3mm}
+\begin{tcolorbox}[colback=black!10,title=\begin{thm}Sklar's Theorem\label{Sklar's Theorem} \end{thm}, colframe=black!60]
+ If $\left(  X_{1}, X_{2} \right)' $ has joint distribution function $F_{1,2}(x_{1}, x_{2})$ and marginal distribution functions $F_{1}(x_{1}), F_{2}(x_{2})$, then there exists an appropriate $2$-dimensional copula ${\color{red}C}$ such that, for all $x_{1}, x_{2}$ in $\bar{\mathbb{ R }} = [ - \infty, \infty]$:
+\begin{eqnarray} \nonumber
+F_{1,2}(x_{1},x_{2})&=& {\color{red}C_{}}\left( F_{1}(x_{1}),F_{2}(x_{2}) \right)
+\end{eqnarray}
+
+\vspace{10pt}
+\justifying The joint probability density function $f_{1,2}(x_{1},x_{2})$ for $F_{1,2}(x_{1},x_{2})$ is:
+\begin{eqnarray}\nonumber
+f_{1,2}(x_{1},x_{2}) &=& {\color{red} c_{}}( F_{1}(x_{1}),F_{2}(x_{2}))\cdot f_{1}(x_{1})\cdot f_{2}(x_{2})
+\end{eqnarray}
+where ${\color{red}c}$ is a $2$-dimensional copula density.
+\end{tcolorbox}
+
+
+}}
+\end{frame}
+
+
+%&\includegraphics[width=0.3\textwidth]{copula_invariance.pdf}&
+
+
+\section{Examples of copulas}
+
+There are broadly three widely known classes of copulas: fundamental copulas, implicit copulas and explicit copulas. First, we will consider the fundamental copulas, which consist of copulas that represent perfect positive dependence, independence and perfect negative dependence. 
+
+
+
+\subsection{Fundamental copulas}
+\subsubsection{Independence Copula}
+
+The independence copula is based on the fact that, if random variables are independent, then their joint distribution function equals the product of marginal distribution functions, $F ( x_1, x_2 ) =  F _ { 1 } \left( x _ { 1 } \right)\cdot  F _ { 2 } \left( x _ { 2 } \right)$. Therefore, the independence copula $\Pi(u_1, u_1)$ of $u_1$ and $u_2$ is the product of $u_1$ and $u_2$, i.e. $\Pi(u_1, u_1)= C\left(u_1, u_2 \right) =  u_1 \cdot u_2$ since $C\left( F _ { 1 } \left( x _ { 1 } \right) , F _ { 2 } \left( x _ { 2 } \right) \right) = F ( x_1, x_2 ) =  F _ { 1 } \left( x _ { 1 } \right)\cdot  F _ { 2 } \left( x _ { 2 } \right)$. Therefore, $X_1,  X_2$ are independent, if and only if, their copula is $\Pi$. The density of the independence copula equals 1,  i.e. $c(u_1, u_1)=1$, $(u_1, u_2)' \in [ 0,1 ] ^ { 2 }$. The importance of product copula is that it is often used as a benchmark because it corresponds to independence.
+
+\subsubsection{Fr\'echet-Hoeffding bounds}
+Other members of fundamental copulas are also known as Fr\'echet-Hoeffding bounds. Fr\'echet-Hoeffding bounds correspond to cases of extreme forms of dependency that represent perfect positive dependence and perfect negative dependence,  comonotonicity and countermonotonicity respectively. The comonotonicity copula ${\color{blue}M\left( u _ { 1 }, u _ { 2 } \right)}$ is the Fr\'echet-Hoeffding upper bound, and the countermonotonicity copula ${\color{red}W ( u _ { 1 }, u _ { 2 } ) }$ is Fre\'chet-Hoeffding lower bound  (for the lower bound this is true only in the two-dimensional case \footnote{ In higher dimensions greater than 2, the Fre\'chet-Hoeffding lower bound is no longer a copula, i.e. it does not satisfy the properties (1) - (3) in Definition \ref{definition}}). That is, they are distributions of perfectly positively dependent and perfectly negatively dependent random variables respectively.
+
+According to the Fr\'echet-Hoeffding bounds, every copula has to lie between these two functions ${\color{blue}M\left( u _ { 1 }, u _ { 2 } \right)}$ and ${\color{red}W ( u _ { 1 }, u _ { 2 } ) }$, which are the bivariate distribution functions. That is, for any $2$-dimensional copula $C : [ 0,1 ] ^ { 2 } \rightarrow [ 0,1 ]$, and any $(u_1, u_2)' \in [ 0,1 ] ^ { 2 }$, the following inequalities hold:
+$${\color{red}W\left( u _ { 1 }, u _ { 2 } \right)} \leq C\left( u _ { 1 } , u _ { 2 } \right) \leq {\color{blue}M\left( u _ { 1 } , u _ { 2 } \right)}$$ 
+
+where:
+
+${\color{red}W (  u _ { 1 }, u _ { 2 } ) }= \max \left\{ u _ { 1 } + u _ { 2 }  - 1,0 \right\}$ and 
+
+${\color{blue}M (  u _ { 1 }, u _ { 2 } ) }= \min \left\{ u _ { 1 }, u _ { 2 } \right\}$
+
+The concept of comonotonicity is important in financial risk management. In particular, the sum of the components $X_1 + X_2 + \cdots + X_n$ will be the riskiest if the joint probability distribution of the random vector $(X_1, X_2, \ldots , X_n)$ is comonotonic, i.e. the copula of the random vector $(X_1, X_2, \ldots , X_n)$ is the comonotonic copula.
+
+Figure \ref{fundamental} illustrates the scatterplots for fundamental copulas, comonotonicity copula, independence copula, and  countermonotonicity copula. The first plot displays comonotonicity copula,  which represents perfect   positive   dependence. It can be observed that the data points lie on a (45 degree) straight line with a positive slope. In the second plot, we have a sample of observations from the independence copula. Here we can observations in the unit square which exhibit no relationship between the variables. The third plot displays the countermonotonicity copula,  which represent perfect negitive dependence. It can be observed that in this case the data points lie on a perfect straight line with a negative slope.
+
+\begin{figure}[t]
+\centering
+\begin{minipage}{0.3\textwidth}
+\centering
+
+\includegraphics[scale=0.5]{comonotonic_c}
+\label{comonotonic_c}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+\centering
+
+\includegraphics[width=0.9\linewidth]{indep_c3} 
+\label{indep_c3}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+\centering
+
+\includegraphics[width=0.8\linewidth]{ccomonotonic_c} 
+\label{ccomonotonic_c}
+\end{minipage}
+\caption{Comonotonicity copula, independence copula, and  countermonotonicity copula.}
+\label{fundamental}
+\end{figure}
+
+
+
+\subsection{Implicit copulas}
+
+Next, let's consider implicit copulas. Implicit copulas are called implicit  because they do not have a simple closed form. Implicit copulas are constructed using well-known multivariate distributions. The two most known and widely used elliptical copulas are the Gaussian and the Student's $t$ copulas, which are the dependence structures of the multivariate normal and $t$ distributions.  One of the prominent characteristics of elliptical copulas is that they exhibit symmetry in the sense that the dependence is the same in the lower and upper tails.
+
+\begin{figure}[t]
+\centering
+\caption{Gaussian (Normal) Copula}
+\includegraphics[scale=0.5]{gaussian}
+\label{gaussian}
+\end{figure}
+
+
+\subsubsection{Gaussian (Normal) Copula}
+The Gaussian copula is perhaps the most widely used of all copulas. In the bivariate case, normal copula has the linear correlation coefficient $\rho$ as its dependence parameter. Furthermore, the Gaussian copula is neither lower- nor upper-tail dependent\footnote{ Do not worry about the mathematical definition of tail dependence, it will not be covered in this course. In simple terms, you can think of upper (or lower) tail dependence as the conditional probability of one variable taking extremely large (or small) values given that the other variable has taken extremely large (or small) values.}, i.e. both lower- and upper-tail dependence parameters are equal to 0. Hence, the Gaussian copula approach cannot model tail dependence. In the context of financial risk management, the lack of lower tail dependence loosely means that, the probability of extreme loss in one investment given an extreme loss experienced in another investment, is equal to 0. This means that a \enquote{reckless} use of Gaussian copula may give a false sense of security when financial assets are in fact tail-dependent. The Gaussian copula can be written as follows:
+    
+\begin{eqnarray}
+    C_{G}(u_{1},u_{2}|\rho)& = & \int_{- \infty }^{\Phi^{-1}(u_{1})} \int_{- \infty }^{\Phi^{-1}(u_{2})} \frac{1}{2\pi\sqrt{1-\rho^2}} \exp \left\{\frac{-(r^2-2\rho rs+s^2)}{2(1-\rho^2)} \right\} drds \nonumber
+\end{eqnarray}
+    
+    where $\Phi^{-1}(\cdot)$ is the inverse cumulative distribution function of a standard normal, and $\rho \in(-1,1)$.
+
+    
+    Figure \ref{gaussian} illustrates four scatterplots of observations drawn from a Gaussian copula with different values of the correlation coefficient. In the first plot $\rho=-0.999$, where the points are accumulated along the main diagonal. The second plot represents the independence case where $\rho=0$, i.e. uniform values exhibit no relationship. As $\rho$ approaches 1 the cloud of points start to accumulate around a (45 degree) straight line with a positive slope. Plots 3 and 4 illustrate that as $\rho$ approaches 1, the Gaussian copula approaches the Fr\'echet-Hoeffding upper bound, i.e. the comonotonicity copula,  which represents perfect   positive   dependence.
+\subsubsection{Student (Student-$t$) copula}
+
+Another member of elliptical copulas is the Student-$t$ copula, which also has the linear correlation coefficient $\rho$ as a measure of dependence. In contrast to the Gaussian copula, the Student copula is both lower- and upper-tail dependent, although it imposes symmetry in both tails. Furthermore, the Student's t-dependence structure introduces an additional parameter for the degrees of freedom $\nu$. Increasing the value of $\nu$ decreases the tendency to exhibit extreme co-movements. Hence, the $\nu$ parameter  controls the heaviness of the tails. The stronger the linear correlation $\rho$, and the lower the degrees of freedom $\nu$, the stronger is the tail dependence. Therefore, in contrast to the Gaussian copula, the Student's t-copula allows for joint fat tails and an increased probability of joint extreme events. The Student's copula can be written as follows:
+
+
+    \begin{eqnarray}
+        C_{t}(u_{1},u_{2}|\rho,\nu) = \int_{- \infty }^{t_{\nu}^{-1}(u_{1})} \int_{- \infty }^{t_\nu^{-1}(u_{2})} \frac{1}{2\pi\sqrt{1-\rho^2}} \left(1+ \frac{r^2-2\rho rs+s^2}{\nu(1-\rho^2)} \right)^{-\frac{\nu+2}{2}} drds \nonumber
+    \end{eqnarray}
+    
+        where $\nu$ is the degree-of-freedom parameter, $t_{\nu}^{-1}(\cdot)$ is the inverse of the standard Student-$t$ cumulative distribution function, and $\rho \in(-1,1)$.
+
+
+
+}
+
+\begin{figure}[t]
+\centering
+\caption{Student (Student-$t$) copula}
+\includegraphics[scale=0.45]{student}
+\label{student}
+\end{figure}
+
+    
+Figure \ref{student} illustrates four scatterplots of observations drawn from Student copula. Similar to the Gaussian copula, the correlation coefficient controls the strength of the dependence. Furthermore, Student's $t$ copula has an additional parameter -- degrees of freedom $\nu$. The lower the degrees of freedom $\nu$, the stronger is the tail dependence. In the top panel $\rho=-0.8$ and $\nu=3$, and at the top right corner $\rho=-0.8$ and $\nu=30$. Note that the $t$ copula has one peculiar feature when $\nu$ is low -- observations are widely scattered in the middle of the distribution and in the corners. The same behaviour can be observed in the lower panel. It is worth noting that, as $\nu \to \infty$, the Student's $t$ copula approaches the Gaussian copula.
+
+
+
+\section{Copula densities}
+If the bivariate copula  $C \left( u _ { 1 } , u _ { 2 } \right)$ has a density $c( u_1, u_2 )$, then it can be obtained by simply taking the partial derivative with respect to both underlying variables:
+
+\begin{block}{}
+$$c (u_1, u_2) = \frac { \partial ^ { d } C \left( u _ { 1 } , u _ { 2 } \right) } { \partial u _ { 1 }, \partial u _ { 2 } }$$
+\end{block}
+
+Suppose that the bivariate copula is given in the following form where the bivariate CDF $F_{1, 2}(\cdot)$ is known:
+
+\begin{block}{}
+$${\color{blue}C } (u_1, u_2)  = F_{1, 2} \left( F _ { 1 } ^ { -1 } \left( u _ { 1 } \right) , F _ { 2 } ^ { -1 } \left( u _ { 2 } \right) \right)$$
+\end{block}
+
+Then the bivaraite copula is implicit, and, therefore, the copula density can be obtained by dividing the bivariate (joint) density function $f_{1, 2}$ by the marginal densities $f_{1}$ and $f_{2}$. 
+ 
+$${\color{red}c}(u_1, u_2) = \frac { f_{1, 2} \left( F _ { 1 } ^ { - 1 } \left( u _ { 1 } \right), F _ { 2 } ^ { - 1 } \left( u _ { 2 } \right) \right) } { f _ { 1 } \left( F _ { 1 } ^ { - 1 } \left( u _ { 1 } \right) \right) \cdot f _ { 2 } \left( F _ { 2 } ^ { - 1 } \left( u _ { 2 } \right) \right) }$$
+
+
+
+Using this technique, we can calculate the density of the Gaussian and the Student's $t$-copulas. For example, the density of the Gaussian copula can be derived as follows:
+
+$${\color{red}c} _ { } ^ { \mathrm { } } ( u_1, u_2 ) = \frac { 1 } { \sqrt { 1-\rho^2 } } \exp \left( - \frac { \rho^2 (x_1^2+x_2^2) -2\rho x_1 x_2 } { 2(1-\rho^2) }\right) \right)$$
+
+where $x_1=\Phi ^ { - 1 } ( u _ { 1 })$, $x_2=\Phi ^ { - 1 } ( u _ { 2 })$ are the standard normal inverse functions of $u_1$ and $u_2$ respectively, and $\rho$ is the correlation coefficient.
+
+\section{Explicit copulas}
+In this section we will consider explicit copulas. They are called explicit  because their distribution functions have (explicit) closed forms, something not possible for the Gaussian and Student $t$ copulas. The well-known family of explicit copulas is the Archimedean copula family. Archimedean copulas are popular (especially in finance, insurance, etc.) and are widely used in applications due to their simple form and nice properties.
+
+
+
+\subsubsection{Frank copula}
+First, let's consider Frank copula, which is a symmetric Archimedean copula, and has the following form:
+
+      \begin{eqnarray} \nonumber
+      C_{}(u_{1},u_{2}|\theta) = - \theta ^ { - 1 } \log \left\{ 1 + \frac { \left( e ^ { - \theta u _ { 1 } } - 1 \right) \left( e ^ { - \theta u _ { 2 } } - 1 \right) } { e ^ { - \theta } - 1 } \right\}
+      \end{eqnarray}
+      
+where $\theta \in (-\infty,\infty)$. Frank copula has the following probability density function:
+
+          \vspace{1mm}
+      \begin{block}{}
+$$\begin{aligned} c ( u_1 , u_2 ) & =\frac { \partial ^ { 2 } C ( u_1 , u_2 ) } { \partial u_1 \partial u_2 } \\ &= \theta \left( 1 - e ^ { - \theta } \right) e ^ { - \theta \left( u _ { 1 } + u _ { 2 } \right) } \left[ \left( 1 - e ^ { - \theta } \right) - \left( 1 - e ^ { - \theta u _ { 1 } } \right) \left( 1 - e ^ { - \theta u _ { 2 } } \right) \right] ^ { - 2 } \end{aligned}$$
+      \end{block}
+                \vspace{3mm}
+
+
+The dependence parameter $\theta$ of a Frank copula may assume any real value, $\theta\in (-\infty, \infty)$. As  $\theta$ approaches  $-\infty$, the Frank copula approaches the Fr\'echet-Hoeffding lower bound; the value of $0$ corresponds to the independence case; and $\theta$ approaches $\infty$, the Frank copula approaches the Fr\'echet-Hoeffding upper bound. The Frank copula has some useful properties. First, the Frank copula allows negative dependence amongst random variables. Second, similar to the Gaussian and Student-t copulas, Frank copula exhibits symmetry in both tails. Third, Frank copula is considered to be "comprehensive" in the sense that both Fr\'echet-Hoeffding  bounds are included in the range of permissible dependence, i.e. as $\theta \to -\infty$ and $\theta \to \infty$ the Frank copula approaches the Fr\'echet-Hoeffding lower and upper bound respectively. What this means is that, the Frank copula can be used to model the dependence structure between random variables with strong positive or negative dependence. 
+                    
+\begin{figure}[t]
+\centering
+\caption{Frank copula}
+\includegraphics[scale=0.45]{frank}
+\label{frank}
+\end{figure}
+
+Figure \ref{frank} illustrates four scatterplots of observations drawn from Frank copula with different parameter values $\theta$.  These simulations illustrate that the strongest dependence is centered in the middle of the distribution.
+
+
+
+\subsubsection{Gumbel copula}
+Next, let's consider Gumbel copula which is an asymmetric Archimedean copula. The distribution function of Gumbel copula has the following form:
+      
+      \begin{eqnarray} \nonumber
+      C_{}(u_{1},u_{2}|\theta) = \exp \left(-\left[ (-\log\: u_{1})^{\theta}+(-\log\: u_{2})^{\theta}  \right]^\frac{1}{\theta}  \right) 
+      \end{eqnarray}
+      
+where $\theta \in [1,\infty)$. Gumbel copula has the following density:
+
+$$\begin{aligned} c ( u_1 , u_1 ) & = \frac { \partial ^ { 2 } C ( u_1 , u_2 ) } { \partial u_1 \partial u_2 } \\ & = C ( u_1 , u_2 ) ( u_1 u_2 ) ^ { - 1 } \left( ( - \log u_1 ) ^ { \theta } + ( - \log u_2 ) ^ { \theta } \right) ^ { - 2 + 2 / \theta } ( \log u_1 \log u_2 ) ^ { \theta - 1 } \\ & \times \left\{ 1 + ( \theta - 1 ) \left( ( - \log u_1 ) ^ { \theta } + ( - \log u_2 ) ^ { \theta } \right) ^ { - 1 / \theta } \right\} \end{aligned}$$
+The Gumbel copula is upper-tail dependent, but not lower tail dependent. For this reason, Gumbel copula is known as an asymmetric Archimedean copula. The dependence parameter $\theta$ is restricted to the interval $[1,\infty)$. Value of $1$ corresponds to the independence case, and as $\theta$ approaches $\infty$, the Gumbel copula approaches the Fr\'echet-Hoeffding upper bound. Nevertheless, the Gumbel copula does not attain the Fr\'echet-Hoeffding lower bound for any value of $\theta$. Furthermore, the Gumbel copula does not allow negative dependence, but it does exhibit strong upper tail dependence.
+
+
+  \begin{figure}[t]
+  \centering
+  \caption{Gumbel copula}
+  \includegraphics[scale=0.45]{gumbel}
+  \label{gumbel}
+  \end{figure}
+
+Figure \ref{gumbel} illustrates four scatterplots of observations drawn from the Gumbel copula for different parameter values of $\theta$. For $\theta=1$ we have the independence case, then as $\theta$ increases and approaches $\infty$, the cloud of points starts to concentrate around a straight line with a positive (45 degree) slope. It can also be observed that values are more concentrated in the upper tail than in the lower tail. Therefore, if outcomes are known to be strongly  dependent at high values but less dependent at low values, then the Gumbel copula may be a good candidate for modelling the dependence structure.
+
+
+\subsubsection{Clayton copula}
+Another asymmetric member of the Archimedean family is the Clayton copula, which is an asymmetric Archimedean copula. The distribution of Clayton copula has the following form:
+
+      \begin{eqnarray}
+      C_{}(u_{1},u_{2}|\theta) = \left(u_{1}^{-\theta}+ u_{2}^{-\theta} -1 \right)^{-\frac{1}{\theta}} \nonumber
+      \end{eqnarray}
+where $\theta \in (0,\infty)$. Clayton copula density:
+
+$$\begin{aligned}
+c ( u_1 , u_2 ) = \frac { \partial ^ { 2 } C ( u_1 , u_2 ) } { \partial u_1 \partial u_2 } = ( 1 + \theta ) ( u_1 u_2 ) ^ { - 1 - \theta } \left( u_1 ^ { - \theta } + u_2 ^ { - \theta } - 1 \right) ^ { - 1 / \theta - 2 }
+\end{aligned}$$
+ In contrast to Gumbel copula, Clayton copula has lower-tail dependence, but no upper tail dependence. The dependence parameter $\theta$ is restricted to $(0,\infty)$ interval. As $\theta$ approaches zero, Clayton copula approaches the independence copula. As $\theta$ approaches infinity, Clayton copula approaches the Fr\'echet-Hoeffding upper bound, but for no value of $\theta$ does it attain the Fr\'echet-Hoeffding lower bound. Hence, similar to Gumbel copula, the Clayton copula cannot account for negative dependence.
+
+ \begin{figure}[t]
+  \centering
+  \caption{Clayton copula}
+  \includegraphics[scale=0.5]{clayton}
+  \label{clayton}
+  \end{figure}
+                   
+Figure \ref{clayton} illustrates four scatterplots of observations drawn from Clayton copula for different parameter values of $\theta$. When $\theta$ aproaches 0, we obtain the independence case; then as $\theta$ increases and approaches $\infty$, the cloud of points starts to concentrate around a (45 degree) straight line with a positive slope. It can also be observed that values are more concentrated in the lower tail than in the upper tail. Clayton copula has been widely used to study events that exhibits strong lower tail dependence. Because Clayton copula allows for the occurrence of extreme downside events, it has been successfully applied in portfolio risk management.
+
+\subsection{Empirical Application}
+
+Simulations play an important role in statistics. They are necessary to understand the properties of an underlying multivariate distribution.  Very often one may need to perform simulations in order to get an idea of the shape of the distribution. In particular, risk management applications require simulation-based experiments. In finance, you may require to simulate possible future scenarios in order to evaluate, for example, Value-at-Risk. If the simulation issue can not be easily solved in higher dimensions for a given copula, then copula is not useful (tractable) to compute the Value-at-Risk. This is because in practice, the analysis will very often take place in the higher dimensional space (i.e. we need to analyse more than two variables). 
+
+
+\subsection{Bivariate Copula Simulation}
+
+Sklar's theorem allows modelling the dependency structure separately  from the marginals. To simulate bivariate data with a particular copula dependence structure, the following steps are performed:
+
+
+\begin{enumerate}
+\item Simulate uniform random variables $\left\{ U _ { 1 }, U _ { 2 } \right\}$ with the given copula dependency structure.
+
+\item Generate sample $\left\{ X_ { 1 } , X _ { 2 } \right\}$ $= \left\{ F_{1}^{-1} \left( U _ { 1 } \right), F_{2}^{-1} \left( U_{ 2 } \right) \right\}$. 
+\end{enumerate}
+
+Note that a random variable $X_i$ can have any desired  distribution by choosing arbitrary marginal quantile function $F_{X_i}^{-1}$. It can be noted here that {\color{blue}Step 2} is straightforward, since all we need is to generate random sample $\left\{ X_ { 1 } , X _ { 2 } \right\}$ by transforming each $U_i$ using the corresponding marginal inverse distribution function. However, it is {\color{red}Step 1} that might require some extra work \footnote{ Do not worry about the details in {\color{red}Step 1}, we will not consider them in this course. Simulations will be performed using R. However, I should mention that the difficulty arises because of the need to induce the dependence structure implied by a copula. We cannot simply simulate a pair of values from the univariate standard uniform distribution.}.
+ 
+xt how to perform {\color{red}Step 1} for implicit and explicit copulas.
+
+
+\subsubsection{Implicit copulas: Bivariate Gaussian copula}
+
+It turns out that is relatively simple to simulate $\left\{ U _ { 1 }, U _ { 2 } \right\}$ from a $2$-dimensional Gaussian copula (which is constructed from a  multivariate standard normal distribution over  $\mathbb {R}^{2}$). First, we simulate random variables $\left\{ X _ { 1 }, X _ { 2 } \right\}$, and then use the Probability Integral Transform (PIT) to obtain random variables $\left\{ U _ { 1 }, U _ { 2 } \right\}$ with the dependence structure described by the Gaussian copula:
+$$\left\{ U _ { 1 }, U _ { 2 } \right\}=\left\{ \Phi \left( X _ { 1 } \right), \Phi\left( X_{ 2 } \right) \right\}$$
+
+
+where $\Phi$ is the cumulative distribution function of a standard normal.
+
+
+
+\subsubsection{Archimedean (explicit) copulas}
+Previous approach can only be implemented when the functional form of the joint distribution is known. This is main drawback of simulating from implicit copulas because it requires the knowledge of the joint distribution. In practice, the joint distribution is usually unknown, and the number of available multivariate distributions is considerably limited. Therefore, this approach limits the usefulness of the inversion method for applications where the researcher or practitioner does not know the true joint distribution.
+
+However, we might have some information about the dependence structure, which can be described using a particular copula. In this situation, we simulate $\left\{ U _ { 1 }, U _ {2} \right\}$ directly from the copula. It is true that we also do not have the knowledge about the true copula. However, the number of available explicit copula functions is relatively higher, and therefore, one is able to draw samples from a variety of multivariate distributions with different dependence structures without knowing the functional form of the multivariate distribution.
+
+
+
+\subsection{Empirical application}
+In this section I present a brief application of the copula theory to the estimation of Value-at-Risk using Monte Carlo simulation approach. We use weekly log-returns for the period from 1999 to 2018. Figure \ref{timeseries} we have time-series plots of log-returns for the two stock indices.
+
+
+ The fist step in copula modelling is to find models for marginal distributions. We will not go into details about marginal modelling in this lecture, but we will come back to this in Lecture 6 using simulated data. 
+\begin{figure}[t]
+  \centering
+  \caption{Weekly log-returns}
+  \includegraphics[scale=0.36]{returns}
+  \label{timeseries}
+  \end{figure}
+
+Once we find the adequate marginal mode, we can apply Probability Integral Transform to our data. According to the Probability Integral Transform result, if the marginal models we have chosen are adequate, then transforming a random variable by its continuous distribution function always leads to the standard uniform distribution. Hence, the transformed observations should look like a draw from a standard uniform distribution. Figure \ref{pit} presents Probability Integral Transform histograms. These histograms seem essentially uniform. We can also employ formal procedures, such as Kolmogorov-Smirnov test, to test for uniformity (more on this in Lecture 6). Without presenting the results, I carried out the test, and the $p$-values were quite large for both stock indices, which means that we do not reject the null hypothesis. In this context, the null hypothesis is that these transformed observations come from a standard uniform distribution.
+
+The next step is to fit various copula models to the transformed data. Using AIC we choose the copula that best fits the data (AIC values are not reported here), and out of the copulas provided in the table, the BB1 is the copula of best fit. Note that BB1 is another bivariate copula which is a member of the Archimedean family of copulas (we haven't considered its functional form in this lecture as this is not essential for our purposes).
+
+Figure \ref{table} presents a table that contains the 99\% and 95\% VaR estimates using Historical simulation approach, highlighted in dark orange, and Monte Carlo simulation based approach using several copula models. The reason we used Monte Carlo approach for computing VaR is because it is not easy to derive parametric formula for VaR based on copulas. It is not surprising that the Gumbel and Frank copulas provide a smaller estimates of VaR. Recall that these two copulas lack lower tail dependence. Also note that different copula models result in different VaR estimates, hence getting the copula model right is very important from the risk management perspective (e.g. if log-returns are lower tail dependent, then using the Gaussian, Gumbel or Frank copulas will underestimate the riskiness of a portfolio, which in this case is reflected in the relatively lower VaR estimates).
+
+
+
+\begin{figure}[t]
+  \centering
+  \caption{Probability integral transform (PIT) histograms.}
+  \includegraphics[scale=0.36]{u}
+  \label{pit}
+  \end{figure}
+
+
+
+\begin{figure}
+\centering
+\caption{Value-at-Risk: Monte Carlo simulation approach}
+\includegraphics[scale=0.36]{table} 
+\label{table}
+
+\end{figure}
+
+
+\end{document}

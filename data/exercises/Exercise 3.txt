@@ -1,0 +1,198 @@
+\documentclass{article}
+\usepackage{color, graphicx, parskip, framed, titling, subfig}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{framed}
+\usepackage[makeroom]{cancel}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{color}
+\usepackage{csquotes} % for use of quotes
+\title{Decision and Risk - Exercise 3}
+\author{}
+\date{}
+
+\setlength{\droptitle}{-10em}
+
+\newcommand\Solution[2][\\]{{\Question#1#2}}
+% TO PROVIDE NO SOLUTION
+%\renewcommand\Solution[2][\\]{}
+
+\begin{document}
+\maketitle 
+\section*{Question 1}
+Consider a model for log-returns of a particular stock:
+   \begin{align}\nonumber
+    Y_t &= \mu + u_t \\ \nonumber
+    u_t &=\sigma_t \varepsilon_t \qquad \varepsilon_t \overset{i.i.d}{\sim} N(0,1) \\ \nonumber
+%    \sigma_{t}^2&=\alpha_0 +\alpha_{1}u_{t-1}^2+\beta_{1} \sigma_{t-1}^2
+%        \sigma_{t}^2&=\alpha_0 +\alpha_{1}u_{t-1}^2+ \alpha_{2}u_{t-2}^2+\beta_{1} \sigma_{t-1}^2  
+%$\alpha_{2}=0.1$
+    \end{align}   
+ Write down the general form of the $GARCH(1,1)$ model for the conditional variance $\sigma^2_t$ and explain what common feature of financial asset log-returns such model is designed to capture.
+ 
+ \Solution{
+ \vspace{.3cm}
+ \color{blue}
+ {\bf Solution}
+    \begin{align}\nonumber
+%     Y_t &= \mu + u_t \\ \nonumber
+%     u_t &=v_t\sigma_t \qquad v_t\sim N(0,1) \\ \nonumber
+     \sigma_{t}^2&=\omega +\alpha_{}u_{t-1}^2+\beta_{} \sigma_{t-1}^2
+     \end{align}
+
+One of the features of the financial asset returns it is designed to capture is a phenomenon known as \enquote{volatility clustering}, which is the tendency of large changes in asset returns to follow large changes, and small changes to follow small changes.
+ }    
+\section*{Question 2}
+Consider the following model for log-returns of a particular stock:
+   \begin{align}\nonumber
+    Y_t &= \mu + u_t \\ \nonumber
+    u_t &=\sigma_t \varepsilon_t \qquad \varepsilon_t \overset{i.i.d}{\sim} N(0,1) \\
+    \sigma^2_t &=\alpha_0+\alpha_1 u^2_{t-1}+\alpha_2 u^2_{t-2} \nonumber
+%    \sigma_{t}^2&=\alpha_0 +\alpha_{1}u_{t-1}^2+\beta_{1} \sigma_{t-1}^2
+%        \sigma_{t}^2&=\alpha_0 +\alpha_{1}u_{t-1}^2+ \alpha_{2}u_{t-2}^2+\beta_{1} \sigma_{t-1}^2  
+%$\alpha_{2}=0.1$
+    \end{align} 
+
+\begin{itemize}
+\item[a)] Suppose the log-returns over the past 2 days have been $Y_1 = 0.1$, $Y_2 = - 0.3$.
+Write down an integral expression to compute the 99\% Value-at-Risk on day 3, assuming that the ARCH parameters have known values $\alpha_0= 0.3$, $\alpha_1= 0.1$, and $\alpha_2= 0.2$. You do not need to evaluate the integral.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+Stated in a simple way, the 99\% Value-at-Risk on day 3 is just the value $y_{3}^{*}$ of the distribution of daily log-returns on day 3 such that the probability of observing log-return below $-y_{3}^{*}$ is 0.01.
+
+%In other words, it is the 1\textsuperscript{st} percentile of a $N(0,\sigma_3^2)$ distribution.
+
+\includegraphics[width=\textwidth]{exercise7.png}
+
+That is, the 99\% VaR is the value $y_{3}^{*}$ such that the following equality holds:
+\begin{align}\nonumber
+\int_{-\infty}^{-y_{3}^{*}} \frac{1}{\sqrt{2\pi\cdot {\color{red} \sigma_3^2}}} e^{-\frac{y_3^2}{2\cdot{\color{red} \sigma_3^2}}} dy_3 = 0.01 \\ \nonumber
+\end{align}
+
+
+The unknown value is the variance on day 3, ${\color{red} \sigma_3^2}$, which can be computed in the following way:
+
+\begin{align} \nonumber
+\sigma_3^2 &=\alpha_0+\alpha_1 y^2_{t-1}+\alpha_2 y^2_{t-2}\\\nonumber
+ &=0.3 +0.1\times (-0.3)^2 + 0.2\times(0.1)^2\\\nonumber
+ &= 0.311
+\end{align}
+
+Substituting into the previous expression gives the required answer:
+\begin{align}\nonumber
+\int_{-\infty}^{-y_{3}^{*}} \frac{1}{\sqrt{2\pi\cdot 0.311}} e^{-\frac{y_3^2}{2\cdot 0.311}} dy_3 = 0.01 \\ \nonumber
+\end{align}
+ 
+}
+
+\item[b)] Now suppose that although $\alpha_0$ and $\alpha_1$ are known and equal to the above values, $\alpha_2$ is unknown. Bayesian inference has been performed based on some earlier historical data $\boldsymbol{y}$ (which also includes data points $Y_1 = 0.1$, $Y_2 = - 0.3$), and the resulting \textbf{posterior} distribution for $\alpha_2$ is $\alpha_2 \sim N(0.1, 0.2)$. Write down an integral expression to compute the 99\% Value-at-Risk on day 3 based on this posterior distribution. You do not need to evaluate any parts of the integral.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+The variance on day 3 is now:
+
+\begin{align} \nonumber
+\sigma_3^2 &=0.3 +0.1\times(-0.3)^2 + \alpha_2(0.1)^2\\\nonumber
+ &= 0.309 + 0.01\alpha_2
+\end{align}
+
+The 99\% VaR is then:
+\begin{align} \nonumber
+\int_{-\infty}^{-y_{3}^{*}} \int_{-\infty}^{\infty} p\left(y_{3} | \alpha_{2}, \boldsymbol{y}\right) \cdot p\left(\alpha_{2} | \boldsymbol{y}\right) d \alpha_{2} d y_{3}&=0.01\\\nonumber
+\int_{-\infty}^{-y_{3}^{*}} \int_{-\infty}^{\infty} \frac{1}{\sqrt{2 \pi \cdot\left(0.309 + 0.01\alpha_2\right)}} e^{-\frac{y_{3}^{2}}{2 \cdot\left(0.309 + 0.01\alpha_2\right)}} \cdot \frac{1}{\sqrt{2 \pi \cdot 0.2^{}}} e^{\frac{-\left(\alpha_{2}-0.1\right)^{2}}{2 \cdot 0.2^{}}} d \alpha_{2} d y_{3}&=0.01
+\end{align}
+}
+
+\end{itemize}
+
+\section*{Question 3}
+Let \(Y_{t}\) denote log-returns which can be described as follows (note that $Y^2_{t-1}=u_{t-1}^2$):
+       \begin{align}\nonumber
+        Y_t &= u_t \\ \nonumber
+        u_t &=\sigma_t\varepsilon_t\qquad \varepsilon_t\overset{i.i.d.}{\sim} N(0,1) \\ \nonumber
+        \sigma_{t}^2&=\alpha_{0} +\alpha_{1}u_{t-1}^2
+        \end{align}
+        
+\begin{itemize}
+\item[a)] Compute the conditional expectation of $Y_t$ given past information $\Omega_{t-1}$, $\mathbb{E}(Y_t|\Omega_{t-1})$.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+\begin{align}\nonumber
+\mathbb{E}\left\{Y_{t} \mid \Omega_{t-1}\right\}=\mathbb{E}\left\{u_{t} \mid \Omega_{t-1}\right\}= & \mathbb{E}\left\{\sigma_{t} \varepsilon_{t} \mid \Omega_{t-1}\right\} \\\nonumber
+=& \sigma_{t}\mathbb{E}\left\{\varepsilon_{t} \mid \Omega_{t-1}\right\} \\\nonumber
+=& \sigma_{t}\mathbb{E}\left\{\varepsilon_{t}\right\} \\\nonumber
+=& \sigma_{t}\cdot 0 \\\nonumber
+=& 0 
+\end{align}
+}
+
+\item[b)] Compute the conditional variance of $Y_t$ given past information $\Omega_{t-1}$, $\textrm{Var}(Y_t|\Omega_{t-1})$.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+\begin{align}\nonumber
+\textrm{Var}\left(Y_{t} \mid \Omega_{t-1}\right)=&\textrm{Var}\left(u_{t} \mid \Omega_{t-1}\right) \\\nonumber
+=&\mathbb{E}\left\{u_{t}^{2}\mid \Omega_{t-1}\right\}-(\underbrace{\mathbb{E}\left\{u_{t}\mid \Omega_{t-1}\right\}}_{=0})^{2}\\\nonumber
+=&\mathbb{E}\left\{(\sigma_{t} \varepsilon_{t})^{2}\mid \Omega_{t-1}\right\} \\\nonumber
+=&\mathbb{E}\left\{\sigma_{t}^{2} \varepsilon_{t}^{2}\mid \Omega_{t-1}\right\} \\\nonumber 
+=&\sigma_{t}^{2}\mathbb{E}\left\{ \varepsilon_{t}^{2} \mid \Omega_{t-1}\right\} \\\nonumber
+=&\sigma_{t}^{2}\mathbb{E}\left\{ \varepsilon_{t}^{2}\right\} \\\nonumber
+=&\sigma_{t}^{2}\cdot \underbrace{ \textrm{Var}\left(\varepsilon_{t})}_{=1} \\\nonumber
+=&\sigma_{t}^{2}
+\end{align}
+}
+
+\item[c)] Compute the unconditional expectation of $Y_t$, $\mathbb{E}(Y_t)$.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+\begin{align}\nonumber
+\mathbb{E}\left\{Y_{t}\right\}=\mathbb{E}\left\{u_{t}\right\}= & \mathbb{E}\left\{\sigma_{t} \varepsilon_{t}\right\} \\\nonumber
+=&\mathbb{E}\left\{\mathbb{E}\left\{\sigma_{t} \varepsilon_{t} \mid \Omega_{t-1}\right\}\right\}\\\nonumber
+=&\mathbb{E}\left\{\sigma_{t}\mathbb{E}\left\{\varepsilon_{t} \mid \Omega_{t-1}\right\}\right\} \\\nonumber
+=&\mathbb{E}\left\{\sigma_{t}\mathbb{E}\left\{\varepsilon_{t}\right\}\right\} \\\nonumber
+=&\mathbb{E}\left\{ \sigma_{t}\cdot 0 \right\}\\\nonumber
+=&\mathbb{E}\left\{0 \right\}\\\nonumber
+=& 0 
+\end{align}
+}
+
+\item[d)] Compute the unconditional variance of $Y_t$, $\textrm{Var}(Y_t)$.
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+\begin{align}\nonumber
+\textrm{Var}\left(Y_{t}\right)\equiv\sigma^2=&\textrm{Var}\left(u_{t}\right) \\\nonumber
+=&\mathbb{E}\left\{u_{t}^{2}\right\}-(\underbrace{\mathbb{E}\left\{u_{t}\right\}}_{=0})^{2}\\\nonumber
+=&\mathbb{E}\left\{(\sigma_{t} \varepsilon_{t})^{2}\right\} \\\nonumber
+=&\mathbb{E}\left\{\sigma_{t}^{2} \varepsilon_{t}^{2}\right\} \\\nonumber =&\mathbb{E}\left\{\mathbb{E}\left\{\sigma_{t}^{2} \varepsilon_{t}^{2} \mid \Omega_{t-1}\right\}\right\} \\ \nonumber
+=&\mathbb{E}\left\{\sigma_{t}^{2}\mathbb{E}\left\{ \varepsilon_{t}^{2} \mid \Omega_{t-1}\right\}\right\} \\\nonumber
+=&\mathbb{E}\{\sigma_{t}^{2}\mathbb{E}\left\{ \varepsilon_{t}^{2}\right\}\} \\\nonumber
+=&\mathbb{E}\{\sigma_{t}^{2}\underbrace{ \textrm{Var}\left(\varepsilon_{t})}_{=1}\} \\\nonumber
+\sigma^2= &\mathbb{E}\left\{\sigma_{t}^{2}\right\}\\\nonumber
+\sigma^2=&\mathbb{E}\left\{\alpha_{0} +\alpha_{1}u_{t-1}^2\right\}\\\nonumber
+\sigma^2=&\alpha_{0} +\alpha_{1}\mathbb{E}\left\{u_{t-1}^2\right\}\\\nonumber
+\sigma^2=&\alpha_{0} +\alpha_{1}\sigma^2\\\nonumber
+\sigma^2(1-\alpha_{1})=&\alpha_{0}\\\nonumber
+\sigma^2=& \frac{\alpha_{0}}{(1-\alpha_{1})}
+\end{align}}
+\end{itemize}
+\end{document}

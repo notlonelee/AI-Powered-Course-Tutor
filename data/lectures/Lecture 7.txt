@@ -1,0 +1,382 @@
+\begin{document}
+\begingroup
+\let\cleardoublepage\clearpage
+\setcounter{chapter}{7}
+\chapter*{\centering Decision and Risk \\ \vspace{1cm} \LARGE Lecture 7: Statistical Decision Theory I}
+\centering {\tiny Last updated on \today}
+\tableofcontents
+\endgroup 
+\chaptermark{Statistical Decision Theory I}
+
+
+\section{Overview}
+In statistical inference, the goal is usually to estimate the unknown parameters $\theta$ of a probability distribution $p(y|\theta)$. However, in many real world situations the goal is not simply to learn a model, but to actually make a decision and take action. For example:
+
+\begin{itemize}
+\item Should a doctor give  medicine to patients based on their symptoms, or declare them healthy and send them home?
+\item Should an email classification system classify a particular email as spam, or not spam?
+\item Should an investor buy a company's stock based on its short term expected returns?
+\end{itemize}
+
+ Statistical decision theory is concerned with the problem of making decisions, in the presence of uncertainty. It translates inference, into action. There are two main types of decision theory, \textit{Frequentist decision theory} and \textit{Bayesian decision theory}. Frequentist decision theory is usually concerned with making decisions that perform best in the \enquote{worst possible case} (minimax). Bayesian decision theory is  concerned with making decisions that perform best, based on the information we have about the unknowns. Lecture 2 is concerned with \textit{Bayesian decision theory}. In Lecture 3, we will consider \textit{Frequentist decision theory}.
+
+
+\section{Basic Elements of a Decision-Making Problem}
+
+Suppose a doctor has to decide whether a patient is healthy, $\theta=0$, or sick, $\theta=1$. His possible actions are either to send the patient home empty handed, $a_1$, or give the patient medicine, $a_2$. The costs of getting the decision wrong are  \textbf{not} equal. If the patient is not healthy and gets sent home without medicine, they might become extremely sick. But if the patient is healthy and mistakenly gets prescribed medicine, this is not a huge problem (in this example). Let $\color{blue}{\boldsymbol{\Theta}}$ denote the \textit{\color{blue}{parameter space}} which consists of all possible \enquote{states of nature} or \enquote{states of the world} $\theta$, of which only one will occur. In the presence of uncertainty, the \enquote{true} state of nature $\theta$ is unknown. {For example}, let $\theta$ represent whether a patient has a particular disease. In this case:
+\begin{align}
+\color{blue}{\boldsymbol{\Theta}} =\{0, 1\}
+\end{align}
+\begin{tabular}{ll}
+where $\color{blue}{\theta =0}$ if a patient is healthy, and $\color{blue}{\theta =1}$ if a patient has a disease.
+\end{tabular}
+\vspace{0.3cm}
+
+\noindent
+Next, let $\color{blue}{\mathscr{A}} = (a_1, a_2, \ldots, a_k)$ denote the \textit{\color{blue}{action space}}, which is the set of all possible actions available, $\color{blue}{a \in \mathscr{A}}$. For example, a doctor can choose a particular action $a$: to treat the patient or send the patient home. In this case:
+\begin{align}
+\color{blue}{\mathscr{A}} =\{0, 1\}
+\end{align}
+\begin{tabular}{l}
+where $\color{blue}{a_1 = 0}$ represents sending patient home without giving medicine, and $\color{blue}{a_2 = 1}$ \\represents prescribing medicine.
+\end{tabular}
+
+\vspace{0.3cm}
+Also, let $\color{blue}{\Omega}$ denote the sample space which contains all possible realisations $y\in \color{blue}{\Omega}$ of a random variable $Y$. For example, a doctor can perform a blood test and obtain an outcome $y$, which could be positive or negative: 
+
+\vspace{.3cm}
+In this case:
+\begin{align}
+\color{blue}{\Omega} = \{0, 1\}
+\end{align}
+\begin{tabular}{l}
+where $\color{blue}{y_1 = 0}$ if the test comes back negative, and $\color{blue}{y_2 = 1}$ if the test comes back positive.
+\end{tabular}
+
+ The \textbf{loss function} $L(\theta,a)$ is a core element of decision making which represents the loss incurred if we choose  action $a$ when the true state of the world is $\theta$ (usually unknown). Let $\color{blue}{L(\theta,a)}$ be a loss function that has the domain $\color{blue}{\Theta} \times \color{red}{\mathscr{A}}$ = $\{({\color{blue}\theta}, {\color{red}a} ) | \; \color{blue}{\theta \in \Theta}$ and ${\color{red}{a \in \mathscr{A}}} \}$ and codomain $\mathbb{R}$. That is, a loss function maps each combination of states of the world $\theta$ and action $a$ onto a numerical loss, $\mathbb{R}$.\footnote{For technical convenience, $L(\theta, a) \geq - K > -\infty$. That is, we are going to consider only finite losses.} For example, if a patient is healthy, $\theta=0$, and doctor sends him home without giving medicine, is $a_1=0$, then the loss incurred is ${\color{blue}L(\theta, {\color{red}a_1}) = L(0, {\color{red}0}) = 0}$.
+
+In this case, $\color{blue}{\Theta = \{0, 1 \}}$ and $\color{red}{\mathscr{A}= \{0, 1 \}}$, and the the corresponding domains is\\
+${\color{blue}\Theta} \times {\color{red} \mathscr{A}} = \{ {({\color{blue}0}, {\color{red}0})}, ({\color{blue}0}, {\color{red}1}), ({\color{blue}1}, {\color{red}0}), ({\color{blue}1}, {\color{red}1})\}$.
+
+The losses corresponding to each action and state of world $\theta$ can be represented by a \textit{loss matrix}:
+
+\begin{center}
+  \begin{tabular}{ c |c c }
+    & $\theta=0$ & $\theta=1$\\
+    \hline 
+    $a_1$ & 0 & 10 \\
+    $a_2$ & 1 & 0 \\
+  \end{tabular}
+\end{center}
+This fully specifies the loss function $L(\theta,a)$ for all values of $\theta$ and $a$.
+
+\section{Bayesian expected loss}
+In practice, the decision-maker does not know the true $\theta$. The state of the world is uncertain. The natural procedure is to consider the \enquote{expected} loss of making a decision.
+
+
+
+\vspace{.9cm}
+\begin{tcolorbox}[colback=black!10,title=Definition, colframe=black!60]
+If $\pi^*(\theta)$ is the believed probability distribution of $\theta$ at the time of decision making, the \textbf{Bayesian expected loss} of an action $a$ is:
+
+$$ \rho(\pi^*, a) = E^{\pi^*}L(\theta, a) = \int_{\Theta} L(\theta, a) dF^{\pi^*}(\theta)$$
+
+\end{tcolorbox}
+\vspace{.9cm}
+
+We will use $\pi^*(\theta)$  to refer to the posterior distribution of $\theta$ after seeing the data, and $\pi(\theta)$ to denote the initial prior distribution for $\theta$ before seeing the data. For example, the decision maker in the definition above has posterior beliefs $p(\theta|\textbf{y})$ about $\theta$ after observing data $\textbf{y}$. Hence, the \textbf{Bayesian expected loss} $\rho( \pi^*, a)$ of taking action $a$ is the expected loss of $a$ under the posterior distribution for $\theta$.\footnote{Similarly, the \textit{Bayesian expected loss} $\rho( \pi, a)$ of taking action $a$ denotes the expected loss of $a$ under the prior distribution for $\theta$.}
+
+
+\vspace{.9cm}
+\begin{tcolorbox}[colback=black!10,title=A little note on Notation, colframe=black!60]
+Let $F(x)$ be the cumulative distribution function associated with the random variable $X$. Then the expected value of a random variable $X$ is defined by:
+ \begin{equation}
+E(X) = \int_{ -\infty}^{\infty} x \; dF(x) = \begin{cases} 
+\sum_{x \in R(X)}^{} x f(x) \quad \textrm{(discrete)}\\
+\\
+\int_{-\infty}^{\infty} x f(x) dx \quad \textrm{(continuous)}
+\end{cases}
+\end{equation} 
+\vspace{.6cm}
+where $R(X) \equiv \{x: f(x)>0$ \textrm{for} $x\in \mathbb{R} \}$.
+\end{tcolorbox}
+\vspace{.9cm}
+
+
+\subsection{The conditional Bayes Principle}
+Once the Bayesian expected loss $\rho(\pi^*, a)$ has been determined for each $a$, one can easily choose an optimal action.
+
+\vspace{.9cm}
+\begin{tcolorbox}[colback=black!10,title=The conditional Bayes Principle, colframe=black!60]
+Choose an action $a\in \mathscr{A}$ which minimizes $\rho(\pi^*, a)$ (assuming the minimum is attained). Such an action will be called a \textit{Bayes action} and will be denoted $a^{\pi^*}$.
+\end{tcolorbox}
+\vspace{.3cm}
+
+\section{Example 1}
+A person hears on the radio that there has been an outbreak of meningitis in her city. Since they have had a headache for several days, they feel paranoid and go to the doctor. Let $\theta$ denote the true state of nature corresponding to the person's health, which has two possible values: $\theta=0$ if the person is healthy and their headache is not serious, and $\theta=1$ if the person has meningitis.
+
+The doctor has two  choices. If he believes the person has meningitis he will prescribe antibiotics, otherwise he will send the patient home. His possible actions are hence: $a_1$ is to send the patient home without giving medication, and $a_2$ is to prescribe antibiotics.
+
+
+\subsubsection*{Specifying prior}
+The doctor' knows that most people who have headaches do not have meningitis. His prior is hence that the patient probably does not have meningitis. Before seeing the patient, his prior is: $p(\theta=0)=0.9$, and $p(\theta=1)=0.1$. That is, if the doctor was predicting the person's health using no information other than his prior knowledge, he would send the patient home since he is 90$\%$ sure they do not have meningitis.
+
+\subsubsection*{Costs}
+However, the costs are \textbf{not} equal. Recall the \textit{loss matrix}: 
+\begin{center}
+  \begin{tabular}{ c |c c }
+    & $\theta=0$ & $\theta=1$\\
+    \hline 
+    $a_1$ & 0 & 10 \\
+    $a_2$ & 1 & 0 \\
+  \end{tabular}
+\end{center}
+
+This fully specifies the loss function $L(\theta, a)$.
+
+\subsection{\normalsize The Bayesian expected loss under the prior distribution.}
+Suppose the doctor has no data, so he computes the \textit{Bayesian expected loss} using only his prior knowledge (denoted by $\pi$ instead of $\pi^*$ ). The \textit{Bayesian expected loss} associated with action $a_1$ (sending the patient home) is: 
+\vspace{-1mm}
+$$\rho(\pi, a_1) = p(\theta=0) \times L(\theta=0, a_1)  \hspace{.2cm} {\color{red}+} \hspace{.2cm} p(\theta=1) \times L(\theta=1, a_1) =$$ 
+$$=0.9 \times 0 \hspace{.2cm} {\color{red}+} \hspace{.2cm} 0.1 \times 10 = 1$$
+
+\vspace{1mm}
+Similarly, the  \textit{Bayesian expected loss} associated with action $a_2$ (prescribing antibiotics) is: 
+\vspace{-1mm}
+$$\rho(\pi, a_2) = p(\theta=0) \times L(\theta=0, a_2)  \hspace{.2cm} {\color{red}+} \hspace{.2cm} p(\theta=1) \times L(\theta=1, a_2)  = $$
+$$=0.9 \times 1 \hspace{.2cm} {\color{red}+} \hspace{.2cm} 0.1 \times 0 = 0.9$$
+
+We would like to address the following question: {What is the doctor's optimal decision?} Using the \textit{the conditional Bayes principle},
+we choose an action which minimizes the \textit{Bayesian expected loss}. Clearly $a_2$ has smaller \textit{Bayesian expected loss},
+and thus is the Bayes action. Therefore, the doctor's optimal decision is to prescribe antibiotics.
+
+
+\subsection{\normalsize The Bayesian expected loss under the posterior distribution.}
+
+In practice, a doctor may wish to perform a blood test on the patient before making a decision. Let $y$ denote the outcome of the blood test, which has two possible values: $y=0$ if the test comes back negative (i.e. no meningitis), and $y=1$ if the test comes back positive (meningitis). However, blood tests are not always accurate. Based on previous experience, the doctor knows that the likelihood function $p(y|\theta)$ is:
+\vspace{.4cm}
+
+\begin{tabular}{lll}
+$p(y=0 | \theta=0) = 0.8$ & $ p(y=1 | \theta=0) = 0.2 $ & (no meningitis case) \\
+$p(y=0 | \theta=1) = 0.3$ & $ p(y=1 | \theta=1) = 0.7 $ &(meningitis case)
+\end{tabular}
+\vspace{.4cm}
+
+\noindent We now have all the elements of a standard decision problem:
+\begin{itemize}
+\item the prior $p(\theta)$
+\item the loss function $L(\theta, a)$ 
+\item the data $y$ 
+\item the likelihood $p(y|\theta)$. 
+\end{itemize}
+Based on all this information, the doctor seeks to make an optimal decision. That is, choose an action $a\in \mathscr{A}$ which minimizes the \textit{Bayesian expected loss}, $\rho(\pi^*, a| y)$.
+
+
+\subsection{\normalsize Computing the posterior distributions}
+The first step is to compute the posterior $p(\theta | y)$ for all possible values of $\theta$ and $y$. This is done directly using Bayes' theorem.
+
+\begin{align}\label{p00}
+p(\theta=0|y=0) & =\frac{p(y=0|\theta=0)\times p(\theta=0)}{p(y=0)} = \frac{0.8 \times 0.9}{p(y=0)}\\
+p(\theta=0|y=1) &= \frac{p(y=1|\theta=0)\times p(\theta=0)}{p(y=1)}  = \frac{0.2 \times 0.9}{p(y=1)}\\
+p(\theta=1|y=0) &= \frac{p(y=0|\theta=1)\times p(\theta=1)}{p(y=0)} = \frac{0.3 \times 0.1}{p(y=0)}\\ \label{p11}
+p(\theta=1|y=1) &= \frac{p(y=1|\theta=1)\times p(\theta=1)}{p(y=1)}  = \frac{0.7 \times 0.1}{p(y=1)}
+\end{align}
+\vspace{.2cm}
+
+\noindent We use the Law of Total Probability to compute $p(y=0)$ and $p(y=1)$:
+\begin{align} \nonumber
+p(y=0) &= p(y=0 | \theta=0)\times p(\theta=0) \hspace{.2cm} {\color{red}+} \hspace{.2cm}  p(y=0 |\theta=1) \times p(\theta=1)\\ \nonumber
+& =0.8 \times 0.9 \hspace{.2cm} {\color{red}+} \hspace{.2cm} 0.3 \times 0.1 = 0.75
+\end{align}
+and 
+\begin{align} \nonumber
+p(y=1) &= p(y=1 | \theta=0)\times p(\theta=0) \hspace{.2cm} {\color{red}+} \hspace{.2cm} p(y=1 | \theta=1)\times p(\theta=1)\\ \nonumber
+&= 0.2 \times 0.9 \hspace{.2cm} {\color{red}+} \hspace{.2cm} 0.7 \times 0.1 = 0.25
+\end{align}
+
+Substituting these back in \eqref{p00} - \eqref{p11} gives:
+\begin{align}
+p(\theta=0|y=0) & =\frac{p(y=0|\theta=0)\times p(\theta=0)}{p(y=0)} = \frac{0.8 \times 0.9}{0.75}= 0.96\\
+p(\theta=0|y=1) &= \frac{p(y=1|\theta=0)\times p(\theta=0)}{p(y=1)}  = \frac{0.2 \times 0.9}{0.25}= 0.72\\
+p(\theta=1|y=0) &= \frac{p(y=0|\theta=1)\times p(\theta=1)}{p(y=0)} = \frac{0.3 \times 0.1}{0.75}=0.04\\
+p(\theta=1|y=1) &= \frac{p(y=1|\theta=1)\times p(\theta=1)}{p(y=1)}  = \frac{0.7 \times 0.1}{ 0.25}= 0.28
+\end{align}
+This completes the computation of the posterior distribution. We can now compute the Bayesian expected loss, $\rho(\pi^*, a|y)$ for each action $a$ and value of $y$. First, let's consider $a_1$
+\begin{align} \nonumber
+\rho(\pi^*, a_1|y) &= \sum_{\Theta} p(\theta | y) L(\theta, a_1) \\\nonumber
+& = p(\theta=0|y)\times L(\theta=0,a_1)\hspace{.2cm} {\color{red}+}\hspace{.2cm} p(\theta=1|y)\times L(\theta=1,a_1)  \\ \nonumber
+& = p(\theta=0|y)\times 0 \hspace{.2cm} {\color{red}+} \hspace{.2cm} p(\theta=1|y)\times 10 \\ \nonumber
+& =  10 \times p(\theta=1|y)
+\end{align}
+Therefore:
+\begin{align} 
+\rho(\pi^*, a_1| y=0) &= 10\times 0.04= 0.4\\
+\rho(\pi^*, a_1| y=1) &= 10\times 0.28 = 2.8
+\end{align}
+Similarly for $a_2$:
+\begin{align}\nonumber
+\rho(\pi^*, a_2|y) &= \sum_{\Theta} p(\theta | y) L(\theta, a_2) \\\nonumber
+& = p(\theta=0|y)L(\theta=0,a_2) \hspace{.2cm} {\color{red}+} \hspace{.2cm} p(\theta=1|y)L(\theta=1,a_2)  \\\nonumber
+& = p(\theta=0|y)\times 1 \hspace{.2cm} {\color{red}+} \hspace{.2cm} p(\theta=1|y)\times 0 \\ \nonumber
+& = p(\theta=0|y)
+\end{align}
+Therefore:
+\begin{align}
+\rho(\pi^*, a_2| y=0) &= 0.96\\
+\rho(\pi^*, a_2| y=1) &= 0.72
+\end{align}
+
+In summary:
+\begin{itemize}
+\item ${\color{blue}\rho(\pi^*, a_1| y=0)} = 0.4$
+\item ${\color{blue}\rho(\pi^*, a_2| y=0)} = 0.96$
+\item ${\color{red}\rho(\pi^*, a_1| y=1)} = 2.8$
+\item ${\color{red}\rho(\pi^*, a_2| y=1)} = 0.72$
+\end{itemize}
+So if the blood test comes back negative (${\color{blue}y=0}$), then $a_1$ has a lower \textit{Bayesian expected loss} than $a_2$, i.e. the patient should be sent home. And if the blood test comes back positive (${\color{red}y=1}$), then $a_2$ has a lower \textit{Bayesian expected loss} than $a_1$, i.e. the patient should be given antibiotics.
+
+
+\section{Example 2}
+Consider a drug company deciding whether or not to market a new pain reliever. One of the many factors affecting its decision is the proportion of the market $\theta$ the drug will capture. Hence, the company desires to estimate $\theta$. Since $\theta$ is a proportion, it is clear that: $$\Theta=\{\theta: 0\leq \theta \leq 1\} =[0,1]$$
+\noindent Since the goal is to estimate $\theta$, the action taken is simply the choice of a number as an estimate for $\theta$. Hence $\mathscr{A}=[0,1]$. If a company underestimates demand, i.e. $\theta-a \geq 0$, the loss incurred is $\theta-a$. However, if a company overestimates demand, i.e. $\theta-a \leq 0$, then it is twice as costly as underestimating the demand with the cost being $2(a-\theta)$. 
+
+\noindent Assume no data is obtained, however there is a prior information about $\theta$ arising from previous introductions of new similar drugs into the market. In the past drugs tended to capture between $\frac{1}{10}$ and $\frac{1}{5}$ of the market, with all values between $\frac{1}{10}$ and $\frac{1}{5}$ being equally likely. The prior density $p(\theta)$ that will reflect this prior information is as follows:
+   \begin{align} \nonumber
+   p(\theta)= & 10\mathbb{I}_{(0.1, 0.2)}(\theta)
+   \end{align}
+The \textit{Bayesian expected loss} $\rho(\pi, a)$ of an action $a$ is:
+   \begin{align} \nonumber
+   \rho(\pi, a)=& \int_{0}^{1} L(\theta,a)p(\theta)d\theta \\ \nonumber
+   =&\int_{0}^{a} 2(a-\theta) 10\mathbb{I}_{(0.1, 0.2)}(\theta) d\theta +\int_{a}^{1} (\theta-a) 10\mathbb{I}_{(0.1, 0.2)}(\theta) d\theta \\ \nonumber 
+   = & \begin{cases}
+    0.15-a  \qquad \quad\quad \quad \;\textrm{if} \quad  a \leq 0.1 \\
+     15a^2-4a+0.3 \:  \qquad \textrm{if} \quad 0.1\leq a \leq 0.2 \\ 
+     2a-0.3  \qquad \quad \quad \quad \; \textrm{if} \quad a \geq 0.2
+         \end{cases}   
+   \end{align}
+\section{Classification}
+ A particular type of decision problem which often occurs is trying to classify an object into one of two categories, based on some associated data.
+Some examples:
+\begin{itemize}
+\item Classifying an email as being either \textbf{spam} or \textbf{not spam}
+\item Classifying a patient as being either \textbf{sick} or \textbf{healthy}
+\item Classifying a particular earthquake scenario as \textbf{worth evacuating  the village} or \textbf{not worth evacuating the village}
+\item Classifying a stock as being \textbf{worth buying} or \textbf{not worth buying}
+\end{itemize}
+Assume that the object can have one of two classes $\theta \in \{0,1\}$. There are two actions ${\color{blue}a_1}$ and ${\color{red}a_2}$, corresponding to the decision to allocate the object to class ${\color{blue}0}$ and ${\color{red}1}$ respectively. The data $y$ has a (known) likelihood function $p(y | \theta)$, and loss function is $L(\theta,a)$. As before, we take the action which minimises the \textit{Bayesian expected loss}. We allocate the object to class ${\color{blue}0}$ if ${\color{blue}\rho(\pi^*, a_1|y)} < {\color{red}\rho(\pi^*, a_2|y)}$, that is, if:
+
+$$ {\color{blue}\int_{\Theta} L(\theta, a_1) dF^{\pi^*}(\theta)} < {\color{red}\int_{\Theta} L(\theta, a_2) dF^{\pi^*}(\theta)}$$
+and to class ${\color{red}1}$ otherwise.
+
+\section{Example 3}
+A company produces widgets on an assembly line. Due to inherent defects in the manufacturing process, each widget has a probability $0.01$ of being defective. The company does not want to send too many defective widgets to the market. The widgets are produced in batches of 10,000. For each batch, there is a chance that the manufacturing process can go drastically wrong, in which case each of the widgets in the batch has probability $0.05$ of being defective.
+
+\noindent Ideally the company would test each widget individually to find whether it is defective. However testing widgets is expensive. So instead the company randomly selects 100 widgets from each batch, and tests only these. The goal is to determine whether each particular batch is bad (i.e. whether it has a defective rate of 0.05 rather than 0.01). If a batch is bad, it is thrown out, otherwise it is sent to the market to be sold. 
+
+\noindent For a particular batch, the company selects 100 widgets at random and tests them. Of these, $y=3$ are found to be defective. We want to address the following question: Does observing $y=3$ justify concluding that the batch is bad, and throwing out the batch? Well, like all decision making, this depends on the relative costs, i.e. on the loss function $L(\theta,a)$. Without specifying this, the question cannot be answered.
+
+
+There are two classes of batch: {\color{blue}good} and {\color{red}bad}. These correspond to ${\color{blue}\theta=0}$ and ${\color{red}\theta=1}$ respectively. Actions ${\color{blue}a_1}$ and ${\color{red}a_2}$ correspond to classifying the batch as good (and keeping it) and classifying the batch as bad (and throwing it out). The company estimates the cost of sending a bad batch to market as being equal to 20 times the cost of throwing out a good batch (due to the cost of potential lawsuits, replacing defective products, etc). The \textit{loss matrix} is hence:
+\begin{center}
+  \begin{tabular}{ c |c c }
+    & $\theta=0$ & $\theta=1$\\
+    \hline 
+    $a_1$ & 0 & 20 \\
+    $a_2$ & 1 & 0 \\
+  \end{tabular}
+\end{center}
+
+\subsubsection*{Specifying prior}
+Based on previous experience, the company knows that only $0.3\%$ of batches are bad. The prior is hence $p(\theta=0) = 0.997$. We now have all the information needed to classify a batch as good or bad based on observing $y$ defectives out of the 100 items sampled. 
+
+\subsection{\normalsize Computing the posterior distributions}
+As before, we first compute the posterior distribution $p(\theta | y)$ for both values of $\theta$. If ${\color{blue}\theta=0}$ then $p(y | \theta=0)$ is a Binomial($100, 0.01$) distribution. Similarly, if ${\color{blue}\theta=1}$ then it is Binomial($100,0.05$). Therefore, the posterior probabilities are:
+
+$$p({\color{blue}\theta=0} | y) =\frac{p(y|\theta=0)\times p(\theta=0)}{p(y)}= \frac{0.997\times {100 \choose 3} 0.01^3 0.99^{97}}{p(y)}$$
+$$p({\color{red}\theta=1} | y) =\frac{p(y|\theta=1)\times p(\theta=1)}{p(y)}= \frac{0.003 \times {100 \choose 3} 0.05^3 0.95^{97}}{p(y)}$$
+
+and:
+\begin{align} \nonumber
+p(y) &= p(y|\theta=0)\times p(\theta=0)\hspace{.2cm} + \hspace{.2cm} p(y|\theta=1)\times p(\theta=1) \\ \nonumber
+    &= 0.997 \times  {100 \choose 3} 0.01^3 0.99^{97} \hspace{.2cm} + \hspace{.2cm} 0.003 \times  {100 \choose 3} 0.05^3 0.95^{97}\\\nonumber
+& = 0.061
+\end{align}
+
+\noindent Substituting in $p(y)$ gives the posterior:
+$$p(\theta=0 | y)  = 0.993162$$
+$$p(\theta=1 | y)  = 0.006838$$
+
+Note that since there are only two possible values for $\theta$, these posterior probabilities must sum to 1 (this will help you check your algebra!).
+
+\noindent We can now compute the \textit{Bayesian expected loss} associated with each action:
+\begin{align} \nonumber
+{\color{blue}\rho(\pi^*, a_1| y)} &= p(\theta=0|y)L(\theta=0,a_1) \hspace{.2cm} + \hspace{.2cm} p(\theta=1|y)L(\theta=1,a_1) \\ \nonumber
+&= 0 + 0.006838 \times 20 \\ \nonumber
+&= 0.1367
+\end{align}
+and
+\begin{align} \nonumber
+ {\color{red}\rho(\pi^*, a_2| y) }&= p(\theta=0|y)L(\theta=0,a_2) \hspace{.2cm} + \hspace{.2cm} p(\theta=1|y)L(\theta=1,a_2) \\ \nonumber
+&=  0.993 \times 1 \\ \nonumber
+&= 0.993
+\end{align}
+So we pick action $\color{blue}{a_1}$, i.e. classify the batch as {\color{blue}good} and send it to market.
+
+\section{Parameter Estimation Using Decision Theory}
+We saw in Lecture 1 how to derive posterior distribution $p(\theta | y)$. In practice we may need to pick our single \enquote{best guess} for $\theta$. That is, rather than using the full posterior distribution $p(\theta | y)$, we may want a single point estimate $\hat{\theta}$. We must hence summarise the posterior distribution by a single number. How can we do this? You have probably been taught how to do this from the frequentist perspective. For example, estimating $\theta$ by choosing the value of $\widehat{\theta}$ that maximises the \textit{likelihood function}. However this does not take costs into account! In Bayesian decision theory, the way in which we summarise the posterior depends on our particular choice of \textit{loss function}. 
+
+\subsubsection{Loss function} 
+Here we make a \textbf{decision} to estimate $\theta$ using the estimate $\hat{\theta}$. In terms of actions, we now have a (possibly infinite) set where action $a_i$ corresponds to estimating $\theta$ by $\hat{\theta} = i$. The loss function $L(\theta, \hat{\theta})$ defines the loss incurred if we estimate the true value of $\theta$ by $\hat{\theta}$. As before, we want to choose the estimate $\hat{\theta}$ to minimise the expected loss. There are three popular loss functions:
+
+\begin{itemize} 
+\item Squared loss: $L(\theta, \hat{\theta}) = (\theta - \hat{\theta})^2$ 
+\item Absolute loss: $L(\theta, \hat{\theta}) = |\theta - \hat{\theta}|$
+\item Binary loss: $
+L(\theta, \hat{\theta}) = \left\{ \begin{array}{rl}
+ 1 &\mbox{ if $\theta \neq \hat{\theta}$} \\
+  0 &\mbox{ if $\theta = \hat{\theta}$}
+       \end{array} \right.$
+\end{itemize}
+
+\indent
+The loss function we choose depends on the problem. For example, binary loss means we only care about getting $\theta$ exactly right, and any deviation is equally bad (usually more sensible when $\theta$ is discrete). The difference between absolute and squared loss is that squared loss punishes big mistakes more, which should lead to a more conservative estimate.
+
+\subsubsection{Parameter estimation} 
+It can be shown that in the case of these three popular loss functions, the following point estimates are obtained:
+
+\begin{itemize}
+\item The squared  loss is minimised if $\hat{\theta}$ is chosen to be the posterior \textbf{mean} $\hat{\theta} = \int \theta p(\theta |y) d\theta$.
+\item The absolute loss is minimised if $\hat{\theta}$ is chosen to be the posterior \textbf{median}.
+\item The binary $0-1$ loss is minimised if $\hat{\theta}$ is chosen to be the posterior \textbf{mode}, $\hat{\theta} = \underset{\theta}{\arg \max_{}}\; p(\theta|y)$.
+\end{itemize}
+
+
+
+\vspace{3mm}
+
+\noindent This is a very nice result because it means our estimates are \textbf{principled}. We aren't just using the posterior mean because it feels like a sensible estimate, it is actually the best possible estimate under the squared error loss function! Other procedures such as \textit{maximum likelihood} typically do not have this property.
+
+
+\vspace{.9cm}
+\begin{tcolorbox}[colback=black!10,title=Proof -  Squared loss function, colframe=black!60]
+The proof for the squared loss function is as follows: 
+\begin{align} \nonumber
+\rho(\pi^*,\hat{\theta}|y)  &= \int (\theta - \hat{\theta})^2 p(\theta | y) d\theta \\ \nonumber
+& = \hat{\theta}^2 \int p(\theta | y) d\theta - 2 \hat{\theta} \int \theta  p(\theta | y) d\theta  + \int \theta^2 p(\theta | y) d\theta\\  \nonumber
+& =  \hat{\theta}^2 - 2 \hat{\theta} E[\theta] + E[\theta^2]
+\end{align}
+Using the result $Var(\theta) = E[\theta^2] - E[\theta]^2$, and rearranging:
+
+\vspace{-.3cm}
+\begin{align} \nonumber
+ &=  \hat{\theta}^2 - 2  \hat{\theta}  E[\theta] + E[\theta]^2 + E[(\theta - E[\theta])^2] \\ \nonumber
+ & = (\hat{\theta} - E[\theta])^2 +E[(\theta - E[\theta])^2]
+\end{align}
+It can be seen that $\rho(\pi^*,\hat{\theta}|y)$ is minimised when $\hat{\theta} = E[\theta]$
+\end{tcolorbox}
+\vspace{.9cm}
+
+
+\nocite{gelman2013}
+\bibliography{references}
+\end{document}

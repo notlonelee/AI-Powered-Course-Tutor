@@ -1,0 +1,145 @@
+\documentclass{article}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{framed, booktabs}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{comment}
+\usepackage{tikz}
+\usepackage{color, graphicx, parskip, titling, subfig}
+
+\title{Decision and Risk - Exercise 1 \\ 
+%{\footnotesize *Starred questions are slightly harder.}
+}
+\author{}
+\date{}
+
+\setlength{\droptitle}{-10em}
+
+\newcommand\Solution[2][\\]{{\Question#1#2}}
+% TO PROVIDE NO SOLUTION uncomment
+\renewcommand\Solution[2][\\]{}
+
+\begin{document}
+
+\maketitle 
+
+\vspace{-20mm}
+
+\section*{Question 1}
+  Let $X_t$ denote weekly log-returns on asset A following normal distribution with mean 0.06 and standard deviation of 0.14, i.e. $X_t\overset{i.i.d.}{\sim}N(0.06, 0.14^2)$.
+  
+  \begin{itemize}
+  \item[(a)] Find the 95\% VaR over a 1-week horizon.
+  
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+$$VaR_{0.95}    = \Phi^{-1}(0.95)*0.14-0.06 = 1.645*0.14 - 0.06 = 0.17$$
+}
+  \item[(b)] Now find the 99\% VaR over a 1-week horizon.
+  
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+$$VaR_{0.99}=\Phi^{-1}(0.99)*0.14-0.06=2.326* 0.14 - 0.06=0.266$$
+}
+  
+  \item[(c)] Repeat (a) and (b) over a 4-week horizon.
+  
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+$VaR_{0.95,4}=\Phi^{-1}(0.95)*0.14*\sqrt{4}-0.06*4=1.645* 0.14*\sqrt{4} - 0.06*4=0.221$
+
+$VaR_{0.99,4}=\Phi^{-1}(0.99)*0.14*\sqrt{4}-0.06*4 =2.326* 0.14*\sqrt{4} -0.06*4=0.411$
+}
+  \end{itemize}
+ 
+ 
+  \section*{Question 2}
+  Show that the variance is not sub-additive, and hence is not coherent.
+  
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+ Let $X_1$ and $X_2$ be two random variables. Then the variance of $X_1 + X_2$ is $var(X_1 + X_2) = var(X_1) + var(X_2) + 2cov(X_1, X_2)$. We know that $\rho(X_1, X_2)=\frac{cov(X_1, X_2)}{\sigma_{X_1}\sigma_{X_2}}$. Hence, the variance can also be written as:
+$$var(X_1 + X_2) = var(X_1) + var(X_2) + 2\rho(X_1, X_2)\sigma_{X_1}\sigma_{X_2}$$
+It can be seen that when $\rho(X_1, X_2)>0$, the following inequality will always hold:
+$$var(X_1 + X_2) > var(X_1) + var(X_2)$$ 
+Hence, variance is not sub-additive.}
+  
+  
+    \section*{Question 3}
+ Consider the following information on the hypothetical portfolio of \pounds5,000 invested in two assets. The information on each daily asset return is provided in the table below. It is assumed that these returns are jointly normally distributed. 
+    
+    
+   \begin{table}[h]
+    \centering
+    \begin{tabular}{lcc}
+                     & \textbf{Asset 1}   & \textbf{Asset 2} \\ \toprule
+    Mean                         & 0.03      & 0.02     \\
+    Standard deviation           & 0.01      & 0.03     \\
+    Portfolio weights            & 0.5       & 0.5    \\ \hline
+                                 &           &         \\
+     Portfolio value             &\multicolumn{2}{c}{\pounds 5,000}        \\
+    Correlation coefficient   & \multicolumn{2}{c}{0.8}
+  %  95\% C.I. standard deviation & \multicolumn{2}{c}{-1.644854}         \\
+  %  99\% C.I. standard deviation & \multicolumn{2}{c}{-2.326348}         
+  \\ \bottomrule
+    \end{tabular}
+    \end{table}
+%    \vspace{-0.3cm}
+
+    
+    \begin{itemize}
+      \item [(i)] Compute the mean and the variance of the portfolio returns consisting of Asset 1 and Asset 2.
+%      \vspace{.6cm}
+
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+\begin{align}\nonumber
+\mu_{P}=\omega_{1} \mu_{1}+\omega_{2} \mu_{2}= 0.5\times 0.03+0.5\times 0.02=& 0.025 \hspace{2.2cm}
+\end{align} 
+
+\begin{align}\nonumber
+\sigma_{P}^2&=\omega_{1}^{2}\sigma_{1}^{2}+\omega_{2}^{2}\sigma_{2}^{2}+2\omega_{1}\omega_{2}\rho_{12}\sigma_{1}\sigma_{2}\\ \nonumber
+&=0.5^2\times 0.01^2+0.5^2\times 0.03^2+2\times 0.5\times 0.5\times 0.8\times 0.01\times 0.03 \\\nonumber
+&= 0.00037
+\end{align}}
+
+    \item [(ii)]  Using results from part (i), compute the 95\% 1-day Value-at-Risk (VaR) of the portfolio. 
+    
+    
+\Solution{
+\vspace{.3cm}
+\color{blue}
+{\bf Solution}
+
+The 95\% 1-day VaR is:
+\begin{align}\nonumber
+VaR_{0.95} = & -(-1.644854*\sqrt{0.00037}+ 0.025) \\\nonumber
+=& 0.0066
+\end{align}
+%  \par The 95\% 1-day VaR in value terms is $0.0066*\pounds5,000 =\pounds33$. That is, if we invest $\pounds5,000$, we are 95\% confident that over the next trading day, the value of the portfolio will not drop by more than $\pounds33$.
+}
+
+       \end{itemize}
+\end{document}
+
+
+
+
+
+
