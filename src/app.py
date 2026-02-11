@@ -5,12 +5,9 @@
 import sys 
 from pathlib import Path
 
-src_path = Path(__file__).parent / "src"
-sys.path.insert(0, str(src_path))
-
 import streamlit as st
 from course_tutor import CourseTutor
-from logger import log_interaction
+from logger import SheetLogger
 import time
 from llm_handler import convert_latex_delimiters
 from classifier import classify_question_complete
@@ -58,10 +55,31 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# Initialise tutor
+# Initialize tutor
 @st.cache_resource
 def initialize_tutor():
     return CourseTutor()
+
+
+# Initialize Google Sheets logger
+@st.cache_resource
+def initialize_logger():
+    try:
+        sheet_id = st.secrets.get("GOOGLE_SHEET_ID")
+        if not sheet_id:
+            st.warning("⚠️ GOOGLE_SHEET_ID not found in secrets")
+            return None
+        
+        logger = SheetLogger(sheet_id)
+        if logger.worksheet:
+            st.success("✅ Connected to Google Sheets")
+            return logger
+        else:
+            return None
+    except Exception as e:
+        st.warning(f"⚠️ Google Sheets connection failed: {e}")
+        return None
+
 
 # ============================================================
 # MAIN INTERFACE
@@ -70,14 +88,24 @@ def initialize_tutor():
 st.title("📚 AI-Powered Course Tutor")
 st.markdown("Ask questions about the course and receive answers based on lecture notes and exercise sheets.")
 
-# Initialise tutor
+# Initialize tutor and logger
 tutor = initialize_tutor()
+logger = initialize_logger()
 
 # ============================================================
 # SINGLE QUESTION TEST
 # ============================================================
 
 st.header("Ask a Question")
+
+# Get user name from sidebar
+with st.sidebar:
+    st.title("⚙️ Settings")
+    user_name = st.text_input(
+        "Enter your name:",
+        value="Anonymous Student",
+        help="Used for logging purposes"
+    )
 
 with st.form("question_form"):
     question = st.text_area(
@@ -111,12 +139,32 @@ if submitted:
         if result['classification'] == "Redirect to lecturer":
             st.markdown(f'<div class="redirect-box"><strong>⚠️ Please redirect to lecturer</strong><br/>{result["response"]}</div>', 
                        unsafe_allow_html=True)
-            log_interaction(question, "", "", result['classification'], confidence, production=True)
+            
+            # Log to Google Sheets
+            if logger:
+                logger.log_interaction(
+                    user=user_name,
+                    question=question,
+                    answer="Redirected to lecturer",
+                    model="HuggingFace",
+                    status=result['classification']
+                )
+                st.toast("✅ Response logged to Google Sheets", icon="✅")
 
         elif result['classification'] == "Irrelevant":
             st.markdown(f'<div class="irrelevant-box"><strong>❌ Question Out of Syllabus</strong><br/>{result["response"]}</div>', 
                        unsafe_allow_html=True)
-            log_interaction(question, "", "", result['classification'], confidence, production=True)
+            
+            # Log to Google Sheets
+            if logger:
+                logger.log_interaction(
+                    user=user_name,
+                    question=question,
+                    answer="Question out of syllabus",
+                    model="HuggingFace",
+                    status=result['classification']
+                )
+                st.toast("✅ Response logged to Google Sheets", icon="✅")
             
         else:
             st.subheader("Response")
@@ -142,14 +190,23 @@ if submitted:
                 <p style="text-align: center; margin-top: 5px;"><strong>{label}</strong></p>
             """, unsafe_allow_html=True)
 
-        # Display sources only for relevant questions
-        if result['sources']:
-            top_source = result['sources'][0]
-            source_name = top_source['lecture'].replace(".txt", "")
-            st.markdown(f'<div class="top-source-box"><strong> For more information, you may want to refer to:</strong> {source_name}</div>', 
-                           unsafe_allow_html=True)
+            # Display sources only for relevant questions
+            if result['sources']:
+                top_source = result['sources'][0]
+                source_name = top_source['lecture'].replace(".txt", "")
+                st.markdown(f'<div class="top-source-box"><strong> For more information, you may want to refer to:</strong> {source_name}</div>', 
+                               unsafe_allow_html=True)
             
-        log_interaction(question, response_with_context, response_without_context, result['classification'], confidence, production=True)
+            # Log successful response to Google Sheets
+            if logger:
+                logger.log_interaction(
+                    user=user_name,
+                    question=question,
+                    answer=response_with_context[:500],  # Limit to 500 chars
+                    model="HuggingFace",
+                    status="success"
+                )
+                st.toast("✅ Response logged to Google Sheets", icon="✅")
 
         st.write("")
 

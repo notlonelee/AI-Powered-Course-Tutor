@@ -1,47 +1,55 @@
 import gspread
+from google.oauth2.service_account import Credentials
+import streamlit as st
 from datetime import datetime
-import os
-import json
 
-SHEET_ID = "1GmaqxFDaP-916TRnPKbUJS7oJU494edKkqc8cmAcDkk" 
-
-def get_google_sheets_client():
-    """Get authenticated Google Sheets client"""
-    try:
-        creds_json = os.getenv("google_sheets_json")
-        if not creds_json:
-            raise ValueError("google_sheets_json not found in secrets")
-        
-        creds_dict = json.loads(creds_json)
-        gc = gspread.service_account_from_dict(creds_dict)
-        return gc
-    except Exception as e:
-        print(f"Error authenticating with Google Sheets: {e}")
-        return None
-
-def log_interaction(question, response_with_context, response_without_context, classification, confidence=0, production=False):
-    """Log interaction to Google Sheets"""
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+class SheetLogger:
+    def __init__(self, spreadsheet_id: str, worksheet_name: str = "Logs"):
+        self.spreadsheet_id = spreadsheet_id
+        self.worksheet_name = worksheet_name
+        self.worksheet = None
+        self._authenticate()
     
-    try:
-        gc = get_google_sheets_client()
-        if gc is None:
-            print("Could not connect to Google Sheets")
-            return
+    def _authenticate(self):
+        try:
+            # Get credentials from Streamlit secrets
+            creds_dict = st.secrets["gcp_service_account"]
+            
+            scopes = [
+                "https://www.googleapis.com/auth/spreadsheets",
+                "https://www.googleapis.com/auth/drive"
+            ]
+            credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+            client = gspread.authorize(credentials)
+            
+            spreadsheet = client.open_by_key(self.spreadsheet_id)
+            
+            try:
+                self.worksheet = spreadsheet.worksheet(self.worksheet_name)
+            except gspread.exceptions.WorksheetNotFound:
+                self.worksheet = spreadsheet.add_worksheet(self.worksheet_name, rows=100, cols=10)
+                self.worksheet.append_row(["Timestamp", "User", "Question", "Answer", "Model", "Status"])
         
-        sh = gc.open_by_key(SHEET_ID)
-        worksheet = sh.sheet1
+        except Exception as e:
+            st.error(f"Google Sheets authentication failed: {e}")
+            self.worksheet = None
+    
+    def log_interaction(self, user: str, question: str, answer: str, model: str, status: str = "success"):
+        if not self.worksheet:
+            return False
         
-        new_row = [
-            timestamp,
-            question,
-            classification,
-            f"{confidence*100:.0f}",
-            response_with_context[:], 
-            response_without_context[:]
-        ]
-        
-        worksheet.append_row(new_row)
-        print("✓ Logged to Google Sheets")
-    except Exception as e:
-        print(f"Error logging to Google Sheets: {e}")
+        try:
+            row = [
+                datetime.now().isoformat(),
+                user,
+                question[:500],
+                answer[:500],
+                model,
+                status
+            ]
+            self.worksheet.append_row(row, value_input_option="RAW")
+            return True
+        except Exception as e:
+            st.warning(f"Failed to log to Google Sheets: {e}")
+            return False
+
