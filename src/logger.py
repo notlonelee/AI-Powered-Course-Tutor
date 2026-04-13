@@ -28,28 +28,27 @@ class SheetLogger:
                 self.worksheet = spreadsheet.worksheet(self.worksheet_name)
             except gspread.exceptions.WorksheetNotFound:
                 self.worksheet = spreadsheet.add_worksheet(self.worksheet_name, rows=100, cols=10)
-                self.worksheet.append_row(["Timestamp", "User", "Question", "Answer", "Model", "Status"])
+                self.worksheet.append_row(["Timestamp", "Question", "Classification", "Answer with Context", "Answer without Context"])
         
         except Exception as e:
             st.error(f"Google Sheets authentication failed: {e}")
             self.worksheet = None
     
-    def log_interaction(self, user: str, question: str, answer: str, model: str, status: str = "success"):
+    def log_interaction(self, question: str, classification: str, answer_with_context: str, answer_without_context: str):
         if not self.worksheet:
             return False
         
         try:
             row = [
                 datetime.now().isoformat(),
-                user,
-                question[:500],
-                answer[:500],
-                model,
-                status
+                question,
+                classification,
+                answer_with_context,
+                answer_without_context
             ]
             self.worksheet.append_row(row, value_input_option="RAW")
             return True
         except Exception as e:
-            st.warning(f"Failed to log to Google Sheets: {e}")
             return False
+
 

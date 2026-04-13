@@ -3,14 +3,25 @@ from pathlib import Path
 import os
 
 # ============================================================
+# OLLAMA SERVER
+# ============================================================
+OLLAMA_HOST = "http://localhost:11434"
+OLLAMA_MODEL = "qwen2-math:1.5b"
+
+
+# ============================================================
 # FILE PATHS
 # ============================================================
-BASE_DIR = Path(__file__).parent.parent
-LECTURES_PATH = BASE_DIR / "data" / "lectures"
-EXERCISES_PATH = BASE_DIR / "data" / "exercises"
+# BASE_DIR = Path(__file__).parent
+# LECTURES_PATH = BASE_DIR / "data" / "lectures"
+# EXERCISES_PATH = BASE_DIR / "data" / "exercises"
 
-LECTURES_PATH.mkdir(parents=True, exist_ok=True)
-EXERCISES_PATH.mkdir(parents=True, exist_ok=True)
+# LECTURES_PATH.mkdir(parents=True, exist_ok=True)
+# EXERCISES_PATH.mkdir(parents=True, exist_ok=True)
+
+EXERCISES_PATH = '/Users/zoe/Desktop/storage/school/ucl/mods/stat0035/ai course tutor copy/data/exercises'
+LECTURES_PATH = '/Users/zoe/Desktop/storage/school/ucl/mods/stat0035/ai course tutor copy/data/lectures'
+FORUM_PATH = '/Users/zoe/Desktop/storage/school/ucl/mods/stat0035/ai course tutor copy/data/forum'
 
 # ============================================================
 # KEYWORD EXTRACTION NOISE FILTERING

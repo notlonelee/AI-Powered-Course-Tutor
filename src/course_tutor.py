@@ -1,5 +1,5 @@
-from txt_processor import load_lecture_texts, load_exercise_texts
-from processors import chunk_lectures_by_section, chunk_exercises_by_question, build_master_keywords
+from txt_processor import load_lecture_texts, load_exercise_texts, load_forum_texts
+from processors import chunk_lectures_by_section, chunk_exercises_by_question, chunk_forum_posts, build_master_keywords
 from semantic import generate_chunk_embeddings
 from classifier import classify_question_complete
 from llm_handler import process_question_with_response
@@ -21,12 +21,17 @@ class CourseTutor:
         print("Loading exercise TXT files...")
         self.exercise_texts = load_exercise_texts(config.EXERCISES_PATH)
         print(f"✓ Loaded {len(self.exercise_texts)} exercise files\n")
+
+        print("Loading forum TXT files...")
+        self.forum_texts = load_forum_texts(config.FORUM_PATH)
+        print(f"✓ Loaded {len(self.forum_texts)} forum files\n")
         
         # Build keyword database
         print("Building keyword database...")
-        all_texts = list(self.lecture_texts.values()) + list(self.exercise_texts.values())
+        all_texts = list(self.lecture_texts.values()) + list(self.exercise_texts.values()) + list(self.forum_texts.values())
         self.master_keywords = build_master_keywords(all_texts)
         print(f"✓ Master keywords: {len(self.master_keywords)} unique terms\n")
+        
         # Chunk lectures by section
         print("Chunking lectures by section...")
         self.lecture_chunks = chunk_lectures_by_section(self.lecture_texts)
@@ -37,8 +42,13 @@ class CourseTutor:
         self.exercise_chunks = chunk_exercises_by_question(self.exercise_texts)
         print(f"✓ Created {len(self.exercise_chunks)} exercise chunks")
         
+        # Chunk forum posts
+        print("Chunking forum posts...")
+        self.forum_chunks = chunk_forum_posts(self.forum_texts)
+        print(f"✓ Created {len(self.forum_chunks)} forum chunks")
+        
         # Combine all chunks
-        self.all_chunks = self.lecture_chunks + self.exercise_chunks
+        self.all_chunks = self.lecture_chunks + self.exercise_chunks + self.forum_chunks
         print(f"✓ Total: {len(self.all_chunks)} chunks\n")
         
         # Generate embeddings

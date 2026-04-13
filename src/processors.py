@@ -206,3 +206,35 @@ def filter_question(question, master_keywords, min_keywords=2):
     is_relevant = len(keywords_found) >= min_keywords
     
     return is_relevant, keywords_found, len(keywords_found)
+
+
+# ============================================================
+# FORUM CHUNKING
+# ============================================================
+
+def chunk_forum_posts(forum_texts):
+    all_chunks = []
+    
+    for forum_name, text in forum_texts.items():
+        qa_pattern = r'\[QUESTION\](.*?)\[ANSWER\](.*?)(?=\[QUESTION\]|$)'
+        matches = re.finditer(qa_pattern, text, re.DOTALL)
+        
+        chunk_index = 0
+        for match in matches:
+            question = match.group(1).strip()
+            answer = match.group(2).strip()
+            
+            chunk_text = f"[QUESTION]\n{question}\n\n[ANSWER]\n{answer}"
+            
+            all_chunks.append({
+                'chunk_id': f"{forum_name.replace('.txt', '')}_Q{chunk_index}",
+                'document_name': forum_name,
+                'document_type': 'forum',
+                'chunk_index': chunk_index,
+                'section_title': f"Forum Post {chunk_index}",
+                'text': chunk_text,
+                'char_length': len(chunk_text)
+            })
+            chunk_index += 1
+    
+    return all_chunks

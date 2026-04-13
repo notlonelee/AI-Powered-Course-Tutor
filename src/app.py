@@ -14,7 +14,7 @@ from classifier import classify_question_complete
 
 # Page configuration
 st.set_page_config(
-    page_title="AI Course Tutor",
+    page_title="AI STAT 11",
     page_icon="📚",
     layout="wide"
 )
@@ -72,7 +72,6 @@ def initialize_logger():
         
         logger = SheetLogger(sheet_id)
         if logger.worksheet:
-            st.success("✅ Connected to Google Sheets")
             return logger
         else:
             return None
@@ -85,7 +84,7 @@ def initialize_logger():
 # MAIN INTERFACE
 # ============================================================
 
-st.title("📚 AI-Powered Course Tutor")
+st.title("📚 STAT11's AI-Powered Course Tutor")
 st.markdown("Ask questions about the course and receive answers based on lecture notes and exercise sheets.")
 
 # Initialize tutor and logger
@@ -95,17 +94,6 @@ logger = initialize_logger()
 # ============================================================
 # SINGLE QUESTION TEST
 # ============================================================
-
-st.header("Ask a Question")
-
-# Get user name from sidebar
-with st.sidebar:
-    st.title("⚙️ Settings")
-    user_name = st.text_input(
-        "Enter your name:",
-        value="Anonymous Student",
-        help="Used for logging purposes"
-    )
 
 with st.form("question_form"):
     question = st.text_area(
@@ -143,13 +131,11 @@ if submitted:
             # Log to Google Sheets
             if logger:
                 logger.log_interaction(
-                    user=user_name,
                     question=question,
-                    answer="Redirected to lecturer",
-                    model="HuggingFace",
-                    status=result['classification']
+                    classification=result['classification'],
+                    answer_with_context=result['response'],
+                    answer_without_context="" 
                 )
-                st.toast("✅ Response logged to Google Sheets", icon="✅")
 
         elif result['classification'] == "Irrelevant":
             st.markdown(f'<div class="irrelevant-box"><strong>❌ Question Out of Syllabus</strong><br/>{result["response"]}</div>', 
@@ -158,17 +144,34 @@ if submitted:
             # Log to Google Sheets
             if logger:
                 logger.log_interaction(
-                    user=user_name,
                     question=question,
-                    answer="Question out of syllabus",
-                    model="HuggingFace",
-                    status=result['classification']
+                    classification=result['classification'],
+                    answer_with_context=result['response'],
+                    answer_without_context="" 
                 )
-                st.toast("✅ Response logged to Google Sheets", icon="✅")
             
         else:
+            response_with_context = result['response']
+            result_no_context = tutor.process_question_no_context(question)
+            response_without_context = result_no_context["response"]
+           
             st.subheader("Response")
+            # response_with_context = convert_latex_delimiters(response_with_context)
+            # st.markdown(response_with_context)
+
+            response_before_conversion = response_with_context
+
+            response_with_context = convert_latex_delimiters(response_with_context)
             st.markdown(response_with_context)
+
+            # # DEBUG: Show raw response text (both versions)
+            # with st.expander("🔍 DEBUG: Raw Response Text"):
+            #     st.write("**Before convert_latex_delimiters():**")
+            #     st.code(response_before_conversion, language="text")
+                
+            #     st.write("\n**After convert_latex_delimiters():**")
+            #     st.code(response_with_context, language="text")
+
             
             # Display confidence 
             if confidence >= 0.6:
@@ -192,26 +195,36 @@ if submitted:
 
             # Display sources only for relevant questions
             if result['sources']:
-                top_source = result['sources'][0]
-                source_name = top_source['lecture'].replace(".txt", "")
-                st.markdown(f'<div class="top-source-box"><strong> For more information, you may want to refer to:</strong> {source_name}</div>', 
-                               unsafe_allow_html=True)
+                top_source = None
+                for source in result['sources']:
+                    if source.get('lecture') != 'forum.txt': 
+                        top_source = source
+                        break
+                if top_source:
+                    source_name = top_source['lecture'].replace(".txt", "")
+                    st.markdown(f'<div class="top-source-box"><strong> For more information, you may want to refer to:</strong> {source_name}</div>', 
+                                unsafe_allow_html=True)
             
             # Log successful response to Google Sheets
             if logger:
                 logger.log_interaction(
-                    user=user_name,
                     question=question,
-                    answer=response_with_context[:500],  # Limit to 500 chars
-                    model="HuggingFace",
-                    status="success"
+                    classification=result['classification'],
+                    answer_with_context=response_with_context,
+                    answer_without_context=response_without_context
                 )
-                st.toast("✅ Response logged to Google Sheets", icon="✅")
 
         st.write("")
 
         if st.button("Ask a new question", use_container_width=True):
             st.rerun()
+
+        st.divider()
+        st.link_button(
+            "📝 Submit Feedback / Report Issues",
+            url="https://forms.gle/gz1W8sRSL9pA5Kds5",
+            use_container_width=True
+        )
 
     else:
         st.warning("Please enter a question.")

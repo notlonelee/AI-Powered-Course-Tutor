@@ -30,9 +30,19 @@ def filter_question_hybrid(question, master_keywords, chunks_with_embeddings, co
     _, keywords_found, keyword_count = filter_question(question, master_keywords, min_keywords=0)
     
     # Semantic filtering
-    relevant_chunks = get_relevant_chunks(question, chunks_with_embeddings, similarity_threshold=0)
+    # relevant_chunks = get_relevant_chunks(question, chunks_with_embeddings, similarity_threshold=0)
     
-    top_similarity = relevant_chunks[0]['similarity_score'] if relevant_chunks else 0.0
+    # top_similarity = relevant_chunks[0]['similarity_score'] if relevant_chunks else 0.0
+
+    relevant_chunks_dict = get_relevant_chunks(question, chunks_with_embeddings, similarity_threshold=0)
+
+    # Combine both lists for analysis
+    all_relevant_chunks = relevant_chunks_dict['lecture_exercise'] + relevant_chunks_dict['forum']
+    top_similarity = all_relevant_chunks[0]['similarity_score'] if all_relevant_chunks else 0.0
+
+    # Store both in the result
+    relevant_chunks = all_relevant_chunks  # For compatibility with rest of code
+
     
     # Confidence calculation: 30% keyword + 70% semantic
     keyword_confidence = min(keyword_count / 5, 1.0)

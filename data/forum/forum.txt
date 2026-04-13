@@ -1,0 +1,2881 @@
+[QUESTION]
+Is it possible to show how we should prove the absolute loss - median and binary loss- mode?
+
+[ANSWER]
+As a starting point, please refer to the online materials for further
+guidance:
+* Proof that the posterior median is the Bayes estimate for the absolute
+loss function [1].
+* Proof that the posterior mode is the Bayes estimate for the 0-1 loss function. [2]
+[1] https://stats.stackexchange.com/questions/376867/proof-that-posterior-median-is-the-bayes-estimate-of-absolute-loss
+[2] https://stats.stackexchange.com/questions/329908/under-the-0-1-loss-function-the-bayesian-estimator-is-the-mode-of-the-posterior
+
+
+[QUESTION]
+If the question say: compute the Bayesian point estimate under loss
+function (a-a_hat)^2
+
+Do I always need to prove that I will use posterior mean to estimate a
+firstly, then to estimate.
+
+[ANSWER]
+In general, when a question asks you to compute the Bayesian point estimate
+under the squared error loss function, you don't need to explicitly prove
+that the posterior mean (when data are available) minimises the expected
+squared error. It is understood that the posterior mean minimises this
+error, making it the appropriate point estimate.
+
+
+[QUESTION]
+You said that stationary means E(Yt)=E(Yt-1)=...,
+Var(Yt)=Var(Yt-1)=...=sigma^2
+But what if E(ut) and Var(ut)? Are they
+satisfied E(ut)=E(ut-1)=..., Var(ut)=Var(ut-1)=...=sigma^2 in any model
+
+[ANSWER]
+If our model is Y_t=u_t, then if u_t is stationary, then Y_t will
+also be stationary, and vice versa.
+
+
+[QUESTION]
+When it says volatility is a specific number, is that the standard
+deviation or the variance? I think I have seen both being used
+
+[ANSWER]
+Volatility is often used as a shorthand for the standard deviation in
+finance, especially when talking about the fluctuation of asset prices.
+
+The variance is the square of the standard deviation, so you may encounter
+both terms, but in most cases, volatility refers to the standard deviation.
+
+
+[QUESTION]
+Exercise 3 Q2b
+Would you mind explaining if a normal posterior distribution is actually
+reasonable here? If the posterior distribution of beta1 is normal then the
+distribution of sigma3^2 would be normal as well which is inappropriate.
+
+[ANSWER]
+You're absolutely right to highlight that ARCH parameter a2 should be
+non-negative to ensure a valid variance, but the normal posterior
+technically allows negative values. However, in Bayesian statistics, this
+isn't necessarily a problem -a normal posterior distribution in this
+question is chosen for  analytical convenience, and as long as most of the
+probability mass lies in the admissible (non-negative) region, the impact
+of the small probability assigned to negative values of a2 is
+negligible.
+
+If we want to be more rigorous in our modelling, we can choose
+priors/posteriors that enforce positivity (like truncated normal or gamma),
+but for practical purposes, the normal posterior is acceptable in this
+question.
+
+The key takeaway here is how Bayesian methods enable us to incorporate
+prior knowledge and uncertainty into the ARCH(2) model.
+
+
+[QUESTION]
+Exercise 8 Q3
+Could anyone explain how we get the Variance of S^2 in this question?
+
+[ANSWER]
+You can use the definition of a variance to compute the variance directly,
+or use the result that [
+\frac{\sum_{i=1}^n\left(X_i-\bar{X}\right)^2}{\sigma^2}  ] [1] follows a
+chi-squared distribution with (n-1) degrees of freedom.
+
+
+[QUESTION]
+All questions I met are the extreme values are negative and in the left
+tail. So that we can convert it to right tail by change the sign. But what
+if the extreme values are positive and left tail? how I can convert them to right tail?
+
+[ANSWER]
+Assuming we are interested in the probability of the log-return falling
+below a particular negative threshold, extreme positive values would not be of interest to us, and therefore we would not focus on transforming them.
+
+
+[QUESTION]
+What are some of the copulas that attain the Lower Frechet-Hoeffding
+Bound? I only find the Frank copula when theta goes to negative infinity.
+What are some other examples?
+
+[ANSWER]
+For example, Gaussian and Student's t copulas.
+
+
+[QUESTION]
+may I ask whether we can always assume that the error terms
+epsilon are independent of sigma t in the time series  model? I
+understand that the epsilon are i.i.d., but I am not sure if independence
+between epsilon and sigma t ( and any other things ) can also be
+assumed.
+
+[ANSWER]
+Yes, we assume epsilon is always independent of sigma_t.
+
+
+[QUESTION]
+Exercise 5, Q.2 b) tells us the expert's opinion on what the mean and variance
+are. But it's the mean and variance of Y (being number of terrorist
+attacks) not lambda (poisson constant). I don't think its obvious that we
+can just plug the values for mean and variance straight into the
+distribution of lambda. 
+
+We end up getting a very similar result anyway, (or I did at least) since
+E[Y] = E[lambda] and Var(Y) = E[lambda] + Var[lambda], where E[lambda] is
+quite small in comparison therefore hardly changes it. Is that why the
+answers say to just plug it straight it or have I made a mistake?
+
+[ANSWER]
+The mean and variance of a Poisson distribution are both equal to l, where
+l is the rate parameter. When we use a Gamma prior for l, we are placing
+a prior belief on the rate l (which is the expected number of attacks per
+year). This is commonly done in Bayesian statistics. If we say the mean of the Gamma distribution is 1000, we're stating that, based on our prior
+belief, we expect the number of number of attacks to be 1000 per year on average. The standard deviation of 700 of our prior would reflect
+uncertainty about the value of l. Note that this is not the standard
+deviation of Y. 
+
+
+[QUESTION]
+Lecture 8 Example 6(c) 
+Can we solve part (c) without plotting the risk function, but just rely on
+the c value we found, which minimises the Risk Function, that is c=3/4, by differentiation?
+
+Since the c we found in part (a) is not equal to 3/4, we conclude that the
+delta1 is inadmissible.
+
+In other words, is it right to say that all decision rule where c is not
+equal to 3/4 are inadmissible?
+
+I also wonder if we could find all the admissible decision rules by
+differentiating the risk function with respect to c. Say if c has multiple
+solutions, then the decision rules for those values of c will be
+admissible, and inadmissible for all other values of c? 
+
+
+[ANSWER]
+Yes, since part (c) doesn't ask to provide a plot.
+
+Yes, since the risk function for c=3/4 is smaller than all other risk
+functions.
+
+In this example, there is only one admissible decision rule, namely
+c=3/4. The specific approach to finding the admissible decision rule will
+depend on the risk function.
+
+
+[QUESTION]
+exercise 5 In 2(a), can I say posterior is proportional to numerator to prove
+the numerator only, instead of calculating p(y) to prove the whole
+expression?
+
+[ANSWER]
+You can work out the resulting normalising constant directly without
+showing the full derivation of the denominator. Nevertheless, I recommend carefully reading the question to understand what it is asking you to do.
+
+
+[QUESTION]
+In the 3-4 week notes, we learned a lot about applying models to different
+scenarios. These knowledge points, like copulas, do not rely on specific
+formulas, but we only need to remember the limitations of these models
+
+[ANSWER]
+What's important is understanding the PROPERTIES OF COPULAS and the specific types of DEPENDENCE they can capture.  By focusing on their properties, we can choose the right copula to model the data more accurately, depending on whether we're dealing with linear or non-linear relationships, tail dependencies and other specific forms of dependence.
+
+
+[QUESTION]
+I have some confusion regarding Question 2(b) in Exercise 6 (Week 3). Here
+it says that [ \alpha_2 \sim N(0.1, 0.2) ] [1], but if this was the case, [
+\sigma_{3}^2 =0.309 + 0.01 \alpha_2 ] [2] would be a normal random variable
+as well which could take negative values. Would you mind explaining whether
+this was realistic? Plus, by definition, the parameter [ \alpha_2 ] [3] in
+an ARCH(2) model cannot be negative.
+
+[ANSWER]
+You're absolutely right to highlight that ARCH parameter a2 should be
+non-negative to ensure a valid variance, but the normal posterior
+technically allows negative values. However, in Bayesian statistics, this
+isn't necessarily a problem -a normal posterior distribution in this
+question is chosen for  analytical convenience, and as long as most of the
+probability mass lies in the admissible (non-negative) region, the impact
+of the small probability assigned to negative values of a2 is negligible.
+
+If we want to be more rigorous in our modelling, we can choose
+priors/posteriors that enforce positivity (like truncated normal or gamma),
+but for practical purposes, the normal posterior is acceptable in this
+question.
+
+The key takeaway here is how Bayesian methods enable us to incorporate
+prior knowledge and uncertainty into the ARCH(2) model.
+
+
+[QUESTION]
+Bayes risk of decision rule and Bayesian expected loss. 
+
+What's the difference between these two? I only know one of the
+differences is we don't have the data in the former (prior), but we know
+the data in the latter (posterior). Is there any other difference? Could
+you please help me distinguish between these two and frequentist risk?
+
+[ANSWER]
+The FREQUENTIST FRAMEWORK treats the parameter th as a fixed but unknown
+quantity, and the expectation is constructed by averaging over the data,
+typically based on sampling distributions. In this framework, the Risk
+function is defined as the expected loss over the sampling distribution of
+the data, and decisions are made by minimizing this risk function.
+
+In contrast, the BAYESIAN FRAMEWORK treats the parameter th as a random
+variable with a probability distribution, and expectations are constructed
+by averaging over this distribution, typically using the posterior given
+the observed data. The Bayesian expected loss is computed by averaging the
+loss function over the posterior distribution of th, accounting for both
+the data and the uncertainty about th.
+
+You can think of BAYES RISK as a "hybrid" between the _Bayesian_ and
+_Frequentist_ frameworks. The key transition from the Risk function (in the
+Frequentist approach) to Bayes Risk occurs when we move from treating th as
+a fixed, unknown parameter to recognizing that th is uncertain and follows
+a probability distribution. In this way, Bayes Risk generalizes the
+Frequentist Risk by incorporating uncertainty about th. This allows the
+decision-making process to account not only for the potential outcomes of
+different decisions but also for the uncertainty surrounding the true value
+of th.
+
+Thus, Bayes Risk is a "hybrid" because it combines the idea of Risk
+function (a frequentist concept) with the uncertainty about the parameter
+th (a Bayesian concept).
+
+
+[QUESTION]
+Lecture 6 Bayesian Inference example 4 in slides
+
+Could you please let me know that what is the point of this example? I am a
+little confused about what I need to grasp in this question. The formulas
+are too long and I don't know if we need to know how to solve such
+questions.
+
+[ANSWER]
+This is a foundational example in Bayesian statistics which is designed to
+illustrate how Bayesian inference works in a simple setting: estimating the
+probability of a coin landing heads, denoted by th, using prior beliefs and
+observed data.
+
+You are expected to grasp the following ideas/concepts:
+
+	* How the Beta distribution is used to represent or capture belief or
+uncertainty about a probability th. How its parameters a and b reflect
+both the _expected value_ and the _confidence_ in that belief.
+	* CONJUGACY: That the POSTERIOR IS ALSO A BETA DISTRIBUTION with updated
+parameters a+Y and b+N-Y.
+	* The Bayesian approach lets us formally INCORPORATE PRIOR BELIEFS and
+UPDATE THEM WITH DATA.
+
+Another key idea to focus on is that DIFFERENT PRIORS RESULT IN DIFFERENT
+POSTERIORS, even with the same data. In our example, John's prior is more
+confident (low variance), while Sarah's prior is more uncertain (flatter).
+As a result, they update differently after seeing the same data. This is a
+core Bayesian idea: _your conclusions depend not only on the data but also
+on your prior beliefs_.
+
+If the formulas feel too long, focus on the flow of reasoning:
+
+	* Start with a prior.
+	* Collect data.
+	* Use Bayes' rule to update the prior.
+	*
+Derive the posterior, which reflects an updated belief based on new data
+
+
+[QUESTION]
+I'm so confused about this content regarding bivariate copula simulation. If we simulate X firstly and use PIT
+to create U, then use inverse PIT to simulate the truly X, I think we will
+get the same X as the one at the beginning. It is really meaningless. Could
+you please help me to clarify the process of Bivariate Copula simulation?
+
+[ANSWER]
+I can see where the confusion is coming from, and I'm happy to clarify.
+
+You're correct in observing that if you're using a GAUSSIAN COPULA and
+simulate bivariate normal variables with mean 0 and unit variance, you
+would indeed end up with the same [ X_1 ] [1] and [ X_2 ] [2] that you
+originally simulated. This is because in the case of the normal
+distribution, the INVERSE CDF (also known as the quantile function) would
+simply transform the uniform random variables back into standard normal
+variables, meaning they would match the original simulated data.
+
+However, this is only one possibility. The key idea behind COPULA
+SIMULATION is that the inverse CDF doesn't have to be the same for all
+distributions. The MARGINAL DISTRIBUTIONS can be any desired distribution
+(e.g. exponential, Gamma, Beta, etc.), and the COPULA is only responsible
+for modelling the DEPENDENCE STRUCTURE between the variables.
+
+So, if you choose different marginal distributions, you would use the
+inverse CDF for those distributions instead. As a result, the simulated [
+X_1] [3] and [ X_2] [4] would no longer match the original simulated
+values, but they would follow the desired marginals and still respect the
+dependence structure imposed by the copula.
+
+
+[QUESTION]
+Exercise 5 Q1
+Why we could compute P(X6>2) using the empirical data observations?
+
+[ANSWER]
+EMPIRICAL PROBABILITY IS BASED ON THE OBSERVED FREQUENCY OF EVENTS IN A
+SAMPLE FROM A POPULATION. THE LOGIC BEHIND THIS METHOD IS THAT WE'RE USING
+THE RELATIVE FREQUENCY OF THE EVENT WE'RE INTERESTED IN, X6>2. THAT IS, THE
+EMPIRICAL PROBABILITY FOR THIS EVENT IS COMPUTED AS THE NUMBER OF
+OBSERVATIONS EXCEEDING 2 DIVIDED BY THE TOTAL NUMBER OF OBSERVATIONS.
+
+ASSUMPTIONS:
+
+	*
+
+RANDOM SAMPLING: YOUR DATA SHOULD COME FROM A RANDOM SAMPLE FROM THE
+POPULATION YOU'RE TRYING TO MAKE INFERENCES ABOUT. IF THE DATA IS BIASED OR
+NOT REPRESENTATIVE, THE EMPIRICAL PROBABILITY MIGHT NOT BE ACCURATE.
+
+	*
+
+LARGE ENOUGH SAMPLE: IN LARGER SAMPLES, THE EMPIRICAL PROBABILITY TENDS TO
+CONVERGE TO THE TRUE PROBABILITY.
+
+
+[QUESTION]
+Is it true that when dealing with calculations related to garch and arch
+models, we always assume mu to be 0 (conditional mean = 0)? Like how we did in today's tutorial.
+
+[ANSWER]
+Not necessarily. The reason I made that assumption was to simplify the
+calculations. For example, I made that assumption in Exercise 3, Question 2 (which I will be updating soon, as I've realized today that you have an older version). I hope this clears things up, but please feel free to ask any further questions if it's still unclear.
+
+
+[QUESTION]
+Hello Professor, I was wondering for what range of p-values researchers or
+traders would assume the PIT passes the uniformity tests (K-S, A-D) in
+reality. In the tutorial pseudo data were used for PIT which achieved
+p-values significantly greater than 0.05, but I suppose this would be too
+unrealistic in reality.
+
+[ANSWER]
+Typically, a p-value greater than 0.05 is considered to indicate that the
+null hypothesis cannot be rejected.
+
+Not necessarily, even with real data p-values can be substantially greater
+than 0.05. The magnitude of p-values depends on the data and the fit of the
+model (the strength of evidence against the null hypothesis).
+
+
+[QUESTION]
+In the week 2 lecture notes it says that it can be proven that the absolute
+loss is minimised by the posterior median, how can we go about doing
+this? 
+
+[ANSWER]
+We first compute the Bayesian Expected Loss, and then choose action to
+minimise that loss. You can use tools from calculus such as setting the 1st
+derivative to 0 and solving for the Bayes action.
+
+
+[QUESTION]
+GPD reparametrisation by -1
+could you please explain by we need to multiply by the -1 when u<-0.6?
+
+[ANSWER]
+Generalized Pareto Distribution (GPD) assumes that extreme events are in
+the upper tail of a distribution, i.e. it is specified for the upper
+tail. This means that the GPD is typically used to model the excesses over
+a certain threshold in the upper tail. As such, by multiplying observations
+by -1, we flip the distribution (i.e. lower tail becomes upper tail) which
+allows us to model excesses in the lower tail instead.
+
+
+[QUESTION]
+Ex 9 Q1
+Why is it we are allowed to go from u = -2 to u = 2?
+What is wrong with sticking to u = -2?
+
+Can't we just use the CDF given in the formulas? the CDF being P(Y<= D|...)
+= 1-(1-...)^1/k
+
+there are 3 values below the threshold. why do we need to change them as
+well?
+
+[ANSWER]
+No, we will not be able to use CDF of a GPD since it is specified for a
+positive/upper tail only. Hence, we need to transform our data (i.e. flip
+the distribution).
+
+
+[QUESTION]
+Ex 9 Q1
+When transforming the data, the original original positive data changes as
+well? (to negative)
+
+[ANSWER]
+Yes, but these observations are irrelevant to our calculations, hence we
+don't focus on them.
+
+
+[QUESTION]
+I can't quite parse the pattern for when we need to use the
+Law as an integration vs algebraic equation for the p(y) denominator of the
+Bayes Theorem. How do we know when to use the integration of
+p(theta)p(y|theta) vs p(a) = p(b)p(a|b) + p(b')p(a|b')?
+
+[ANSWER]
+INTEGRATION is used when the parameter of interest is CONTINUOUS, and
+summation is used when the parameter is discrete.
+
+
+[QUESTION]
+I'm a bit confused with concept of the Bayesian estimator and Bayesian
+rule.
+Is Bayesian estimator the estimator that minimizes the Bayesian expected
+loss (the expectation of loss function taken over posterior distribution of
+lambda) and  Bayesian rule is the decision rule that minimize the Bayes'
+risk function (first take expectation of loss function over x and then take
+the expectation of the previous result over the prior of lambda)?
+
+[ANSWER]
+Yes. So the Bayes rule combines elements of both the Bayesian and
+frequentist approaches.
+
+
+[QUESTION]
+if the loss function doesn't contain lambda hat, how can we compute
+the the bayesian estimator?
+
+[ANSWER]
+Usually, lambda_hat will always be part of the loss function; otherwise,
+the loss does not change regardless of which lambda_hat is chosen. In other
+words, any value for lambda_hat is acceptable.
+
+
+[QUESTION]
+I would like to ask how can we know what type of distribution for the
+likelihood function and prior.
+
+[ANSWER]
+Most exam questions will explicitly state which prior to use (or at least
+provide suggestions). For an advanced question, you will need to determine
+the likelihood from the available information. 
+
+More generally, determining the type of distribution for the likelihood
+function and prior often relies on the context of the problem at hand and
+any available information or assumptions. The Bernoulli distribution is
+appropriate when there are only two possible outcomes (success or failure)
+and the probability of success remains constant for each trial.
+
+
+[QUESTION]
+Can you please give an example of a decision rule(s) that is non-comparable
+while inadmissible?
+
+[ANSWER]
+Below is an example from Lecture 3 which has been slightly modified. Here
+both a1 and a2 are non-comparable (between themselves) and inadmissible.
+
+[ \begin{array}{|c|c|c|c|} \hline & a_1 & a_2 & a_3 \\ \hline \theta_1 & 1
+& 3 & -4 \\ \hline \theta_2 & -1 & 5 & -5 \\ \hline \theta_3 & 0 & -1 & -3
+\\ \hline \end{array} ] [1]
+
+
+[QUESTION]
+GPD Distribution
+I was wondering if the observation (after transformed by multiply by -1) is
+exactly equal to the threshold u , should we include that observation into
+our further calculation? (i.e. calculation for sigma and k ) 
+
+[ANSWER]
+Yes, observations equal or greater than u.
+
+
+[QUESTION]
+The Bayesian expected loss has E(L(theta,a)).
+In exercise 2, a is the action.
+
+The description in the question also uses a. 
+
+Does the "a" used in the description signify the "demand"?
+
+[ANSWER]
+Note that in
+this example action space is [0,1], i.e the set of values "A" can take is
+infinite. In other examples, the action space is finite, i.e. "A" can take
+a finite number of values (either A1 or A2)
+In this example "A" represents action (i.e. our estimate of th). Demand is
+captured by the unknown parameter "TH".
+
+
+[QUESTION]
+In lecture 8, Why do we do the law of total probability?
+
+Is it so we can incorporate the likelihood of the data given a certain
+distribution while also incorporating the prior of the parameters?
+
+[ANSWER]
+Yes, the Law of total probability is being applied here. This is because
+the parameter is unknown and integrating it out allows us to consider all
+possible parameter values and not just the specific estimates. This helps
+to account for the uncertainty in the parameter estimates and provides a
+more accurate representation of the likelihood of the data under the model
+
+
+[QUESTION]
+For a particular model e.g. Y_t = u_t, where u_t = sigma_t*e, sigma_t=
+w+alpha*u_t-1, just to confirm is it true that u_t is the 'future' value we
+want to estimate based on the  u_t and sigma_t function provided, whereas
+u_t-1 is a historical data, which might be given and is equal to Y_t-1?
+
+[ANSWER]
+We never claimed in lectures that u_t represents the future value. It
+simply represents the error term at time t. We are not interested in
+estimating u_t per se, but in estimating its conditional variance s_t^2
+(where u_t=s_t*e_t).
+
+ u_t-1 is the value of an error term at time t-1 which is known at time
+period t.
+
+
+[QUESTION]
+Can we only use this /these formula(s) in lecture notes 4 when the log returns are assumed to
+be normally distributed?
+If we are given a question where log returns have a pdf that is NOT that of
+a normal, we can't use this formula(s) right?
+
+[ANSWER]
+This formula is only valid under the assumption of normality, and hence
+shouldn't not be used when this assumption does not hold.
+
+
+[QUESTION]
+ex6 q3
+I have some confusion between conditional and unconditional.
+
+When we compute the conditional expectations, we are able to take the sigma
+out of the expectations, is it because in this case, since we conditioning
+on past information we treat sigma as a constant. is this applied to
+conditional variance? Can I compute it in the following way? And the
+sigma^2 I get here should be consider as a rv right. For the unconditional
+part, since we are not conditioning on any information, we can't take the
+sigma out of the expectation or variance and we can't use the information
+error term is normal 0,1 distributed.
+
+[ANSWER]
+When computing conditional expectations, we treat the conditioning variable
+as a constant because we are conditioning on that specific information.
+This concept can be applied to s_t^2 as well. However, it is important to
+note that when computing unconditional expectations, we are not
+conditioning on any specific information. Hence, we cannot treat s_t^2 as
+a constant because it is a random variable. In this case, we cannot take
+s_t^2 out of the unconditional expectation.
+
+
+[QUESTION]
+Ex 6 q3d
+Could you please explain how E((U_{t-1})^2) = sigma^2? 
+This is the last line.
+
+[ANSWER]
+This is by definition of a variance of a mean zero r.v.
+
+
+[QUESTION]
+could you explain why we choose M1 when P(Y|M0) < P(Y|M1)? for ex7
+
+[ANSWER]
+This is because both models are equally likely a priori, and therefore
+P(Y|M0) < P(Y|M1) implies that P(M0|Y) < P(M1|Y)
+
+
+[QUESTION]
+In the expected shortfall derivation, could you please explain where the 1/(1-alpha) term comes from
+mathematically?
+
+[ANSWER]
+We divide by the normalising constant 1-alpha so that the conditional
+density integrates to 1 on interval  [VaR_alpha, ?). It is computed
+as [ P(Z  \geq VaR_{\alpha})=\int_{VaR_{\alpha}}^{\infty} f{(z)}
+\mathrm{d} z = 1-\alpha ] [1]. 
+
+
+[QUESTION]
+Could you please explain how should we prove the bayesian point estimator
+of absolute loss is posterior mean ?
+
+[ANSWER]
+The steps are exactly the same as for any other loss functions - you
+compute the Bayesian expected loss, and then choose an action that will
+minimise that Bayesian expected loss. 
+
+
+[QUESTION]
+Exercise sheet q3
+I was hoping you could explain the result for the final question in the
+problem sheet (question 3). It is a known result that the variance of the
+residuals over the variance is 'n-1'?
+
+[ANSWER]
+Knowing that the sample variance S^2 is an unbiased estimator of the
+population variance, simplifies the computation of the risk function since
+it becomes equal to the variance of the decision rule. If we had an
+alternative decision rule, say [ \delta _ {3} ( \textbf{X} ) = \frac { 1 }
+{ n} \sum _ { i = 1 } ^ { n } \left( X _ { i } - \overline { X } \right) ^
+{ 2 } ] [1], then that decision rule d3 would be biased, i.e. [ E \left[
+\delta _ { 3 } ( \mathbf { X } ) \right] \neq \sigma^2 ] [2], and we would
+not be able to write the risk function as being equal to the variance of
+the decision rule d3. Hence, we would need to compute the expectation
+of the loss function by evaluating the integral.
+
+
+[QUESTION]
+when computing the posterior distribution, can we drop the
+constants to simplify calculations? I'm not sure when we can and when we
+can't. For example, in some exercises, the question says "find the
+posterior distribution", in this case, can we drop the constants? I noticed
+for some questions phrased like this, we dropped the constants, while in
+the others we didn't. (I think that when the question explicitly asks the
+bayesian theorem, we can't drop the constants.)
+
+[ANSWER]
+Yes, you can derive the posterior distribution using the proportionality
+sign, i.e. you can start with p(th|y) ? p(y|th) * p(th) and then deduce
+the resulting posterior distribution (but you need to show these steps
+clearly). Since we are considering only the conjugate priors in this
+course, we know that when a conjugate prior is combined with the likelihood
+function, it will result in a posterior distribution that belongs to the
+same family as the prior distribution (but make sure you show the resulting
+parameters clearly).
+
+
+[QUESTION]
+Conjugate priors
+Does the prior distribution depend on the sampling model such that they
+need to match in order for the posterior distribution to be the same as the
+prior?
+For example, the beta-binomial.
+
+Does the beta prior distribution NEED to be paired with the Binomial
+sampling model in order to have a beta posterior or can the beta prior be
+with any likelihood model other than binomial?
+
+[ANSWER]
+The key requirement for the posterior distribution to be the same as the
+prior is that the likelihood function and the prior distribution are
+conjugate. 
+
+In the case of the beta-binomial model, the beta distribution is conjugate
+to the binomial distribution, which means that if the prior distribution is
+beta and the sampling model is binomial, the posterior distribution will
+also be a beta distribution.
+
+While matching the prior distribution with the sampling model can simplify
+calculations (and be analytically tractable), it is not always necessary
+for the posterior distribution to be the same as the prior. Priors should
+be chosen based on prior knowledge, beliefs, and reasoning about the
+parameters of interest, as well as any available data or expert opinion.
+
+
+[QUESTION]
+GPD distribution
+Could you please specify the support of u?
+The lecture notes does not specify it.
+
+I see u = 10 but what does that mean? 
+
+should u be between 0 and 1 inclusive or between 0 and 100?
+
+Finally what exactly does u represent? In the notes (page 18, week 9) it
+says it is a threshold.
+
+also what did you mean by "nth smallest observation"? Smallest number of
+attacks?
+
+[ANSWER]
+The threshold u represents the value above which extreme events are
+considered. This means that only values exceeding the threshold u are
+included in the analysis. The threshold u can be any value above which
+extreme events are of interest, and it does not necessarily have to fall
+between 0 and 1 or 0 and 100.  The choice of u can may depend on the
+support of the distribution, as it determines which values are considered
+extreme and are included in the analysis. Also, the choice of u depends on
+the specific application and the data being analyzed.
+
+It refers to the rank which is the position of a value within the dataset
+when it is sorted in either ascending or descending order. For example, if
+we order all observations from smallest to largest, say
+1,2,3,4,5,6,7,8,...,n  then 1 would be the first smallest observation, 2
+would be the second smallest observation, etc. Suppose n=10, then the 50th
+percentile would be 0.5*10th (=5th) smallest observation, which is 5.
+
+Note: There are several formulas (or formulae) for calculating a particular
+percentile. The above is the simplest approach.
+
+Observations represents the number of fatalities in a particular attack.
+
+
+[QUESTION]
+can you explain why E((y-m)^2) = E((m-y)^2) as discussed in Q1a in
+Exercise Sheet 3? 
+Does this always apply to decision rules? Or is it just because a Normal/
+symmetric distribution is used? 
+
+[ANSWER]
+This holds true regardless of whether the distribution is symmetric or
+not. Consider the following:
+
+E(Y-m)^2 = E(Y^2) - 2mE(Y) + m^2
+
+E(m-Y)^2 = m^2 - 2mE(Y) + E(Y^2)
+
+Hence, E(Y-m)^2 = E(m-Y)^2
+
+
+[QUESTION]
+Hi, in the notes VaR is defined as F-1(a)*sigma - miu. However in your
+derivation in week 4 of the expected shortfall you are using F-1(a)*sigma
++ miu. Could you please explain why there is a PLUS in the derivation of ES
+in the handwritten notes?
+
+[ANSWER]
+Recall that in the derivation of the ES we're considering
+the "loss distribution" (where we focus on the upper tail, i.e. positive
+values) instead of a "returns distribution" (where we focus on the lower
+tail, i.e. negative values). The formula in lecture 4 was derived using the
+"returns distribution': VaR_a = PH-1(a)s - m.
+
+
+[QUESTION]
+Ex2, Q2
+I wanted to ask about the clarification of the bounds for the Bayesian
+Expected Loss calculation. So, we are to consider that a<=0.1, 0.1<=a<=0.2
+as well as a>=2. For the first case: the integral, why are the bounds
+between 0.1 and 0.2, not between 0 and 0.1? The same question stands for
+the a>=2 case? Surely that our parameter space is [0,1]
+
+[ANSWER]
+Our parameter space is indeed [0,1]. However,
+recall that the prior density is defined as U(0.1,0.2), which means it
+only has a non-zero value within the [0.1,0.2] interval and is 0 outside of
+that interval.
+
+
+[QUESTION]
+Ex6 Q3a,b
+Are we able to use that stet ~ N(0, a0 + a1 u^2 t-1) and then read
+the conditional mean and variance straight off?
+
+[ANSWER]
+The question specifically requests that we 'compute', therefore it is
+necessary to demonstrate all steps (by the way, how can one be sure that
+N(0, a0 + a1 u^2 t-1) is indeed the conditional distribution and not
+the unconditional distribution?). This type of question typically requires
+that all steps leading to the answer be clearly shown.
+
+
+[QUESTION]
+Lecture 8 There seems to be some switching between the use of p(y|M) and p(M|y)
+
+[ANSWER]
+ P(Y|M_I) is the marginal likelihood of the data Y under model M_I,
+and P(M_I|Y) is the posterior probability for model M_I after
+conditioning on the data Y. Hence, these terms involve different aspects
+of the data and the model and are calculated in different ways.
+
+
+[QUESTION]
+Lecture 8 In the case that the second-to-last sentence means to say "We can
+compute each p(M_i|y) in a similar manner to how we computed p(M_1|y)," I'm
+confused where we computed p(M_1|y).
+
+[ANSWER]
+You're right, actually we haven't computed this quantity in the end (since
+this is straightforward once you compute the marginal likelihood p(y|M_1)),
+but we considered a formula for computing this posterior probability for
+model M_1: e.g. [ p\left(M_1 \mid
+\boldsymbol{y}\right)=\frac{p\left(\boldsymbol{y} \mid M_1\right)
+p\left(M_1\right)}{p(\boldsymbol{y})} ] [1]. As an example, see Exercise 7
+solutions [2] on how to compute these quantities. Same approach applies
+when we have more than one change point.
+
+
+[QUESTION]
+Lecture 8 Why aren't we using BIC in this? Also, if we were using BIC in this,
+would \tau and each change point count as a parameter for k?
+
+[ANSWER]
+We're not computing the BIC because we can easily compute the marginal
+likelihood p(y|M_1). However, it is not always possible to compute the
+marginal likelihood; in those cases, BIC might be helpful. Yes, \tau is a
+parameter. Actually, in this context BIC might be a bit trickier to compute
+since we don't have MLE estimates for \lambda_0, \lambda_1, \tau (we could
+investigate further if closed-form expressions for MLE estimates exist).
+
+
+[QUESTION]
+while calculating posterior, when we have Int(x^a'-1(1-x)^b'-1)dx, can we
+skip the derivation and just say it is equal to Beta(a',b')?
+
+[ANSWER]
+Yes, you can derive the posterior distribution using the proportionality
+sign, i.e. you can start with p(th|y) ? p(y|th) * p(th) and then deduce
+the resulting posterior distribution (but you need to show these steps
+clearly). Since we are considering only the conjugate priors in this
+course, we know that when a conjugate prior is combined with the likelihood
+function, it will result in a posterior distribution that belongs to the
+same family as the prior distribution. 
+
+
+[QUESTION]
+In the VAR calculation, I am a little confused why we need to take the
+negative q as VAR in this case? Or, in another word, why not calculate
+lower 1% quantile of log return as 99% var ? Since VAR represents a loss.
+Finally, do we need to take negative for all VAR calculations?
+
+[ANSWER]
+This is because by convention VaR is reported as a positive value, so we
+multiply it by (-1) to get the value of q, which is negative since we are
+considering a returns distributions (where negative values represent
+losses).
+
+
+[QUESTION]
+Week7 example4
+Hi Professor, could you elaborate a bit more on why we have n (=100) for S2
+(which is the second segment of our data, i.e. the part after the change
+point), and n-1 (=99) when rescaling p(y)?
+
+[ANSWER]
+Because in a sample of size n=100 we can only consider n-1=100-1=99
+possible change points; if the change point took place in the last time
+period 100, then our sample would not include the subsequent data point
+101. Hence, we are not considering the last time period as a possible
+change point. Hence, we sum over 99 possible change points.
+
+
+[QUESTION]
+If the significance level is 5% and your p value is EXACTLY 5%, do you
+still accept the null hypothesis?
+
+[ANSWER]
+If we are willing to follow this dichotomous interpretation of hypothesis
+testing using the widely adopted threshold value of 0.05, then if the
+p-value is exactly 0.05, it means that the result is on the border of
+statistical significance. In this case, you would typically interpret the
+results with caution. (remember that the choice of 0.05 is arbitrary, hence
+what we consider significant is our choice.)
+
+On a more general note (as I mentioned in the previous post), there is an
+ongoing debate about this dichotomous interpretation of hypothesis
+testing. Some believe that p-values should not be seen as a strict measure
+of significance, but rather as a continuous gauge of evidence opposing the
+null hypothesis (and I'm more inlined towards this way of thinking).
+Hence, dividing results into "significant" and "non-significant" might be
+considered as non-sensical. Viewing p-values as a continuous indication of
+evidence against the null hypothesis means that they offer a degree of
+confidence in rejecting the null hypothesis based on the data at hand.
+Instead of treating p-values as a strict threshold for significance 
+
+
+[QUESTION]
+Stochastic Volatility vs GARCH
+Is there a difference between the two?
+Is GARCH an alternative way to get the stochastic volatility?
+
+[ANSWER]
+Yes, GARCH model is an alternative way to capture the time-varying
+volatility of financial asset returns. Stochastic volatility models
+explicitly model the volatility process as a stochastic process.
+
+
+[QUESTION]
+For sstd and std, when doing the PIT [u2<-pstd(dataset$ret2, mean=0, sd=1,
+nu=6)], do we always assume mean=0, sd=1, while for nu and xi, we use model
+coefficients?
+
+[ANSWER]
+Yes, we always assume mean=0, sd=1. For other parameters you need to
+provide their estimates.
+Parameter estimates are stored in garchFit output.
+
+
+[QUESTION]
+Week 5 vs 6 in R 
+When we apply the Probability Integral Transform, for week 5, you just used
+the data to get u1 and u2 but for week 6, you used res1 and res2. What is
+the difference and which way should we use?
+
+[ANSWER]
+In week 5 my simulated data are i.i.d. Student-t distributed, hence I
+applied PIT (using pstd) directly to my data, e.g. 
+
+u1<-pstd(dataset$ret1, mean=0, sd=1, nu=10)
+
+u2<-pstd(dataset$ret2, mean=0, sd=1, nu=6)
+That is, marginal distributions are known and we don't need to model them.
+
+In Week 6 my data are no longer i.i.d., hence I need to model the marginal
+distributions first and obtain standardised residuals, and then apply PIT.
+
+
+[QUESTION]
+In your weighting of portfolios in the tutorial you used the following
+code:
+port_sim=log(1+((exp(ret1_sim)-1)+(exp(ret1_sim)-1))*(1/2)).
+
+Could you please explain why you -1 after exponentiation the log return? -
+and then why did you +1?
+also, should the 2nd (exp(ret1_sim)-1)) be ret2_sim instead of ret1_sim?
+
+[ANSWER]
+Because we want to extract simple net returns R_t. Remember that the
+log-return is:  r_t=log(R_t+1). Exponentiating both sides and subtracting
+1 yields R_t.
+
+Yes, the 2nd part should be ret2_sim instead of ret1_sim as follows:
+
+port_sim=log(1+((exp(ret1_sim)-1)+(exp(ret2_sim)-1))*(1/2))
+
+
+[QUESTION]
+why only (exp(ret2_sim)-1) was multiplied by
+1/2 and not also (exp(ret1_sim)-1), since we are constructing an equally
+weighted portfolio.
+
+[ANSWER]
+Note that 1/2 is outside of the brackets, so using the distributive
+property 
+
+(R_t1 + R_t2)*1/2 = R_t1*1/2 + R_t2*1/2
+
+
+[QUESTION]
+Autocorrelation vs Serial Correlation can we use these two terms interchangeably?
+
+[ANSWER]
+Autocorrelation can be considered as a specific type of serial correlation,
+and the two terms are used as synonyms. 
+
+Interestingly, in econometrics serial correlation refers to the
+autocorrelation of error terms in a regression model, which violates the
+assumption of independence of errors.
+
+
+[QUESTION]
+If we use an arma(0,0) + garch(1,1) model, aren't there three degrees of
+freedom? That is, the constant, the alpha, and the beta for the Garch
+model. 
+More generally, could you provide some guidance on what to use for fitdf?
+
+[ANSWER]
+I copy and paste here an excerpt from Box.test documentation:
+
+"These tests are sometimes applied to the residuals from an ARMA(p,
+q) fit, in which case the references suggest a better approximation to the
+null-hypothesis distribution is obtained by setting fitdf = p+q, provided
+of course that lag > fitdf."
+
+
+[QUESTION]
+Probability Integral Transform 
+In the code examples, pnorm is typically used to transform the residuals
+into a uniform. Do we have to assume the residuals follow a normal
+distribution? Isn't it possible for them to follow Student's T or something
+else? Would you recommend looping through different distributions to see
+what gives the best KS p-value?
+
+[ANSWER]
+It is not recommended to assume _a priori _a particular conditional
+distribution for transforming the standardised residuals. Model selection
+techniques should be used to identify the most appropriate conditional
+distribution for transforming the standardised residuals.
+
+
+[QUESTION]
+Week 6 In class, do you mean that Ljung-Box test is a test to check
+autocorrelation in residuals, and is not related with AR(p) model of log
+returns?
+
+[ANSWER]
+The Ljung-Box test is indeed a test used to check for the presence of
+autocorrelation in the residuals of a time series model. In the context of
+an AR(p) model of log returns, the Ljung-Box test can be used to assess the
+adequacy of the model by examining whether any autocorrelation is present
+in the model's residuals.
+
+
+[QUESTION]
+Week 6 If autocorrelation exist in residuals, this implies our AR(p) model is
+not good, because we include some correlated thing in residuals, which
+means there are some lags we didn't accounted for in the model. Am I
+understanding this correctly? 
+
+[ANSWER]
+Yes, if autocorrelation is detected in the residuals of an AR(p) model, it
+suggests that the model may not adequately capture all the autocorrelation
+present in the data. This could indicate that there are additional lags or
+patterns in the data that were not accounted for in the model
+specification.
+
+
+[QUESTION]
+When determining the uniformity, can we only use one of these two tests
+(KStest and ADtest)? 
+
+[ANSWER]
+Yes, that's fine.
+
+
+[QUESTION]
+I was wondering when checking the conditional
+distribution of model residuals, would directly plotting a histogram and
+comparing it to the pdf of the conditional distribution (e.g., pnorm, pstd,
+psstd, etc.) be apppropriate. 
+How would this be different from computing the probability integral
+transform, then plotting a histogram and comparing it to a unif(0,1)
+distribution? One possible reason I can think of is that it would be easier
+to observe tail behaviour if we apply the PIT. Nevertheless, are both
+methods appropriate or should I stick to applying the PIT? 
+
+[ANSWER]
+Visual exploratory analysis can be a good starting point (histogram of
+standardised residuals and transformed standardised residuals), but do
+follow up with a K-S/A-D test for uniformity and AIC/BIC.
+
+
+[QUESTION]
+In the R code of week 6, you did a acf and pacf plot of 2 columns of data
+set and you directly conclude the garch model you use. Could you please
+tell a bit more about how you select the model? 
+
+[ANSWER]
+The ACF/PACF is not helpful to establish the order of GARCH model. Instead,
+you can try to fit every single possible model up to GARCH(3,3) and choose
+the 'best' based on AIC/BIC. No need to go beyond that order. 
+
+
+[QUESTION]
+When we have our final model and are aiming to compute the Value-at-Risk.
+Do we use the coefficient estimates under "par" or "coef"  in the "fit"
+section of our model. 
+
+[ANSWER]
+If you use the coef() function, it will retrieve the estimated coefficients
+of a fitted model object. 
+
+
+[QUESTION]
+Is there any other way besides from acf to see if there is any
+auto-correlation (in the case that acf doesn't show evidence of
+autocorrelation)?
+
+[ANSWER]
+Yes, there are other ways:
+
+	*
+Ljung-Box test: This statistical test can help determine if there is
+significant autocorrelation in a time series by examining the residuals
+from a model.
+
+	*
+Durbin-Watson statistic: This test can be used to detect autocorrelation in
+the residuals of a regression model. A value close to 2 indicates no
+autocorrelation, while values significantly different from 2 suggest
+autocorrelation.
+
+
+[QUESTION]
+If the acf graph of our data doesn't show geometric decay and the pacf
+graph keeps showing significance even after 10 lags, does that mean there
+is some problem and is there any way for us to determine the lag?
+
+[ANSWER]
+If the true model of a process is an autoregressive (AR) model, the
+autocorrelation function (ACF) graph will show geometric decay. This is
+because in an AR model, the current value of the process depends only on
+its previous values, and as the lag between the current value and previous
+values increases, the correlation between them decreases exponentially,
+leading to geometric decay in the ACF graph.
+
+However, the ACF graph of the real data does not always have to show
+geometric decay. The shape of the ACF graph can vary depending on the
+nature of the data. 
+
+In PACF graph, I suggested that in this ICA it may be beneficial to ignore
+lags beyond 10 for the sake of simplicity, even though there is no
+theoretical justification for doing so (and this would be fine in terms of
+marking, i.e. no marks are lost if you do that). However, if this leads to
+a model where the autocorrelation in the residuals is still detected using
+Ljung-Box test (and also the model cannot pass the AD/KS tests), then I
+would suggest taking those lags into account, either individually or all
+together, until you have accounted for the autocorrelation.
+
+
+[QUESTION]
+what evaluations we can use to help choosing the p and q for garch(p,q)? 
+
+[ANSWER]
+AIC/BIC can assist in the process of selecting the best model:
+
+	*
+AIC helps to compare the fit of different models, taking into account the
+model's complexity. Lower AIC values indicate a better fitting model.
+
+	*
+BIC also helps to compare the fit of different models, but penalizes more
+complex models more heavily. Lower BIC values indicate a better fitting
+model.
+
+
+[QUESTION]
+Can we compare the models first and then do model checking, or we have to
+check all the candidate models and then do model checking? 
+
+[ANSWER]
+There is no harm in beginning with either option. It might be helpful to
+compare the goodness of fit of models first before conducting model
+adequacy checking. This allows you to determine which model best fits the
+data. Once you have identified the best-fitting model, you can then conduct
+model adequacy checking to ensure that the chosen model meets the necessary
+assumptions and accurately represents the data. 
+
+
+[QUESTION]
+For the code in WEEK6 folder, why do we have to go through copula theory
+and simulate epsilon from the Clayton? Why cant we simply generate the data
+from a normal distribution, e.g. res1_sim = rnorm(N)? And
+I also don't understand how come res1_sim and res2_sim become i.i.d.
+
+[ANSWER]
+
+In my example, Clayton copula is the copula of best fit, it describes the
+dependence structure of epsilons. Hence we need to simulate epsilons with
+that dependence structure. In order to do that, we first simulate (u_1, u2)
+and then apply inverse CDF (i.e. Inverse PIT) to produce epsilons
+(e_1, e_2) = (F^{-1}(u_1), F^{-1}(u_2)).
+
+If you simulate directly using RES1_SIM = RNORM(N), then this would lead
+to RES1_SIM being independent from RES2_SIM, which is probably not the
+case in your data. Hence, simulating from the copula induces the
+dependence structure observed in your data.
+
+
+[QUESTION]
+you mentioned in the lecture that if BICs are postive, we
+would choose the largest, i.e. we would go with BIC =5; if BICs are
+negative, we would select the smallest. i.e. BIC=-5. When running the code
+provided in week5, the three models for ret2 (model2), AR(3) is the correct
+(or the most appropriate) model, but looking at their AIC and BIC values,
+as all numbers are postive, AR(1) has the largest AIC and BIC, yet it
+fails the Box tests. Could you elaborate on this a bit more?
+
+[ANSWER]
+In the lecture I was trying to warn you that the statistical software
+packages will give you the negative version of the BIC we've seen in
+lectures. That is, in your R output, the lower BIC values indicate a better
+fitting model.
+
+During the lecture, I was trying to alert you that the statistical software
+packages will display the negative form of the BIC value discussed in
+lectures. In other words, when looking at your R output, remember that
+lower BIC values indicate a better fitting model.
+
+
+[QUESTION]
+Hi, do we need to make the fitdf in the boxtest consistent with the number
+in the arma function?
+
+[ANSWER]
+These tests are sometimes applied to the residuals from an ARMA(p,
+q) fit, in which case the references suggest a better approximation to the
+null-hypothesis distribution is obtained by setting fitdf = p+q, provided
+of course that lag > fitdf.
+
+
+[QUESTION]
+if our model doesn't have the arma function, when doing
+the Box.test(res2c, lag = 10, type = c("Ljung-Box"), fitdf = 1), is the
+fitdf = 0?
+
+[ANSWER]
+Yes, if you're using arma(0,0), then df=0.
+
+
+[QUESTION]
+If there is no geometric decay in AR model and this is no cut off in the
+pacf, can we not using arma model but only using garch model?
+
+[ANSWER]
+If AFC/PACF and Ljung-Box test suggest you do not need AR model, then you
+can avoid fitting AR model by specifying arma(0, 0) option in GarchFit
+function.
+
+
+[QUESTION]
+You did this code a few weeks back:
+u1<-pstd(dataset$ret1, mean=0, sd=1, nu=10).
+Did you choose mean=0, sd=1, nu=10 because that was quite literally the
+distribution of the log returns 1 or do we *always* choose mean=0, sd=1
+(with different nu) ?
+
+[ANSWER]
+We always choose mean=0, sd=1  for all conditional distributions. This is
+the assumption we're imposing on the conditional distribution (because we
+standardised the residuals, i.e. we re-centered and re-scaled them).
+
+
+[QUESTION]
+Hi, given that we're simulating data is it expected to get different (99%
+and 95%) VaR values every time the code is run? 
+If so, to what degree should we expect differences in these values? 
+
+[ANSWER]
+Yes, it is expected to get different VaR values every time the code is run
+since the data is being simulated randomly each time. The degree of
+differences in the VaR values will depend on the randomness of the data
+generation process and the size of the dataset. In general, small
+differences in the VaR values are common due to the random nature of the
+simulation.
+
+The overall results should still be comparable and consistent, reflecting
+the underlying principles and assumptions of the simulation model. Hence,
+they should be in the same ballpark.
+
+By using set.seed(), you can specify a specific seed value that will ensure
+that the random number generator produces the same sequence of random
+numbers each time you run the simulation. This can be useful if you wish to
+replicate your results or if you want to ensure that others can reproduce
+your findings.
+
+
+[QUESTION]
+Would you let us know what package does the function jarqueberaTest()
+belong to? R keeps saying error: could not find the function when I tried
+to run it.
+
+[ANSWER]
+ jarqueberaTest() is part of 'FBASICS' package, however as it was
+suggested in previous reply (thank you!), you can use jarque.bera.test()
+which is part of  'TSERIES' package.
+
+
+[QUESTION]
+Expanding on example 3, lecture 8
+You said that if there is more than one change point, the process is
+identical.
+Suppose there is a 2nd change point. does this mean we would need to
+evaluate a quadruple integral?
+
+[ANSWER]
+In the k change point case such that k>1, the full likelihood becomes:
+
+[ \begin{aligned} & p\left(y_1, \ldots, y_n \mid \tau_1, \ldots,
+\tau_k\right)=\left(\int \prod_{t=1}^{\tau_1} p\left(y_t \mid
+\theta_1\right) p\left(\theta_1\right) d \theta_1\right) \times\left(\int
+\prod_{t=\tau_1+1}^{\tau_2} p\left(y_t \mid \theta_2\right)
+p\left(\theta_2\right)\right) \times \\ & \times\left(\int
+\prod_{t=\tau_2+1}^{\tau_3} p\left(y_t \mid \theta_3\right)
+p\left(\theta_3\right) d \theta_3\right) \times \ldots \times\left(\int
+\prod_{t=\tau_k+1}^n p\left(y_t \mid \theta_{k+1}\right)
+p\left(\theta_{k+1}\right) d \theta_{k+1}\right) \end{aligned} ] [1]
+
+We are still breaking the likelihood up into segments as before, we just
+have k + 1 segments now rather than two in the case of 1 change point.
+
+
+[QUESTION]
+Getting to posterior gamma
+Can you please explain how we got to that conclusion ? Looking at the posterior distribution in  page 6 of the week 7 lecture
+notes, I don't seem to see how we got that pdf to be that of a gamma (alpha
++n, beta + sum...).
+
+[ANSWER]
+We have the likelihood function as follows:
+
+[ L(\gamma | y_1, \ldots, y_n) = \prod_{t=1}^{n} \gamma e^{-\gamma y_t} ]
+[1]
+
+and the prior distribution for [ \gamma] [2] is [ Gamma(\alpha, \beta)]
+[3]:
+
+[ p(\gamma) = \frac{\beta^\alpha}{\Gamma(\alpha)} \gamma^{\alpha - 1}
+e^{-\beta \gamma} ] [4]
+
+We want to find the posterior distribution of [ \gamma ] [5] given the
+data [ y_1, \ldots, y_n] [6]. Using Bayes' theorem, the posterior
+distribution is proportional to the product of the prior distribution and
+the likelihood function:
+
+[ p(\gamma | y_1, \ldots, y_n) \propto L(\gamma | y_1, \ldots, y_n)
+p(\gamma)\\ \propto \left( \prod_{t=1}^{n} \gamma e^{-\gamma y_t} \right)
+\frac{\beta^\alpha}{\Gamma(\alpha)} \gamma^{\alpha - 1} e^{-\beta \gamma}\\
+\propto \gamma^{n+\alpha-1} e^{-\gamma \left( \beta + \sum_{t=1}^{n} y_t
+\right)} ] [7]
+
+So, the posterior distribution is [ Gamma\left( \alpha + n, \beta +
+\sum_{t=1}^{n} y_t\right) ] [8].
+
+
+[QUESTION]
+y tilde vs y 
+could you please explain the difference between the two? I don't quite get
+how we had Y then suddenly had y tilde. also If Y has an exponential
+distribution, how is it that Y tilde also has that? what is the connection
+between y tilde and y?
+
+[ANSWER]
+[ \tilde{y} ] [1] simply denotes the future value of y. For example, if we
+are currently at time point T, then [ \tilde{y} ] [1] could represent
+y_(T+1).
+
+
+[QUESTION]
+expected shortfall
+could you explain a bit more about how we derive expression for
+this conditional standard normal distribution? 
+
+[ANSWER]
+The short answer is that [ \frac{1}{1-\alpha} ] [1] is the normalising
+constant so that the area under the standard normal p.d.f. [
+\frac{1}{\sqrt{2 \pi}} e^{-\frac{z^2}{2}} ] [2] above [ \Phi^{-1}(\alpha) ]
+[3] integrates to 1. Without this normalising constant the area would be
+equal to [ 1-\alpha ] [4], that is [ \int^{\infty}_{\Phi^{-1}(\alpha)}
+\frac{1}{\sqrt{2 \pi}} e^{-\frac{z^2}{2}} d z=1-\alpha ] [5]. Hence we
+divide both sides by [ 1-\alpha ] [4] so that [ \frac{1}{1-\alpha}
+\int^{\infty}_{\Phi^{-1}(\alpha)} \frac{1}{\sqrt{2 \pi}} e^{-\frac{z^2}{2}}
+d z= \frac{1-\alpha}{1-\alpha} =1 ] [6]. 
+
+The longer answer involves finding the conditional CDF, i.e. [ F_{Z \mid Z
+\geq
+\Phi^{-1}(\alpha)}(z)=\frac{F_Z(z)-F_Z(\Phi^{-1}(\alpha))}{1-F_Z(\Phi^{-1}(\alpha))}=\frac{F_Z(z)-\alpha}{1-\alpha}
+] [7], and then differentiating with respect to [ z ] [8] yields the
+conditional p.d.f. which is [ f_{Z \mid Z \geq \Phi^{-1}(\alpha)}(z) =
+\frac{1}{1-\alpha} f_{Z}(z)=\frac{ 1}{1-\alpha} \frac{1}{\sqrt{2 \pi}}
+e^{-\frac{z^2}{2}} ] [9]
+
+
+[QUESTION]
+Lecture 4 Could you explain a bit more about how can we derive the new normal
+distribution based on the integral above? and would you let us know if
+these kind of calculation (integral of two normal distribution's product)
+will be examinable?
+
+[ANSWER]
+To establish what would be the posterior predictive distribution, we first
+note that the integrand is the joint normal density of [ \tilde{y} ] [1]
+and [ \mu ] [2] (since the product of two normal densities of two
+independent r.v.'s is the joint normal density). Integrating out [ \mu ]
+[3] yields the marginal (normal) density of  [ \tilde{y} ] [1] . So we
+know that the posterior predictive distribution will be normal, and all is
+left now is to find the mean and the variance of this distribution.
+
+[ \begin{aligned} \textrm{We know that}\quad & \tilde{y} \sim N\left(\mu,
+\sigma^2\right) \quad\textrm{and}\quad Y_i \sim N\left(\mu, \sigma^2\right)
+\\ \textrm{Then}\quad& \frac{\tilde{y}-\mu}{\sigma}=z \sim N(0,1) \\
+\textrm{or}\quad& \tilde{y}=\mu+\sigma z \\ \textrm{The mean is }\quad&
+E\left(\tilde{y} \mid y, \sigma^2\right)=E\left(\mu \mid y,
+\sigma^2\right)+E\left(\sigma z \mid y, \sigma^2\right) \\ & =\mu_n +\sigma
+E\left(z \mid y, \sigma^2\right) \\ & =\mu_n +\sigma \cdot 0 \\ & =\mu_n \\
+& \\ \textrm{The variance is } \operatorname{Var}\left(\tilde{y} \mid y,
+\sigma^2\right)&=\operatorname{var}\left(\mu \mid \sigma^2,
+y\right)+\operatorname{Var}\left(\sigma z \mid y, \sigma^2\right) \\ &
+=\sigma_n^2+\sigma^2\\ \end{aligned} ] [4]
+
+Hence, we established that
+
+[ \tilde{y} \mid y \sim N\left(\mu_n, \sigma_n^2+\sigma^2\right) ] [5]
+
+
+[QUESTION]
+Could you please tell us which package pstd() is from?
+
+[ANSWER]
+ pstd() is from 'FGARCH' package.
+
+
+[QUESTION]
+Exercise 6 I wonder in the solution for Question 3 part (d), why does E[u^2 _(t-1)]
+equal to sigma^2 ?
+
+[ANSWER]
+Recall that the (unconditional) variance of a random variable u_(t-1) with
+mean 0 is E[u^2 _(t-1)], which is sigma^2_(t-1).
+
+Also, the (unconditional) variance of a random variable u_t with mean 0 is
+E[u^2 _t], which is sigma^2_t.
+
+One crucial detail to note here is that we rely on the assumption of WEAK
+STATIONARITY of a time series. Weak stationarity is a statistical property
+of a time series where the mean, variance, and autocovariance do not change
+over time. Therefore, the variance of u_t is the same as the variance of
+u_(t-1). Thus,  sigma^2_t=sigma^2_(t-1)=sigma^2. This holds for any t.
+
+P.S. A TIME SERIES of a random variable Y_t is a sequence of observations
+of Y at different time points t (e.g. in our case we assume log-returns are
+weakly stationary). Each observation in the series is a realization of the
+random variable Y at a specific time point t.
+
+
+[QUESTION]
+week 6 exercise, q3 (d)
+I was wondering in the solution of this question, why is the E(u_t-1^2)
+equal to the E(u_t^2), in other words why the E(u_t-1^2) is equal to
+sigma^2?
+
+[ANSWER]
+Yes, that's correct, this is because the process is stationary and the
+unconditional variance is the same for all t.
+
+
+[QUESTION]
+I have a few questions about sampling from copulas. In the lecture, it says
+that we can directly sample from explicit copulas. What does that mean?
+Assuming we have a copula C(u1, u2) = F_1,2(X<=x, Y<=y) (where F_1,2 is the
+joint CDF for the RVs X and Y), does it mean integrating out u1 or u2 and
+then inverting so we get the inverse marginal CDF and can then sample from
+it?
+
+From what I understood, for implicit copulas, the lecture says you first
+need to simulate RVs {X, Y}. Is this done using the marginal CDFs? Then, we
+apply the PIT to get U1 = F_XY(X) and U2 = F_XY(Y) (where  F_XY is the
+joint CDF so we impose the required dependency structure).  Why can we do
+this since the PIT says the RV needs to be transformed using its own CDF
+(so wouldn't it have to be U1 = F_X(X) and similarly for U2; but doing that
+would not impose any dependency structure on U1 and U2)? 
+
+[ANSWER]
+When we sample from explicit copulas, we don't need to know the joint
+distribution of X and Y, we can directly sample u1 and u2. The simulation
+from explicit copulas is beyond the scope if this course and it is not
+examinable. However, if you want to learn more about this, we can meet
+during drop-in hours and discuss this in greater detail. 
+
+If we want to sample from the implicit copula, we first need to simulate
+observations of X and Y, and then transform them using their CDF's to
+obtain u1=F(X) and u2=F(Y).
+
+
+[QUESTION]
+for the copula graph mentoined in the lecture notes(e.g. student t copula)
+when it refers to tail dependence, suppose the two random variables are
+positively dependent, does it refers to the right-bottom corner and the
+left-top corner of the graph? Or the right-top and left-bottom of the
+graph? Are the tail dependence means more observations in this area of the
+graph? How about if the two random variables are negatively dependent? 
+
+[ANSWER]
+When we are considering the POSITIVE DEPENDENCE
+(e.g. in a student t copula with the degree of freedom parameter being
+finite), the tail dependence refers to the top-right and bottom-left
+corners. That is, loosely speaking, the non-zero tail dependence indicates
+that no matter how far we go into the tails, the probability of
+observations falling into that region is strictly greater than 0.
+
+For the NEGATIVE DEPENDENCE - the tail dependence refers to the top-left
+and bottom-right corners. That is, when the tail dependence is non-zero, no
+matter how far we go into the top-left and bottom-right corners, the
+probability of observations falling into that region is strictly greater
+than 0.
+
+
+[QUESTION]
+To confirm, is that means for positive dependence relationship between two
+random variables, we look the areas around (0.0,0.0) and (1.0,1.0) (on the
+graph of copula, e.g. page 12 of the lecture notes), and for negative
+dependence relationship we concentrated on the area around (1.0,0.0) and
+(0.0,1.0)? Furthermore, when we refer to the lower tail dependence, is that
+means we refer to the (0.0,0.0) area on the positively dependence
+relationship graph and area around (1.0,0.0) if the dependence between two
+random variables is negative? 
+
+[ANSWER]
+Yes, that's correct. However, note that in the case of a _NEGATIVE
+DEPENDENCE_, it becomes ambiguous to determine what is meant by "LOWER"
+and "UPPER" tail dependence because what is considered the lower tail for
+one variable may actually be the upper tail for the other variable, and
+_vice versa_. Hence, when someone uses terms such as "lower" and "upper"
+tail dependence, they are typically referring to the positive
+dependence.
+
+
+[QUESTION]
+Ex.sheet 3 - question 2(a)
+In my view, a3 is inadmissible as it has delta(a1) and delta(a2) as R
+better decision rule.  However, the solution suggests a3 is also
+admissible.  Can you please kindly explain the details?
+
+[ANSWER]
+If there are values of th for which a3 has lower cost than a1 and a2, then
+these cannot be R-better actions. For example, when th=th2, a3 loss is
+GBP3000 which is less than the loss of a2 of GBP5000. When th=th3, a3 loss is
+-GBP100 which is less than the loss of a1 of GBP300. Hence, a3 is admissible.
+
+
+[QUESTION]
+Ex3 Q3 
+Could you please kindly hint why the 2(n-1) from the solution is derived
+from prior step, in the solution.
+
+[ANSWER]
+This makes use of the knowledge that the variance of a chi-squared
+distributed random variable with (n-1) degrees of freedom is 2(n-1).
+
+For example, let  [ \quad X_i \overset{i.i.d.}{\sim} N\left(\mu,
+\sigma^2\right) ] [1], for [ i=1, \ldots, n ] [2]. Then we know that [
+Y=\frac{\sum\left(X_i-\bar{X}\right)^2}{\sigma^2} \sim \chi_{(n-1)}^2 ]
+[3]. Finally, we use the result that [ Var(Y)=2(n-1) ] [4]
+
+
+[QUESTION]
+What is the difference between the posterior distribution and posterior
+predictive distribution?
+what *exactly* are their uses cases that make them differnet?
+
+[ANSWER]
+The POSTERIOR DISTRIBUTION is obtained by applying the Bayes' theorem to
+update the prior belief about th using the observed data. It provides a
+description of the uncertainty about th after considering the data. 
+
+On the other hand, the POSTERIOR PREDICTIVE DISTRIBUTION is derived using
+the posterior distribution. For example, consider the derivation of
+the posterior predictive distribution presented on page 41 of Lecture 4:
+
+[ \begin{aligned} p(\tilde{y} \mid \mathbf{y}) & =\int p(\tilde{y}, \theta
+\mid \mathbf{y}) d \theta \\ & =\int p(\tilde{y} \mid \theta, \mathbf{y})
+p(\theta \mid \mathbf{y}) d \theta \\ & =\int p(\tilde{y} \mid \theta)
+p(\theta \mid \mathbf{y}) d \theta \end{aligned} ] [1]
+
+The main idea to have in mind here is that we want to make predictions or
+forecasts for new data points. That is, we need a distribution of
+possible outcomes of [ \tilde{y} ] [2]. Suppose we know the
+distribution [ p(\tilde{y} \mid \theta) ] [3]. However, it can be noted
+that this distribution depends on th, which is unknown. We can employ the
+Bayesian approach in this context by treating th as a random variable, and
+therefore, we can integrate it out. In order to do that, we take the
+following steps:
+
+	*
+First line: We start with the joint density of [ \tilde{y} ] [2] and [
+\theta ] [4] given the observed data  [ \mathbf{y} ] [5]. It is
+represented as [ p(\tilde{y}, \theta \mid \mathbf{y}) ] [6].
+
+	*
+Second line: We know that [ p(\tilde{y}, \theta \mid \mathbf{y}) ]
+[6] can be rewritten as the product of two conditional densities: [
+p(\tilde{y} \mid \theta, \mathbf{y}) ] [7] and [ p(\theta \mid \mathbf{y})
+] [8]. 
+
+	*
+Third line: We use the assumption that [ \tilde{y} ] [2] is conditionally
+independent of the observed data  [ \mathbf{y} ] [5] given the parameter [
+\theta ] [4]. In other words, [ \tilde{y} ] [2]  only depends on [ \theta
+] [4] and is not influenced by the observed data. Therefore, we can drop
+the conditioning on [ \mathbf{y} ] [5] in the conditional distribution [
+p(\tilde{y} \mid \theta, \mathbf{y}) ] [7], resulting in [ p(\tilde{y} \mid
+\theta) ] [9]. Therefore, the integral becomes [ \int p(\tilde{y} \mid
+\theta) p(\theta \mid \mathbf{y}) d \theta = p(\tilde{y} \mid \mathbf{y}) ]
+[10].
+
+Finally, we obtain the POSTERIOR PREDICTIVE DISTRIBUTION [ p(\tilde{y}
+\mid \mathbf{y}) ] [11].
+
+
+[QUESTION]
+in slide 37 of week 4, you noted the term "empirical". I have also seen
+this term in many statistical papers. Can you please explain what the term
+"empirical" means for this degree?
+For example, what is an empirical, distribution?
+
+[ANSWER]
+In general, the term "empirical" refers to the information or knowledge
+that is acquired from observations (i.e. data) rather than being based on
+theoretical assumptions or beliefs. 
+
+On that slide, the term "empirical mean" refers to the mean of the
+distribution calculated from the observed data (i.e. observed
+log-returns): y = (-0.003, 0.034, 0.012, 0.042, 0.017, -0.006, 0.040,
+0.037, 0.022, -0.006)
+
+"Empirical mean" is also known as the sample mean.
+
+The "empirical distribution" is a distribution that is derived from
+observed data rather than being based on theoretical assumptions. The
+empirical distribution is often displayed through histograms, empirical
+cumulative distribution function (eCDF), or kernel density
+estimation (KDE).
+
+In contrast, a theoretical distribution is based on a mathematical model
+that describes the probabilities of different outcomes, e.g. probability
+density function (PDF) or a probability mass function (PMF). 
+
+
+[QUESTION]
+Portfolio variance Is this essentially the quadratic form of the variance-cov matrix?
+
+[ANSWER]
+Yes, that's right. A quadratic form of a 2-by-2 variance-covariance matrix
+S is a function defined by [ Q(\mathbf{ w})=\mathbf{ w}^{\top} \Sigma
+\mathbf{ w} ] [1], where [ \mathbf{ w} ] [2] is a column vector of size 2
+(i.e. a column vector of portfolio weights), and [ \mathbf{ w}^{\top} ] [3]
+denotes the transpose of [ \mathbf{ w} ] [2]. In other words, it is a
+polynomial function of the variables [ w_i ] [4] (the elements of [
+\mathbf{ w} ] [2] representing the fraction of funds invested into asset i)
+of degree 2, with the coefficients given by the entries of the matrix S.
+
+
+[QUESTION]
+Example 3 from week 3 
+Could you please explain more about the non-comparable decision rules? why
+does risk functions crossing make decisions rules non comparable?
+
+[ANSWER]
+We say that the decision rules are non-comparable when the risk functions
+associated with them cross. Suppose we have two non-comparable decision
+rules: d1 and d2.This implies that for some values of the unknown
+parameter th, the risk function of the decision rule d1 will be smaller
+(i.e. d1 will have a smaller expected loss associated with it), whilst for
+other values of  th, the risk function of the decision rule d2 will be
+smaller. Hence, we cannot say whether the decision rule d1 is R-better
+than a decision rule d2, i.e. they are not comparable.
+
+
+[QUESTION]
+Example 3 from week 3 Also, why does for 0<= c <=1 make the decision rules admissible? is it
+because:
+1. for values c>1, the risk function is above the risk function when c = 1,
+so don't even consider.
+2. for 0<= c <= 1, drawing the graph, we see *sections* of the graphs that
+below the risk function when c =1, so they *could* be up for being
+admissible?
+
+[ANSWER]
+1. Yes, for all values c>1, the risk functions will be always higher than
+the risk function associated with c=1 for all values of th. Therefore, the
+decision rules are inadmissible for c > 1 since we have the decision rule
+for c =1 which is R-better. See the graph below:
+
+2. Yes, the decision rules are non-comparable for 0 <= c <= 1, because
+the risk functions associated with them cross. Therefore, we cannot find
+the decision rule which is R-better for 0 <= c <= 1. See the graph below:
+
+One important point worth mentioning is that, NON-COMPARABILITY does not
+necessarily imply ADMISSIBILITY. For example, the decision rules for c=1.2
+and c=0.8 are _non-comparable _with each other, however the decision rule
+for c=1.2 is INADMISSIBLE,  but the decision rule for c=0.8
+is ADMISSIBLE. See the graph below (c=1.2 in green, and c=0.8 in red):
+
+
+[QUESTION]
+question 1 exercise 2
+I was wondering when we calculate bayesian expected loss for action a0, for
+p(theta=1| y=3),this will involving calculate p(y=3|theta=1), I understand
+this follow a gamma(3,1) distribution, however, i  was wondering is gamma
+(3,1) distribution is a continuous distribution? And therefore how do we
+calculate the probability when a random variable with continuous
+distribution equal to a specific value (i.e.y=3)? Will that be 0?
+
+[ANSWER]
+Yes, the probability of y=3 is 0, but remember that
+for continuous random variables, we use the probability density function,
+which is not zero for y=3 given those parameter values.
+
+Also, when we compute the posterior probability p(theta=1|
+y=3), p(y=3|theta=1) is treated as a likelihood function, i.e. as a
+function of theta. Note that theta is discrete in this example.
+
+
+[QUESTION]
+example 2, week 2 
+Could you please explain why the expected loss integral is broken down into
+2 integrals with different limits? One is from 0 to a, the other is from a
+to 1. How are these limits defined? Why exactly those?
+
+[ANSWER]
+This is one of the properties of an integral - we can split an integral
+over 0-1 interval into one over two smaller intervals [0, a] and [a, 1].
+
+For example, let the function f(x) be integrable on an interval that
+contains 0, a, and 1. Then
+
+[ \int_0^1 f(x) d x=\int_0^a f(x) d x+\int_a^1 f(x) d x ] [1]
+
+This property is useful here since the loss function L(th, a) is a
+piece-wise function, that is, over the [0, a] interval it has the form
+L(th, a)= 2(a-th), and over [a, 1] interval it has the form L(th, a)=
+th-a.
+
+Where do these limits of integration come from, [0, a] and [a, 1]? Well, we
+know that th can take values in the [0,1] interval (parameter space is TH
+= [0, 1]) and action a is the choice of a number in [0,1]  as an estimate
+for th, i.e. the parameter space is A = [0, 1].
+
+The limits of integration will be reduced further according to the prior
+information provided in the question:  "_In the past drugs tended to
+capture between 0.1 and 0.2 of the market,..."_
+
+
+[QUESTION]
+Example 1.2
+does having the probability of 4.5% therefore suggest the medical screening
+test is a good test - or not?
+4.5% isn't that high but then again the population/ prior suggests there
+isn't even a high chance of having the disease in the first place
+
+[ANSWER]
+Here 4.5% is the probability of having the disease given that the test
+comes back positive (not the degree of accuracy). It is actually low given
+the advertised degrees of accuracy. Intuitively we would expect this
+probability to be higher since the ability of a test to correctly identify
+positive cases is quite high (i.e. true positive rate is 95%).
+
+The advantage of using the Bayesian approach in this context is that it
+allows us to incorporate both the true positive rate and true negative
+rate of the test. This approach takes into account not only the accuracy
+of the test but also the prevalence of the disease in the population (i.e.
+1 in 1000 people in the population have the disease), providing a more
+reliable assessment. 
+
+
+[QUESTION]
+Beta distribution and priors 
+is there a discrete equivalent to the beta distribution? maybe binomial?
+Also, do priors always have to be a continuous distribution? I know it is
+also common to use the uniform[0,1], which is a non informative prior but
+of course, that is continuous, not discrete.
+could a discrete prior be used? 
+if so, I suppose it has to do with the context right?
+
+[ANSWER]
+Yes, as you've correctly mentioned, the appropriateness of using a
+particular prior distribution depends on the specific problem at hand and
+the available prior information. 
+
+Priors don't have to be continuous, and the choice will depend on the
+context and the nature of the problem (e.g. the type of variable being
+modelled). For example, the uniform[0,1] may be more suitable for
+modelling proportions or probabilities. Technically, a discrete prior can
+be used in this context, although this might not be the best choice
+as proportions or probabilities could take any value between 0 and 1.
+
+
+[QUESTION]
+Exercise 3 question 3 
+I am wondering why E(S^2) = sigma^2 (in purple text)? 
+Based on your video of question 1, I think it should be sth like: E(S^2) =
+E((1/n-1)*(S(i=1 to n) Xi- X_bar)^2) which is not equal to sigma^2?
+
+[ANSWER]
+We know that it is unbiased because if we take the expectation of S^2, we
+get sigma^2.
+
+
+[QUESTION]
+Exercise sheet 2 Q1 
+it is very confused in Q1 we assume Y given theta has gamma distribution
+which is c.t.s. conditional on Y=3 which is discrete how it works we just
+substitute 3 into gamma density to compute the probability that Y=3 given
+theta as in the answer sheet ,it does not make sense .
+
+[ANSWER]
+I would like to highlight that Y
+is not discrete, it is theta (which is the state of nature) that is
+discrete here. Also note that we compute the likelihood of theta given Y=3
+here, and subsequently substitute this into the Bayes' theorem. 
+
+Hopefully you will also agree that th is a discrete r.v. since it can take
+only two values, th = 0 or th = 1. That is, there are two states of
+nature.
+
+When the state of nature is th = 0, parameters of a gamma distribution are
+?=3  and  ?=2. 
+
+When the state of nature is th = 1, parameters of a gamma distribution are
+?=3  and  ?=1.
+
+Hence, when we construct the posterior probabilities, we only need to
+consider two values, th = 0 and th = 1.  
+
+Note that the likelihood function p(y|th) is essentially the gamma
+likelihood with a restricted domain {(3,2), (3,1)}.  
+
+
+[QUESTION]
+Generalised Pareto distribution 
+it seems as if the formula for the cdf won't take values in [0,1] as y --> inf
+unless we choose a negative k. Does this mean we must take k<0 or is there
+something I'm missing
+
+[ANSWER]
+Don't worry about these details, this IS a proper distribution function.
+Yes, k is a real number and hence can take values below 0.
+
+
+[QUESTION]
+Exercise 6 Question 3
+- For part 1) highlighted in pink, I do not know the reason why we are able
+to pull out the s_t from the expectation. This circumstance is different
+from the Section 6.2 in the note where we are able to pull out s because
+it is always a constant, and not always changing i.e. s _t according to
+different time (t, t-1, ..., 1).
+
+[ANSWER]
+part 1) The reason we can pull s_t out of expectations operator is
+because once we condition on past information O_t-1, s_t becomes a
+constant, and expected value of a constant is a constant itself. For
+example, if a r.v. X is being multiplied by a constant c, then
+E(c*X)=c*E(X).
+
+
+[QUESTION]
+Exercise 6 Question 3 part C
+- For part 3) highlighted in pink, how does Var (Y_t) ? s^2 =Var (u_t)?
+What steps are taken for us to get s^2 (without the subscript of t
+anymore) from Var (Y_t) and Var (u_t)? My friend told me that the
+unconditional variance do not have subscript because it is a constant, but
+I do not know the reason behind it. Please provide full steps, proofs and
+explanations for this part.
+
+- Part 4) highlighted in pink, the similar question to part 3), but this
+time for E(u_t-1) = s^2 (without subscript t). Does the expectation of
+u_t and Y_t also produce s^2, why is this the case for both variance and
+expectation?
+
+- Part 5) highlighted in pink, is this question like a loop, where for each
+smaller t, s^2 Will appears within the equation?
+
+[ANSWER]
+Yes, unconditional means it does not depend on t, and hence it is a
+constant. Because we are computing the unconditional variance, hence it
+does not depend on t. In order to compute it, we take the unconditional
+expectation. The steps you are showing here are quite detailed, and cannot
+be broken down further.
+
+ This is because we need to take the unconditional expectation to derive
+the unconditional variance, Var (Y_t) ? E(u_t^2)=s^2 . However, because
+the unconditional expectation is hard to compute, we makes use of the Law
+Iterated Expectations (LIE), which uses the conditional expectation, which
+is much easier to compute. The formula you are showing for LIE is correct.
+
+This goes back to the unconditional variance being a constant, hence it is
+the same for all t, i.e. E(u_t^2)=E(u_t-1^2)=s^2
+
+
+[QUESTION]
+Exercise 6 Question 3
+- For part 2) highlighted in light pink, same case as in the Section 6.2 in
+the note, I do not know why the standard normal distribution e_t are
+able to get rid of the conditional O_t-1 part (from E {e_t | O_t-1}
+ to E {e_t}). Are there explanations for this?
+
+[ANSWER]
+part 2) This is by independence, since e_t is an i.i.d. process (first
+'i' stands for independence), then it does not depend on any past
+information (including information contained in O_t-1). Hence, if it is
+independent, then the distribution of e_t is not affected by O_t-1,
+which implies that the expected value of e_t is not affected
+by O_t-1,  the variance of e_t is not affected by O_t-1, etc.
+Therefore,  E {e_t | O_t-1} = E {e_t}.
+
+
+[QUESTION]
+Exercise 6 Q3 Why can ignore the condition on the past information and get to the next
+step? 
+
+[ANSWER]
+We are not ignoring past information, in fact it is crucial to what we can
+say about the expected value and the  variance. Generally sigma_t is not a
+constant, it is a random variable as it depends on innovations and past
+sigma_t's. However, once you condition on the past information, it becomes
+a constant, and in the above derivation we can pull it out of expectations
+operator. If we don't condition on the past information, then we need to
+compute the expected value of a product of two r.v.'s which is generally a
+complicated thing to do.
+So the answer is no - we don't ignore past information represented by
+O_t-1.
+
+
+[QUESTION]
+Please could you give some guidance as to how we work out E(sigma_t-1^2),
+specifically with a Garch(1,1) model?
+
+[ANSWER]
+The approach is analogous to the one used in Exercise 6 Q3. E(sigma_t-1^2)
+equals to the unconditional variance sigma=1/(1-alpha-omega).
+If you really want to get a better intuition of how we reach this result,
+you can try an alternative approach - try to substitute E(sigma_t-2),
+E(sigma_t-3), and so on into E(sigma_t-1^2) to obtain a geometric series,
+and then try to obtain a closed form of this geometric series.
+
+
+[QUESTION]
+can you explain why there is a term for the prior for T in the lecture note
+but in exercise 7, there is no term representing prior for T?
+
+[ANSWER]
+ this is because we have the knowledge of a
+particular value of tau, which is tau=2. Hence, tau is not unknown, and we
+don't need to integrate it out. 
+The expression in the slides is for the unknown location tau. 
+
+
+[QUESTION]
+Lecture 9 prediction 
+Given D>u, the equation P(Y>=D)=P(Y>=D|Y>=u) 
+Does this means P(Y>D)=P(Y>D|Y>u) ?
+if not how do we compute P(Y>=D)=P(Y>=D|Y>=u)? in other words, how to
+compute P(Y?
+
+[ANSWER]
+P(Y>D) is unconditional probability and P(Y>D|Y>u)  is conditional on
+exceeding the threshold u. They are not equal.
+Exercise 9 provides detailed steps on how to compute these
+probabilities. P(Y>=D) is computed using sample proportion,
+and P(Y>D|Y>u)  is computed using GPD distribution.
+
+
+[QUESTION]
+in ex9, we can get P(Y>u) using sample proportion, and P(Y>D|Y>u) by GPD
+distribution.
+How do we get P(Y>=D|Y>=u) exactly, ie. from GPD distribution, we know
+P(Y<=D|u), and we could get P(Y>u|Y>u), but how do we get P(Y>=D|u) ?
+Does P(Y>=D|u) also equals to 1-P(Y<=D|u) ?
+
+[ANSWER]
+Yes, we can obtain P(Y>=D|u) using 1-P(Y<=D|Y>=u) or 1-P(Y<D|Y>=u) .
+
+
+[QUESTION]
+BIC 1 or more Change Point(s) prior p(τ) Understanding
+ I would like to know why does breaking
+down the t integral section created the prior p(t). I am not sure which
+theory does p(t) in this question comes from? Since from my understanding
+I thought that p(t) will only be used in the situation: p(y| t) =
+p(t |y)p(y)/p(t)? So, could you please clarify my understand of why the
+prior p(t) is utilized in this situation after we break down the integral
+in respect to t.
+
+[ANSWER]
+We are interested in the marginal likelihood under various competing
+models. In this case we are computing the marginal likelihood under model 1
+where the unknown parameters are integrated out. Here, the likelihood
+is p(y|t,l1,l2) and t is one of the unknown parameters, hence we
+integrate it out.
+
+We never used the Bayes' theorem to compute p(y| t) in the following way
+p(y| t)  = p(t |y)p(y)/p(t). I think there is confusion
+with p(t|y), which is a different object.
+
+
+[QUESTION]
+Exercise 6 q 3d
+I don't understand line 8 of the solution - why is E(et^2) = Var (et )?
+Also, in line 9, why have we made this equal to sigma^2?
+Finally, in line 11/12, how do we know that the expectation of this is
+equal to sigma^2 ?
+
+[ANSWER]
+Here et ~N(0,1). Since the expected value of et  is 0, then its
+variance will be E(et^2) = Var (et ) =sigma^2 =1.  sigma^2 is simply
+a widely accepted notation for the variance ( in the same way as mu is
+used to denote the mean). 
+
+
+[QUESTION]
+Why is E{u^2_t-1}=sigma^2 without time dependence and subscript t
+
+[ANSWER]
+The process u_t is stationary since we assume that |a1|<1, which means
+that the unconditional variance does not depend on time period t, i.e. it
+is the same regardless time period t. Therefore, Var(u_t)
+= Var(u_t-1) = Var(u_t-2)=s^2. We have seen that Var(u_t)= E{u^2_t}},
+and also it is the case that Var(u_t-1)= E{u^2_t-1}},
+and Var(u_t-2)= E{u^2_t-2}}. Hence, combining with the first result, this
+implies that E{u^2_t}} = E{u^2_t-1}} = E{u^2_t-2}} = s^2 which answers
+your question.
+
+
+[QUESTION]
+Exercise 6 q 3d is it always the case that we assume u_t is stationary? 
+
+[ANSWER]
+Here as long as 0<a1<1 the process will be stationary.
+
+
+[QUESTION]
+Regarding the Bayesian Information Criterion, if we compare 2 models and
+one has a more negative BIC than the other, which one do we pick? Is it the
+model with the value closest to 0 or the one with the most negative value?
+
+[ANSWER]
+Depends on which version you are using - if you are using the version form
+lecture 8, then you choose the one that provides the highest BIC.
+
+
+[QUESTION]
+Lecture8 Example3 
+In this precess of calculating marginal likelihood of model M1, I am
+confused why we need to multiply the prior 1/(n-1) as changing the integral
+to summation.
+
+[ANSWER]
+The integral changes to summation because tau is discrete.
+So p(l0,l1,t|M1) = p(l0|M1) p(l1|M1)p(t|M1)
+where p(t|M1) =1/(n-1) .
+
+
+[QUESTION]
+Week 4 Bayesian Inference 
+In the notes, we are given a simplest scenario in which variance is known
+but mu is not. It then states 'it can be shown the conjugate prior is also
+normal' but how do we know it doesn't take another distribution because I
+think the prior can also be Gamma if we have a normal likelihood?
+Will we be told to assume this and if not, how do we know which
+distribution to choose as the prior?
+
+[ANSWER]
+Normally you will be given the conjugate prior, so you don't have to worry
+about choosing the appropriate prior.
+Yes, we can use other conjugate priors depending on what is parameter of
+interest and which parameters are known/constant. For example, Gamma can be
+used as a conjugate prior when the likelihood is Normal with known mean
+m, and the parameter of interest is [{\displaystyle 1/\sigma
+^{2}}] (i.e. the inverse of a variance).
+
+
+[QUESTION]
+Week 2 Notes 
+For the parameter estimation, do you estimate them to be put into each of
+their respective loss function?
+Also, for the parameter estimation, do you mind giving examples of how to
+calculate these three highlighted in pink? Since I do not know whether my
+understanding are fully correct or not from reading the notes.
+
+[ANSWER]
+The key idea here is that we can use different measures of central
+tendency to estimate the unknown parameter once we derive the posterior
+distribution: the MEAN, the MEDIAN, and the MODE. Each of these choices are
+principled, meaning that they are not arbitrary choices, but are the BEST
+choices under specific loss functions (_best_ in the sense that they
+minimise the Bayesian Expected Loss)! 
+Do you mean an example on how to compute the mean, the median, and
+the mode of the posterior distribution?
+
+
+[QUESTION]
+Explicity and Implicit Copulas 
+I was a bit confused on the difference between explicit and implicit
+copulas. Based on lecture 5 we are told explicit are in closed form but I
+am not sure what this means could you please clarify this.
+
+[ANSWER]
+A closed-form expression can be (loosely) described as a mathematical
+expression that does not use infinite products, infinite sums, limits,
+integrals, and derivatives. For example, Gaussian (normal) copula and
+Student-t copulas have no closed forms since they use integrals in their
+mathematical expressions.
+
+
+[QUESTION]
+Law of total probabilitiy vs Bayes' Rule 
+When using conditional probabilities for deriviation, could you clarify
+under what circumstances we use Law of Total Probability and under what
+circumstances we use Bayes' Rule?
+
+[ANSWER]
+These are not substitutes. Law of Total Probability can be used when the
+marginal probability of interest is unknown, but we do know relevant
+conditional probabilities. Bayes' rule can be used to update our beliefs
+based on the arrival of new, relevant information (e.g. data). Hope this
+clarifies the confusion.
+
+
+[QUESTION]
+week 7 lecture notes on posterior predictive distribution 
+I wonder how to get to the last line.
+
+[ANSWER]
+You need to use the Bayes' theorem. See solutions for Exercise 9 Q2(a) for
+a similar example using the Poisson likelihood instead.
+
+
+[QUESTION]
+Week6: Residuals 
+Could you please explain why we should standardise the residuals? And why
+used standardised residuals instead of non-standardised residuals for the
+copula?
+
+[ANSWER]
+Because non-standardised residuals have different variances at different
+time periods, hence we cannot apply the same cdf (or PIT). So here
+standardising means that you divide each residual by its corresponding
+standard deviation. You can experiment to see what happens by applying CDF
+(or PIT) to non-standardised residuals (will it pass the tests?).
+
+
+[QUESTION]
+Lecture 6：Simulation 
+You mentioned that in lecture 6, once we reintroduce the garch effect, we
+will be able to build the log returns for our portfolio. I am not sure I
+understand what you meant, cause from my understanding, the monte carlo
+simulation has already generated the portfolio log returns. Did you mean
+that these log returns shouldn't be used because they are assumed to be
+i.i.d, so we need to adjust them?  
+
+[ANSWER]
+We first simulate individual log-returns 1-step ahead, and then we combine
+these simulated individual values to construct portfolio log-returns. 
+After we apply IPIT to simulated u1 and u2, we need to re-introduce
+autocorrelation and GARCH effects observed in raw log-returns. Hope this
+clarifies the confusion.
+
+
+[QUESTION]
+Lecture 6：Simulation 
+u1 and u2 are marginal distributions of the standardised residuals right?
+So is it true that using the copula selected for u1 and u2, the monte carlo
+simulation would give us residuals, which are the error terms in the Garch
+model? And to get the true log returns, we need to use your hint, calculate
+the individual log returns and combine them? 
+
+[ANSWER]
+u1 and u2 are PIT transforms of the standardised residuals. U1 and U2 are
+distributed as U(0,1) - standard uniform r.v. Copula is applied to u1 and
+u2, not the standardised residuals (remember that copula has standard
+uniform margins).
+
+You will obtain simulated standardised residuals once you apply IPIT (i.e.
+inverse PIT) to simulated u1 and u2 from a copula. Once you obtain
+these simulated standardised residuals, you need to use my hint to obtain
+simulated log-returns (in the next time period).
+
+
+[QUESTION]
+Lecture 8 Slides
+Can we assume that p(tau|M1)=p(tau), i.e. are they independent?
+
+[ANSWER]
+It will be helpful not to think about the tau this way. Because if we do,
+then we would reach the following conclusion: p(tau|M1) = p(tau|M0)
+= p(tau), but M0 has no change point! Think about p(tau|M1) as the prior
+belief about tau in a model with a single change point. 
+
+
+[QUESTION]
+In lecture4's notes, alpha are usually taken as 0.95, 0.99 when calculating
+VaR. But in week5's R example you provided, alpha is taken as 0.05 and
+0.01, and give negative valued VaR. Can I know why the value of alpha is
+taken differently?
+
+[ANSWER]
+In R example we are using 1-alpha=1-0.95= 0.05 and 1-0.99= 0.01 to feed
+into quantile()function. Alpha is not taken differently, this is what the
+definition says.
+
+
+[QUESTION]
+Week 4 Notes (Multi period) Portfolio Value of Risk 
+The highlighted subscript "p" of the sigma square formula, what does
+that indicate about the calculation? Is it the number of assets in the
+portfolio we are trying to calculate?
+Moreover, for the two-asset case of the portfolio, do we just multiply with
+sqrt(h) and h the same way we are trying to calculate the multi period VaR
+for one asset portfolio VaR?
+
+[ANSWER]
+'P' stands for portfolio, so this is a variance of a portfolio of assets.
+Yes, since this is a scalar, you can take the square root of it.
+
+
+[QUESTION]
+It says online AIC and BIC can take negative values but can I clarify if
+model with AIC 0.5 is better or model with AIC -5? Does it have to be
+smaller in absolute terms or just purely as smaller as it can be?
+
+[ANSWER]
+That's correct, they can take negative values. Note that there is not
+mentioning of absolute values. -5 is less than -1, i.e. -5<-1.
+
+
+[QUESTION]
+When performing the model checking we need to show that the residuals can
+be transformed to follow a uniform distribution using a PIT transformation.
+Can the model (when we are converting the log returns to a uniform
+distribution)  use a different conditional distribution (for example pstd)
+while at the same time we use a PIT "normal" transformation for the
+residuals?
+
+[ANSWER]
+Remember that we are modelling conditional marginal distributions, and
+hence we need to be consistent with our choices when applying PIT.
+
+
+[QUESTION]
+If we add MA model into our final model and the second argument of function
+arma() has a non-zero integer, eg. arma(3,2), how can we calculate the log
+return? 
+
+[ANSWER]
+You can apply arma models. Note that we are applying arma model to
+log-returns (arma models are not used to calculate log-returns).
+
+
+[QUESTION]
+Week 3 Notes Non-Sensical Decision Rule 
+From the picture, does the non-sensicle decision rule occur when the risk
+function equal to 0 or when the theta equal to 0? Or does both of these
+circumstances need to occur? If not, then what determine the occurrence of
+non-sensicle function
+
+[ANSWER]
+Nonsensical decision rule here is to choose c=0, which means you estimate
+the mean of a normal distribution to be 0 regardless of the sample you
+obtain. For example, if you obtain a single realisation equal to, say
+10000, then it would be unreasonable to estimate the mean of the unknown
+distribution to be 0 (because if that was true, then it would be very
+unlikely to observe a value of 10000!). So by 'nonsensical' here we mean
+the approach where we completely disregard the sample information (which
+does not make any sense for doing so).
+If c=0, then the resulting the risk function is theta^2.
+
+
+[QUESTION]
+On the last page of note week 3, "the maximum of these functions
+exist". What are the cases where it does not exist and there are
+Supremum? And if Supremum occur what values of p and risk function would we
+be choosing? Infinity?
+
+[ANSWER]
+For example, the set [0, 3) does not have a maximum, but has a supremum
+which is 3. If you have a function y=x^2, then that function does not have
+a maximum on a set [0, 3), but has a supremum which is 3^2=9.
+
+
+[QUESTION]
+Week 4 Notes Posterior Predictive Distribution 
+From the calculations highlighted in pink, why does the observed value of y
+in the conditional area disappeared? Are there any explanations for that?
+
+[ANSWER]
+This is because Y's are independent (this is an i.i.d. assumption).
+
+
+[QUESTION]
+Week 6 Notes Autoregressive Models distribution
+a2yt 2 + . . . + apyt p, s2) (6.1) and Yt|yt 1, . . . , yt p ~ N (c +
+a1yt 1 + . . . + apyt p, s2) (6.2) are the same? Does these two
+probability distributions does not involve past innovations? If so, why?
+
+[ANSWER]
+This is because the information set Ot-1 contains yt-1, . . . , yt-p. This
+is the relevant information for our model AR(p).  Relevant past
+innovations are already contained in yt-1, . . . , yt-p, which represent
+the relevant info.
+
+
+[QUESTION]
+Hi professor, I have a few questions for exercise 6:
+1. In question 2 , I wonder where does this equation comes from?
+2. In question 3,  why E{ut-1  ^2} = sigma^2?
+
+[ANSWER]
+1. Outer integral is due to the definition of VaR, the inner integral is
+the Bayesian approach to integrate out the unknown parameter alpha2.
+2. This is because E{ut-1 ^2} is the variance of a zero mean random
+variable ut-1 , and by convention we use sigma^2 to denote the variance.
+
+
+[QUESTION]
+Week 8 Notes Additional Questions (Contradiction) 
+However, the same distribution also appear in Week 8, but it seems that the
++n and S yt parts now swap sides. Why is this the case of the context of
+the question? And how do I distinguish what will the Gamma distribution be
+(in which context)? Could you please clarify?
+Furthermore, would you be able to give me the explanations for the Beta
+posterior distribution, is it the same case for the Gamma distribution? If
+not, what are the differences in creating the distributions?
+
+[ANSWER]
+The parameters of the posterior differ because the likelihood in each
+example are different - in one case it is an exponential, and in another it
+is Poisson. These parameters are computed by combining the likelihood and
+the prior. See Exercise 1 Q. 4 for an example using an exponential
+likelihood. The idea is the same for the Poisson likelihood.
+
+
+[QUESTION]
+Week 8 Notes Predicting Large Values (Conditional on y) 
+Why in the two pictures the conditional on observed value y are different
+to each other. With the latter case (where we know the true value of the
+change point), p(~y|y1, . . . , yn, t ) has conditional on y, but the
+former case where (we do not know the true value of the change
+point), p(~y|l) has no conditional on y? Is there an explanation for
+that?
+
+[ANSWER]
+These are different densities of ~y:
+	* p(~y|y1, . . . , yn, t )  is the posterior predictive density
+for ~y in the presence of a change point
+	* p(~y|l)  is the 'usual' density of ~y
+
+
+[QUESTION]
+Week 9 Notes Generalised Pareto Distribution 
+Why does the r codes formulas highlighted in pink for the single and
+multiple attacks do not align? In comparison to the log normal and
+exponential case where it is just the 1-X and 1-X^2000?
+
+[ANSWER]
+This is because using the GPD we are computing 1- (1-p(Y >= D))^2000.
+
+
+[QUESTION]
+When BIC is negative, should we choose the one which is more negative(like
+-356) than the one with less negative(-245)? From Lecture 6, I remember we
+chose the model with BIC that is more negative and more away from 0. 
+But in Bayesian Model Selection section in Lecture 9, comparing exponential
+to lognormal, it chooses -26687.5 instead of -32243.51. Could you please
+explain the difference?
+
+[ANSWER]
+We choose the model of best fit, i.e. the model that minimises AIC/BIC
+criteria.
+I mentioned in Lecture 9 that students should be careful not to confuse
+this part - most (if not all) stats packages minimise the negative of the
+log-likelihood. The conventional version of BIC is based on the negative of
+the log-likelihood, hence when we use the BIC version provided by the
+statistical packages, we select the model with the smallest BIC.
+In Lecture 9 we consider the log-likelihood, hence we choose the model with
+the largest BIC.
+
+
+[QUESTION]
+Copula modelling based on Marginal distribution
+if we use sstd in Step2(estimation), do we assume the marginal
+distribution also follows the student-t distribution? So can we replace the
+final step with res1_sim=qt(u_sim[,1], df=10, ncp=0) 
+
+[ANSWER]
+We don't simply assume here, we need to select the model of best fit using
+AIC/BIC!
+
+
+[QUESTION]
+In the Lecture 6 R example, when we are transforming the residuals of the
+model using 
+u1<-pnorm(res1, mean=0, sd=1)[4:length(ret1)]
+Why do we need [4:length(ret1)]? Does this mean we should always discard
+the first 3 transformed results?
+
+[ANSWER]
+Not always, it depends on the model. In this example we used AR(3) model,
+hence 3 observations are lost.
+
+
+[QUESTION]
+According to week6 code, we can compare models by checking their IC values
+and P values for two uniform tests and we wish to get a model with smallest
+IC values and biggest p values. However, if for two models, one has smaller
+IC values while the other one has bigger p values, how should we choose our
+model?
+
+[ANSWER]
+I would recommend using IC values for model selection instead of comparing
+p-values across models. That is, select the model that has the smallest AIC
+or BIC.
+
+
+[QUESTION]
+In the week 7 notes, we give the parameters of the exponential distribution
+lambda_1, lambda_2 a gamma prior, and then in the example 4, you state that
+we specifically give them a gamma(1, 1) prior.
+How is this choice made? How do we know it is gamma(1, 1), and not some
+other gamma distribution?
+This seems a pretty crucial choice, since the posterior distribution
+includes the use of the alpha and beta, where the parameters of the
+exponential distribution lambda_1, lambda_2 are distributed Gamma(alpha,
+beta).
+
+[ANSWER]
+The only reason of this assumption is to simplify the final expression. 
+
+
+[QUESTION]
+Lecture 6 First, in the example code you provided, the
+simulated VaR loss seems unreasonable large. May I know why the loss is too
+large in this case ?
+Also, quoting from the example code you provided, u1<-pnorm(res1, mean=0,
+sd=1)[4:length(ret1)]. May I know why we start with the 4th data in our
+dataset ?
+
+[ANSWER]
+The question asked by that student was why
+losses exceed 100% (i.e. below -1). Well, remember that we are using
+log-returns, which is an approximation to net returns. The closer the
+net-returns are to 0, the better is the approximation. However, when we
+consider VaR, negative net returns are close to -1, hence the discrepancy.
+Also note that log-returns can take values up to negative infinity, so they
+can fall below -1.
+Because first 3 observations are lost due to AR(3) model.
+
+
+[QUESTION]
+When choosing AR and GARCH models, if the log-return data doesn't have
+autocorrelation (tested from Ljung-box test), but shows volatility
+clustering in the traceplot, should we consider AR and GARCH models
+separately or do they come together?
+
+[ANSWER]
+You can consider them separately. AR is the model for the conditional mean,
+GARCH is the model for the conditional variance. The data could exhibit
+GARCH effects and no autocorrelation.
+
+
+[QUESTION]
+A general question would be how should we decide on whether to use normal
+or student t distribution as our conditional distribution for the model.
+Also, if we decided to use, say, a normal distribution for the
+autocorrelation model, do we also have to use the same model when we
+perform the PIT on the log-return (i.e. use CDF of N(0,1) in this case).
+
+[ANSWER]
+Model selection procedure would help to address that question. Remember
+that in Step 1 we are modelling the marginal distributions
+(conditional marginal distributions, to be more precise in our case), i.e.
+F() . Therefore, you need to use the corresponding F() when applying PIT. 
+
+
+[QUESTION]
+In the week 7 notes, on page 5, it talks about the non-informative prior:
+_"If there are n observations, the last point cannot be a change point
+since we require at least one observation on both sides of t . As such,
+there are n - 1 possible locations..."
+In this case, surely the first point/the first observation would not be a
+change point either, as there are no observations below this point. From
+this, would it not be the case that there are N - 2 possible locations for
+a change point, rather than n - 1 as stated in the notes?
+
+[ANSWER]
+Basically what it says is that you need at least one observation from each
+distribution. If _t=1, _then there is one observation before change,
+however if _t=n_, then all observations will be before change point, and
+none from after the change point. Hence, we exclude _t=n_ since this is
+irrelevant to our analysis (simply because our data has no change point).
+
+
+[QUESTION]
+Exercise 6 q 2b 
+I am confused about how we got this large integral. I understand that we've
+used the normal CDF in the final line, but how did we get to the integrals
+and the variables from the previous line?
+
+[ANSWER]
+Remember that a2 is unknown in this part-question. Also, we wish to employ
+the Bayesian inference where we treat a2 as a random variable. Hence we
+can integrate out the unknown a2. Thus we have a second integral there.
+
+
+[QUESTION]
+I have a question about the lecture 6 r script, what we do before is to
+check the auto-correlation in the data and use garch and arma to eliminate
+the auto-correlation. Then, we can use the eliminated version to simulate
+u1 and u2 by using the copula. But in the end, you said we need to
+re-introduction correlation here, I don't quite get why we need to
+re-introduce correlation and garch effect here. Could you please explain
+it?
+
+[ANSWER]
+This depends on your original log-returns data - if autocorrelation and
+GARCH effects are present in your original data, then your simulated data
+should also have these features present. When we apply Inverse PIT ([ \{
+F^{-1}(u_1), F^{-1}(u_2) \} ] [1], this yields i.i.d. data, hence we need
+to re-introduce the autocorrelation and GARCH effects present in your
+original data. 
+
+
+[QUESTION]
+Ex 6 Question 2b 
+Was wondering if instead of using p (y3|a2, y) . p (a2|y) da2 I could
+instead use p (y3|s^2, y) . p (s^2|y) ds^2 adter finding the
+distribution of s^2. 
+
+[ANSWER]
+Technically you could, but then it would not be clear that the randomness
+comes through a2. 
+
+
+[QUESTION]
+Exercise 6 Qu 3 d 
+I'm struggling to understand why the second expectation [line 5] comes in
+the provided solution.
+
+[ANSWER]
+We need to compute the unconditional expectation, which is not easy in this
+context. However, we know how to compute the conditional expectation (from
+part b). So, we make use of the Law of Iterated Expectations (aka LAW OF
+TOTAL EXPECTATION [1]) to compute the unconditional expectation. This is
+some sort of 'trick' to break down a difficult task into a smaller easy
+tasks. 
+
+
+[QUESTION]
+Lecture 4 empirical mean 
+I am wondering how do you derive the empirical mean here?
+
+[ANSWER]
+I believe it's just the mean of the 10 observed log-returns on page 29 of
+the PPT. Yes, it uses the data from p. 29:      (0.003, 0.034, 0.012, 0.042,
+0.017, -0.006, 0.040, 0.037, 0.022, -0.006)
+
+
+[QUESTION]
+Lecture 4 Bayesian video 
+hi, where is 0.0063^2 from?
+
+[ANSWER]
+This is simply using the formula on pp. 36-37:  [
+\sqrt{\frac{\sigma^2}{n}} = \sqrt{\frac{0.0004}{10}} ] [1] = 0.006324555.
+This can be easily computed using R: sqrt(0.0004/10)
+
+
+[QUESTION]
+In the "Lecture 5 R Example", the last three lines of codes deal with
+calculating the portfolio log-returns and VaR. I am a bit confused
+about port_sim =
+log(1+((exp(ret1_sim)-1)+(exp(ret1_sim)-1))*(1/2)) and var_sim =
+quantile(port_sim, c(0.01,0.05)). Could you please explain how these codes
+run the calculations to return the results we need?
+
+[ANSWER]
+This goes back to what we mentioned in
+previous lectures: log-returns are additive across time, but NOT across
+assets. Therefore, we need to transform back to individual net returns to
+form a portfolio of net returns, and then take logs to construct portfolio
+log-returns. The quantile(port_sim, c(0.01,0.05) simply returns the values
+of portfolio log-returns such that 1% and 5% of the data lies below those
+thresholds, respectively.
+
+
+[QUESTION]
+Week 4 Example 2 
+Why the integral is from -0.03 to -infinity?
+
+[ANSWER]
+This is because we want to compute the probability of a return being
+less than or equal to -0.03.
+
+
+[QUESTION]
+VaR parametric approach
+In VaR, the threshold is the probability of losing more than the threshold
+is equal to 1-a, and to calculate this threshold in the parametric
+approach, we find the threshold that the log return dropping below it is
+1-a. I find it a bit confusing how we could use this way to find VaR, could
+you please explain the method behind this approach? 
+
+
+[ANSWER]
+Log-returns are the (natural) logarithmic transformations of gross returns
+(or we could also say net returns, because we could add 1 to net returns
+and then take logarithms). Then this invites the question - why bother with
+the logarithmic transformation? The answer is because it is more convenient
+to work with log-returns than gross or net returns (e.g. log-returns are
+additive across time).
+When we try to make a connection between log-returns and the loss, then it
+is easy to see that negative values of log-returns are losses, and positive
+values are gains (or profits).
+
+
+[QUESTION]
+VaR parametric approach Does the log
+return below the threshold here the same as the loss in VaR? Therefore q is
+negative but the magnitude is equal to the threshold in VaR, so we take the
+value -q as VaR?
+
+[ANSWER]
+I think it might help to get a more firm understanding if you try not to
+limit the definition of VaR to returns or log-returns only. If you think
+more generally about this concept, then you can actually view it as a
+quantile function of any distribution (i.e. inverse CDF). Using the
+Wikipedia wording, a quantile function "_specifies_ _the value of the
+random variable such that the probability of the variable being less than
+or equal to that value equals the given probability._ " [{\displaystyle
+Q(p)=F_{X}^{-1}(p)\,.}]
+In our context, if X represents log-returns (it could even represent
+net returns  or gross returns, but as I mentioned in lectures, the
+parametric formula relies on the normality assumption, but net returns or
+gross returns cannot be normally distributed due to the range of values
+they can take, hence I used log-returns). So the we could define [
+100\alpha\% VaR ] [1] as follows (over a certain period h, of course):
+[ VaR_{\alpha} := - F_{X}^{-1}(1-\alpha) ] [2] 
+(negative sign in my definition above helps to express VaR as a positive
+number; assuming a is high enough to return a negative
+value [  F_{X}^{-1}(1-\alpha) ] [3] ).
+Of course, this relies on the existence of an inverse CDF [ F^{-1} ] [4].
+Hence, there is a more general definition used in Lecture 4 p. 4
+(Definition 1) which holds even when an inverse CDF is not defined. Note
+that this Definition 1 uses losses L, instead of log-returns.
+
+
+[QUESTION]
+I am a bit confused about the explanation of VaR in the parametric and
+bayesian approaches. My understanding is in the parametric approach the VaR
+is a threshold of loss, and in bayesian, the VaR is the probability we lose
+a certain amount(proportion) of loss. Could you please tell me whether my
+understanding is correct? If yes I am confused why VaR could have 2
+different explanations(ie. proportions of different things) 
+
+[ANSWER]
+In Lecture 5 (p. 46) we did not actually
+try to compute the VaR, we tried to find "the probability of the portfolio
+dropping in value by more than 3% on a given day." Nevertheless, knowing
+the definition of VaR, we could say that this is equivalent to saying that
+the 100*(1-0.01774811)% confidence level 1-day VaR is 0.03.
+To check you understanding, try to compute the 99% 1-day VaR using
+the posterior predictive distribution below (more precisely, try to
+explain in words how would you find it).
+
+
+[QUESTION]
+In the last figure of the lecture 5 notes, it is said that the Gumbel and
+Frank Copulas exhibit weak lower tail dependence. 
+I understand that for Gumbel Copulas as it is explained in its section, but
+the notes further up about Frank Copulas only discuss that it has symmetric
+dependence, and mentions nothing about lacking lower tail dependence.
+Could you elaborate more on this contradiction? 
+
+[ANSWER]
+Frank copula does not have tail
+dependence (neither upper nor lower tail dependence), and Gumbel does not
+have lower tail dependence. 
+I think I see the source of confusion - if we say that Frank copula
+"exhibits symmetry in both tails" (see p. 14 in Lecture notes), we are not
+contradicting the fact that Frank copula does not have tail dependence -
+it is zero in both tails. If it helps, I include below a definition of a
+TAIL DEPENDENCE  to clarify this further:
+Frank copula has ?_U=0 and ?_L=0, hence  ?_U=?_L.
+P.S. This also brings to another nuanced distinction in the way I use
+terms TAIL DEPENDENCE and _dependence in the tails_. TAIL DEPENDENCE has
+an explicit probabilistic definition (see above) which is not quite the
+same as the _dependence in the tails_. Loosely speaking, when I say
+_dependence in the tails_, I refer to what happens in the positive and
+negative quadrants. See the picture below. I might be abusing the
+terminology here, so apologies in advance. 
+Also, further clarification on the use of the wording "symmetry in both
+tails" -  it does *NOT* refer to another definition which says that a
+copula is symmetric if [ C(u_1, u_2)=C(u_2, u_1) ] [1]  [ \forall
+u_1,u_2 \in [0,1] ] [2].
+EDIT: I say positive/negative quadrant, but this does not necessarily imply
+positive or negative values (of the original variables X1, X2 of course,
+since U1, U2 are always positive since they take values in [0,1]). Perhaps
+I should've used upper-right quadrant and lower-left quadrant instead.
+
+
+[QUESTION]
+Exercise 1 Qu 4 
+How is it that the probability distribution for lambda is derived?
+
+[ANSWER]
+So here we
+simply selected a good candidate (which is also conjugate) for the prior
+distribution that will reasonably describe prior beliefs about the
+parameter l. The Gamma distribution seems to be a good candidate because
+its probability density is strictly positive for all positive real
+numbers (continuous case). 
+Note that here _l_ > 0 is the rate parameter of the exponential
+distribution, and it is strictly positive. So, we want to consider only
+those prior distributions that will not assign a strictly positive density
+to non-positive numbers (i.e. 0 and all negative real numbers).
+P.S. there is a fancy name for this - "the support"; hence we can
+alternatively say that the support of a Gamma distribution is the set of
+all positive real numbers.
+
+
+[QUESTION]
+Ex 3 Q3 
+According to the definition of the S^2 in the question, the sum of
+(x-x_bar)^2 should be equal to (n-1)sigma^2. so the sigma^2 should cancel
+out and  became var[ (n-1) ].  I am not sure how the final result 2(n-1)
+was computed.
+
+[ANSWER]
+It looks like you are thinking of taking expectations of (X-X_bar)^2.
+However note that here the variance operator is being applied to that term
+in square brackets. But we know that:
+[ \sum _ { i = 1 } ^ { n } \frac { \left( X _ { i } - \overline { X }
+\right) ^ { 2 } } { \sigma^2 } ] [1] 
+has a chi-squared distribution with (n-1) degrees of freedom, with the
+variance equal to 2(n-1). This is where 2(n-1) term comes from. This
+is based on a well-known result, hence not much detail was provided,
+apologies for that, and I hope this clarifies your question a little bit.
+
+
+[QUESTION]
+Could you explain, why the risk function for a randomised decision rule
+equals the loss function when there's no data?
+
+[ANSWER]
+This is because in the absence of data, the loss
+function (with respect to data) is a constant, hence taking expectations
+(over x) of a constant is a constant.
+
+
+[QUESTION]
+Would you be able to provide some insight as to how this value at risk
+formula for multiperiod returns over a h-day horizon is derived?
+
+[ANSWER]
+So here we used the additive property of log-returns. That
+is, if we want to find the log-return over, say, two periods, then we can
+simply add log-returns in period 1 and period 2. In the formula above we
+assume i.i.d. normality, so the variance of the sum of two log-returns is
+simply the sum of the variances of individual log-returns (using the
+independence assumption), i.e. 2s^2. If we want to find the variance of
+log-returns over the next h periods, then we add individual variances h
+times, which yields hs^2 (to get the standard deviation, we take the
+square root).
+
+
+[QUESTION]
+I assume all week 3 materials are talking about how to make a decision
+within the Frequentist framework.
+As far as I'm concerned, we assume a parameter \theta is a fixed but
+unknown quantity using the frequentist way of thinking. But here when we
+calculate the Bayes risk, we give a prior distribution for \theta and say
+it's a random variable when we make decision. Could you please explain why
+that makes sense, even within the Frequentist framework?
+
+[ANSWER]
+Here the Bayes risk can be thought of as being a hybrid
+of both frameworks, the Bayesian and frequentist. So, this isn't a 'pure'
+frequentist principle as it considers the expected loss over both X and
+theta. 
+
+
+[QUESTION]
+can we say that the Bayesian expected
+loss is calculated based on the posterior distribution of theta, and the
+Bayes rule gives a single number output by first integrating over all
+possible values of X, then integrating over our assumed distribution for
+theta? In terms of using them to make decisions, are they just different
+plausible methods or does any of them work better in certain cases?
+
+[ANSWER]
+Yes, the Bayes risk involves taking expectations over both X and theta
+(and returns a single number). 
+These are different approaches to estimation problems. However, there is a
+link between them - the Bayes risk is also minimised when the Bayesian
+expected loss is minimised for any fixed x.
+
+
+[QUESTION]
+In example 2 we stopped after getting the function of the Bayesian expected
+loss. If we were to further decide what action to take (in this case, the
+value of a to estimate theta), is it correct for me to do so by  drawing
+the plot of the Bayesian expected loss function and find the corresponding
+a where the plot reach its minimum?
+
+[ANSWER]
+Yes, if we wished to proceed to find the Bayes
+action (i.e. the action that minimises the Bayesian expected loss), then we
+would need to find the value of action 'a' for which the function attains
+its minimum value. This would be the value you've indicated on the plot,
+a=2/15. 
+
+
+[QUESTION]
+Beta function (Example 4) b
+Could you please explain why the LHS integral of 1.14 could be written as
+B(alpha+Y,beta+N-Y) in 1.15? 
+
+[ANSWER]
+This is because we know that the area under the probability density
+function always equals to 1. Hence:
+[ \int_{0}^{1} \frac{\theta^{\alpha+Y-1}(1-\theta)^{\beta
++N-Y-1}}{B(\alpha+Y, \beta+N-Y)} d \theta=1 ] [1]
+Multiplying both sides by  [ B(\alpha+Y, \beta+N-Y) ] [2]  yields:
+[ \int_{0}^{1}\theta^{\alpha+Y-1}(1-\theta)^{\beta +N-Y-1} d \theta=
+B(\alpha+Y, \beta+N-Y) ] [3]
+
+
+[QUESTION]
+Exercises 6 Q2b 
+I am not too sure what theory/part of the notes is being used here
+
+[ANSWER]
+This relates to the posterior predictive distribution. When the parameter
+is unknown, the way to proceed in the Bayesian context is to integrate it
+out. Hope this makes sense. Here the unknown parameter is [\alpha_2] [1]
+(which enters the equation for [ \sigma^2] [2] ).
+
+
+[QUESTION]
+Q4 of exercise 3
+Could you explain where does the formula in the red box come from? Besides,
+why is the Var equals to 2(n-1)?
+
+[ANSWER]
+Remember that our decision rule is [
+\delta(\boldsymbol{X})=\frac{1}{n-1}\sum_{i=1}^{n}(X_i-\bar{X})^2 ] [1].
+First we multiply and divide by [ \sigma^2 ] [2] so the constant  becomes
+[ \frac{1}{n-1} \frac{\sigma^2}{\sigma^2} ] [3]. Next we apply the variance
+operator and pull out this part of the constant [ \frac{\sigma^2}{n-1} ]
+[4] out of the variance operator. The rule for taking constants out of the
+variance operator is that you square the constant. Hence, we end up with
+that expression in the red box.
+
+
+[QUESTION]
+Exercise 9 Question 1 
+For what reason do you decide to reparameterize to look at the right tail
+instead of the left? Could we not simply use the MoM formulas and follow
+the method using the values of X that are greater than u=-2 ? Did you do it
+this way so that D>u and the p(Y>D) formula is simplified?
+
+[ANSWER]
+This is because the GPD distribution is defined for the right tail with
+positive values of exceedances. In order to be able to model the left tail,
+we need to transform the data. This can be done by multiplying
+observations by -1, which is essentially rotating the empirical
+distribution around Y-axis. 
+
+
+[QUESTION]
+For the parametric approach, do we assume the log-returns to be iid
+as well or we only assume normally distributed?
+
+[ANSWER]
+Yes, here we need to assume IID normally distributed and apply the formula
+directly to log-returns. Subsequently you can comment on the validity of
+this assumption.
+
+
+[QUESTION]
+On page 7 of week 6 slides, I was wondering: do we need to decide the
+value of k for pacf by ourselves? If so, how do we decide which value of k
+to use?
+By the way, could you maybe clarify the last bullet point on page 17?
+Why [ \sigma^2_t ] [1] depends on the previous value Yt-1? 
+Is it because [ \sigma^2_t ] [2] depends on [ u^2_{t-1} ] [3] (since [
+\sigma^2_t= \beta_0+ \beta_1 u^2_{t-1} ] [4]) and therefore it depends on
+Yt-1 (since Yt-1=ut-1)?
+
+[ANSWER]
+Yes, this is part of the Box-Jenkins method. Select order k using pacf,
+estimate and then determine whether this model is adequate (using the
+relevant test presented in lecture 6 ).
+
+Yes, that's correct,  [ \sigma^2 ] [1] depends on the previous value
+[Y_{t-1} ] [2] because [ Y_{t-1}=u_{t-1} ] [3].
+
+
+[QUESTION]
+Why the density of the independence copula is equal to 1?
+
+[ANSWER]
+this can be easily seen using
+Sklar's Theorem in the density form: we know that if two random variables
+are independent, then their joint density is equal to the product of
+marginal densities [ f(x_1, x_2)=f(x_1)\cdot f(x_2) ] [1].
+
